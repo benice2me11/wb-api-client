@@ -1,0 +1,9 @@
+# binaries
+/bin/
+
+# test / coverage
+*.out
+coverage.out
+
+# IDE / OS
+.DS_Store

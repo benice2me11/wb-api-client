@@ -1,0 +1,5224 @@
+openapi: 3.0.1
+info:
+  description: "Management of orders, metadata"
+  title: DBS Orders
+  version: order
+  x-file-name: orders-dbs
+servers:
+- url: /
+security:
+- HeaderApiKey: []
+tags:
+- description: ""
+  name: DBS Assembly Orders
+- description: ""
+  name: DBS Metadata
+paths:
+  /api/v3/dbs/orders/new:
+    get:
+      description: |
+        Returns a list of all new orders for the seller at the moment
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_200_response'
+          description: Success
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get New Orders List
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders:
+    get:
+      description: |
+        Returns information on completed orders (either canceled or sold). <br> You can get data for a specified period, maximum of 30 calendar days per request.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      parameters:
+      - description: Pagination parameter. Sets the limit for the amount of data returned.
+        explode: true
+        in: query
+        name: limit
+        required: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+        style: form
+      - description: "Pagination parameter. Sets the value from which to retrieve\
+          \ the next batch. It should start at 0 to get the full list of data. For\
+          \ the subsequent requests, you must take the value from the `next` field\
+          \ in the response."
+        explode: true
+        in: query
+        name: next
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: |
+          Period start date in Unix timestamp format
+        explode: true
+        in: query
+        name: dateFrom
+        required: true
+        schema:
+          type: integer
+        style: form
+      - description: Period end date in Unix timestamp format
+        explode: true
+        in: query
+        name: dateTo
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_get_200_response'
+          description: Success
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get Information on Completed Orders
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/groups/info:
+    post:
+      description: |
+        The method provides information on paid delivery for assembly orders that have been received at a single warehouse (warehouseId) as part of a single buyer transaction (orderUid).
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrderGroupsRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OrderGroup'
+          description: Success
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      summary: Get Information on Paid Delivery
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/client:
+    post:
+      description: |
+        The method allows getting information about the buyer by order ID
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrdersRequestAPI'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DbsOnlyClientInfoResp'
+          description: Success
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Buyer Information
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/b2b/info:
+    post:
+      description: |
+        The method returns B2B buyers data by assembly orders ID:
+          - Taxpayer Identification Number (TIN or INN in Russian)
+          - Code of Reason for Registration (CRR or KPP in Russian)
+          - Company name
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.B2bClientInfoResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: B2B Buyer Information
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/delivery-date:
+    post:
+      description: |
+        Method provides information about the delivery date and time selected by the buyer for orders.
+        <br>
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDatesRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryDatesInfoResp'
+          description: Success
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest1'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Delivery Date and Time
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/status/info:
+    post:
+      description: |
+        Returns the statuses of [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) based on the list of assembly order IDs.
+
+        `supplierStatus` is a status of an order. The trigger for its change is the action of the seller himself.<br>
+        Possible values for this field are:
+        | Status   | Description               | How to move an order to this status   |
+        | -------  | ---------                 | --------------------------------------|
+        | `new`      | **New order** | |
+        | `confirm`  | **Order on assembly**      |  [Transfer to assembly](/openapi/orders-dbs?locale=ru#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1confirm/post)
+        | `deliver`  | **Order on delivery**<br>    | [Transfer to delivery](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1deliver/post)
+        | `receive`  | **Received by the buyer**<br>       | [Notify that the order has been accepted by the buyer](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1receive/post) <br>
+        | `reject`   | **Declined upon receipt**<br>           |  [Notify that the buyer has declined the order](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1reject/post)
+        | `cancel`   | **Canceled by the supplier**   |  [Cancel the order](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1cancel/post)
+        | `cancel_missed_call` | **Cancellation due to unreachable buyer**<br> | The status changes automatically |
+
+        `wbStatus` is a status of an order on the Wildberries side.<br>
+        Possible values for this field are:
+        - `waiting` — assembly order in work
+        - `sold` — the buyer got the order
+        - `canceled` — assembly order canceled
+        - `canceled_by_client` — the buyer canceled the order
+        - `declined_by_client` — the buyer canceled the order in the first hour <br> Cancellation is available to the buyer in the first hour from the moment of order, if the order is not transferred to confirm status.
+        - `defect` — order canceled due to a defect
+        - `ready_for_pickup` — the order arrived the pickup point
+        - `canceled_by_missed_call`— cancellation due to unreachable buyer. For delivery by supplier
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OrderStatusesV2'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Not found
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get Assembly Order Statuses
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/status/cancel:
+    post:
+      description: |
+        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the [statuses](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) `new`, `confirm` и `deliver` to the status `cancel` — canceled by the supplier.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 s | 1 request | 1 s | 10 requests |
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Cancel Assembly Orders
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/status/confirm:
+    post:
+      description: |
+        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the `new` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) to the `confirm` status — order on assembly.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 s | 1 request | 1 s | 10 requests |
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Transfer to Assembly
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/stickers:
+    post:
+      description: |
+        <div class="description_token">Method is available by <a href="/openapi/api-information#tag/Authorization/Rules-for-using-API-access-tokens">token types</a>:<strong> Personal</strong>,<strong> Service</strong> </div>
+
+        The method returns stickers for the assembly orders with delivery to pickup points in the [statuses](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post):
+          - `confirm` — on assembly
+          - `deliver` — in delivery
+
+        You can get stickers only with 580x400 px size in PDF format.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 300 requests | 200 ms | 20 requests |
+
+        </div>
+      parameters:
+      - description: Sticker format
+        explode: true
+        in: query
+        name: type
+        required: true
+        schema:
+          enum:
+          - pdf
+          type: string
+        style: form
+      - description: Sticker width
+        explode: true
+        in: query
+        name: width
+        required: true
+        schema:
+          enum:
+          - 58
+          type: integer
+        style: form
+      - description: Sticker height
+        explode: true
+        in: query
+        name: height
+        required: true
+        schema:
+          enum:
+          - 40
+          type: integer
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_stickers_post_request'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_stickers_post_200_response'
+          description: Success
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get Stickers for Assembly Orders with Delivery to Pickup Point
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+      x-token-types:
+      - personal
+      - service
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/status/deliver:
+    post:
+      description: |
+        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the `confirm` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) to the `deliver` status — order on delivery.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 s | 1 request | 1 s | 10 requests |
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Transfer to Delivery
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/status/receive:
+    post:
+      description: |
+        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the `deliver` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) to the `receive` status — received by the buyer.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 s | 1 request | 1 s | 10 requests |
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersCodeRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_status_receive_post_200_response'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Notify that the Orders Are Received
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/status/reject:
+    post:
+      description: |
+        The method transfers [assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders) with the `deliver` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) to the `reject` status — declined upon receipt.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 s | 1 request | 1 s | 10 requests |
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersCodeRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Notify that the Orders Are Declined
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/status:
+    post:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_v3_dbs_orders_status_post_request'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_status_post_200_response'
+          description: Success
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get orders statuses
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/cancel:
+    patch:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 50 requests | 72 s | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Canceled
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Status update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Cancel the Order
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/confirm:
+    patch:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 50 requests | 72 s | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Confirmed
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Status update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Transfer to Assembly
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/deliver:
+    patch:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 50 requests | 72 s | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Confirmed
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Status update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Transfer to Delivery
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/receive:
+    patch:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 50 requests | 72 s | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Code'
+        required: true
+      responses:
+        "204":
+          description: Confirmed
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+                InvalidWBCode:
+                  $ref: '#/components/examples/InvalidWBCode'
+                SGTINIsNotFilled:
+                  $ref: '#/components/examples/SGTINIsNotFilled'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Status update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Notify That the Order Has Been Accepted by the Buyer
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/reject:
+    patch:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>DBS assembly orders</strong> methods:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 100 requests | 600 ms | 20 requests |
+        | Service | 1 min | 100 requests | 600 ms | 20 requests |
+        | Base | 1 h | 50 requests | 72 s | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Code'
+        required: true
+      responses:
+        "204":
+          description: Confirmed
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                StatusMismatch:
+                  $ref: '#/components/examples/StatusMismatch'
+                InvalidWBCode:
+                  $ref: '#/components/examples/InvalidWBCode'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Status update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Notify That the Buyer Has Declined the Order
+      tags:
+      - DBS Assembly Orders
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/info:
+    post:
+      description: |
+        Returns assembly orders metadata.<br>
+        You can get the list of metadata available for the assembly order via the [list of new assembly orders](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1v3~1dbs~1orders~1new/get) method, field `requiredMeta`.<br>
+        Possible metadata:
+        - `imei` — [IMEI](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1imei/post)
+        - `uin` — [UIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1uin/post)
+        - `gtin` — [GTIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1gtin/post)
+        - `sgtin` — [Data Matrix code](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post)
+        - `customsDeclaration` — [customs declaration number](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1meta~1customs-declaration/post)
+
+        If the response has an empty `meta` structure, the assembly order has no metadata and you can't add it.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>getting and deleting DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 150 requests | 400 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersRequestV2'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.OrdersMetaResponse'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get Assembly Orders Metadata
+      tags:
+      - DBS Metadata
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/delete:
+    post:
+      description: |
+        Removes all [assembly order metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post) values.
+        <br><br>
+        You can only delete one type of metadata in one request.
+        Specify the metadata type in the request:
+        - `imei` — [IMEI](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1imei/post)
+        - `uin` — [UIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1uin/post)
+        - `gtin` — [GTIN](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1gtin/post)
+        - `sgtin` — [Data Matrix code](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post)
+        - `customsDeclaration` — [customs declaration number](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1meta~1customs-declaration/post)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>getting and deleting DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 150 requests | 400 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersMetaDeleteRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.Error'
+          description: Metadata deletion error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Delete Assembly Orders Metadata
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/sgtin:
+    post:
+      description: |
+        Sets the Data Matrix code (Chestny ZNAK marking) for the assembly orders. <br>
+        You can set the Data Matrix code only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order metadata](orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post) method.
+        <br>
+        For more information about Data Matrix Codes please check: https://chestnyznak.ru/en/.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 500 requests | 120 ms | 20 requests |
+        | Service | 1 min | 500 requests | 120 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersSGTINsSetRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add Data Matrix Codes to Assembly Orders (Chestny ZNAK)
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/uin:
+    post:
+      description: |
+        Sets the UIN to the [assembly orders metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post). <br>
+        The order can only have one UIN.
+        You can add the UIN only for assembly orders in the `confirmed` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) and that are delivered by Wildberries.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 500 requests | 120 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersUINSetRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add UIN (Unique Identification Number) to Assembly Orders
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/imei:
+    post:
+      description: |
+        Sets the IMEI for the [assembly orders metadata](/openapi/orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post). <br>
+        The assembly order can have only one IMEI.
+        You can add the IMEI only for orders in the `confirmed` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) and that are delivered by Wildberries.<br>
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 500 requests | 120 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersIMEISetRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add IMEI to Assembly Orders
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/gtin:
+    post:
+      description: |
+        Sets the GTIN, Belarus product unique identifier, for the assembly order metadata(./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1info/post). <br>
+        The assembly order can only have one GTIN.
+        You can set the GTIN only for orders in the `confirmed` [status](/openapi/orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1marketplace~1v3~1dbs~1orders~1status~1info/post) and that are delivered by Wildberries.<br>
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 500 requests | 120 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/api.OrdersGTINSetRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.StatusSetResponses'
+          description: Success
+        "400":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: IncorrectRequest
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                detail: {}
+                origin: dbs-public-api
+                requestId: f1787bd2d1fdс35d6f537316514у4a05
+                title: AccessDenied
+              schema:
+                $ref: '#/components/schemas/api.BatchError'
+          description: Access denied
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api.Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add GTIN to Assembly Orders
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/marketplace/v3/dbs/orders/meta/customs-declaration:
+    post:
+      description: |
+        Sets the cargo customs declaration number in the metadata of the assembly orders.
+
+        One assembly order can have only one cargo customs declaration number.
+
+        The customs declaration number can only be added to assembly orders that are in `deliver` status.
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | 1 min | 500 requests | 120 ms | 20 requests |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_meta_customs_declaration_post_request'
+      responses:
+        "204":
+          description: Updated
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                FailedToUpdateMeta:
+                  $ref: '#/components/examples/FailedToUpdateMeta'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add Custom Declaration to the Orders
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/meta:
+    delete:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 300 requests | 200 ms | 20 requests |
+        | Service | 1 min | 300 requests | 200 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      - description: "Name of metadata to delete (**imei**, **uin**, **gtin**, **sgtin**).\
+          \ Only one value is passed"
+        explode: true
+        in: query
+        name: key
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "409":
+          content:
+            application/json:
+              examples:
+                FailedToUpdateMeta:
+                  $ref: '#/components/examples/FailedToUpdateMeta'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Metadata delete error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Delete Order Metadata
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    get:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 300 requests | 200 ms | 20 requests |
+        | Service | 1 min | 300 requests | 200 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders__orderId__meta_get_200_response'
+          description: Success
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Get order metadata
+      tags:
+      - DBS Metadata
+      x-readonly-method: true
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/meta/sgtin:
+    put:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Service | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_v3_dbs_orders__orderId__meta_sgtin_put_request'
+      responses:
+        "204":
+          description: Sent
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                FailedToUpdateMeta:
+                  $ref: '#/components/examples/FailedToUpdateMeta'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Error adding label
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add Data Matrix Code to the Order
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/meta/uin:
+    put:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Service | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_v3_dbs_orders__orderId__meta_uin_put_request'
+      responses:
+        "204":
+          description: Updated
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                FailedToUpdateMeta:
+                  $ref: '#/components/examples/FailedToUpdateMeta'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add UIN (Unique Identification Number) to the Order
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/meta/imei:
+    put:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Service | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_v3_dbs_orders__orderId__meta_imei_put_request'
+      responses:
+        "204":
+          description: Updated
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                FailedToUpdateMeta:
+                  $ref: '#/components/examples/FailedToUpdateMeta'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add IMEI to the Order
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+  /api/v3/dbs/orders/{orderId}/meta/gtin:
+    put:
+      deprecated: true
+      description: |
+        This method is deprecated. It will be removed on [April 13](https://dev.wildberries.ru/en/release-notes?id=378)
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding DBS metadata</strong>:
+
+        | Type | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- | --- |
+        | Personal | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Service | 1 min | 1000 requests | 60 ms | 20 requests |
+        | Base | 1 h | 10 requests | 6 min | 1 request |
+
+        One request with a response code of <code>409</code> is counted as 10 requests
+        </div>
+      parameters:
+      - description: Assembly order ID
+        explode: false
+        in: path
+        name: orderId
+        required: true
+        schema:
+          example: 5632423
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_api_v3_dbs_orders__orderId__meta_gtin_put_request'
+      responses:
+        "204":
+          description: Updated
+        "400":
+          content:
+            application/json:
+              examples:
+                IncorrectRequestBody:
+                  $ref: '#/components/examples/IncorrectRequestBody'
+                IncorrectRequest:
+                  $ref: '#/components/examples/IncorrectRequest'
+                IncorrectParameter:
+                  $ref: '#/components/examples/IncorrectParameter'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/problem+json:
+              example:
+                title: unauthorized
+                detail: "token problem; token is malformed: could not base64 decode\
+                  \ signature: illegal base64 data at input byte 84"
+                code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+                requestId: 7b80742415072fe8b6b7f7761f1d1211
+                origin: s2s-api-auth-catalog
+                status: 401
+                statusText: Unauthorized
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Unauthorized
+        "402":
+          content:
+            application/problem+json:
+              example:
+                title: payment required
+                detail: wb solution for business has insufficient funds on its balance.
+                  please top up the balance in the company's personal account https://dev.wildberries.ru/company
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+          description: Payment required
+        "403":
+          content:
+            application/json:
+              example:
+                message: ""
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Access denied
+        "404":
+          content:
+            application/json:
+              example:
+                message: Не найдено
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The resource is not found
+        "409":
+          content:
+            application/json:
+              examples:
+                FailedToUpdateMeta:
+                  $ref: '#/components/examples/FailedToUpdateMeta'
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Metadata update error
+        "429":
+          content:
+            application/problem+json:
+              example:
+                title: too many requests
+                detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+                code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+                requestId: 9d3c02cc698f8b041c661a7c28bed293
+                origin: s2s-api-auth-catalog
+                status: 429
+                statusText: Too Many Requests
+                timestamp: 2024-09-30T06:52:38Z
+              schema:
+                $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+          description: Too many requests
+      security:
+      - HeaderApiKey: []
+      summary: Add GTIN to the Order
+      tags:
+      - DBS Metadata
+      x-readonly-method: false
+      x-category: marketplace
+    servers:
+    - url: https://marketplace-api.wildberries.ru
+components:
+  examples:
+    IncorrectRequestBody:
+      description: Incorrect request body
+      value:
+        code: IncorrectRequestBody
+        message: ""
+    IncorrectRequest:
+      value:
+        message: Incorrect request parameters
+    IncorrectRequest1:
+      description: Incorrect Request
+      value:
+        code: IncorrectRequest
+        message: ""
+    IncorrectParameter:
+      value:
+        message: Incorrect parameter value
+    FailedToUpdateMeta:
+      value:
+        message: "Failed to update order metadata. Ensure that the order meets all\
+          \ necessary requirements (the order exists, is in the \"In Assembly\" status,\
+          \ and has accessible metadata; see the description of the **Get order metadata**\
+          \ method)"
+    StatusMismatch:
+      value:
+        message: Status change is not allowed for the order
+    InvalidWBCode:
+      description: Invalid code
+      value:
+        code: InvalidWBCode
+        message: ""
+    SGTINIsNotFilled:
+      description: "Required [Data Matrix Code](./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post)\
+        \ is not specified"
+      value:
+        code: SGTINIsNotFilled
+        message: ""
+  parameters:
+    OrderDBS:
+      description: Assembly order ID
+      explode: false
+      in: path
+      name: orderId
+      required: true
+      schema:
+        example: 5632423
+        format: int64
+        type: integer
+      style: simple
+    Order:
+      description: Assembly order ID
+      explode: false
+      in: path
+      name: orderId
+      required: true
+      schema:
+        example: 5632423
+        format: int64
+        type: integer
+      style: simple
+    Next:
+      description: "Pagination parameter. Sets the value from which to retrieve the\
+        \ next batch. It should start at 0 to get the full list of data. For the subsequent\
+        \ requests, you must take the value from the `next` field in the response."
+      explode: true
+      in: query
+      name: next
+      required: true
+      schema:
+        format: int64
+        type: integer
+      style: form
+    Limit:
+      description: Pagination parameter. Sets the limit for the amount of data returned.
+      explode: true
+      in: query
+      name: limit
+      required: true
+      schema:
+        maximum: 1000
+        minimum: 1
+        type: integer
+      style: form
+  responses:
+    "401":
+      content:
+        application/problem+json:
+          example:
+            title: unauthorized
+            detail: "token problem; token is malformed: could not base64 decode signature:\
+              \ illegal base64 data at input byte 84"
+            code: "07e4668e--a53a3d31f8b0-[UK-oWaVDUqNrKG]; 03bce=277; 84bd353bf-75"
+            requestId: 7b80742415072fe8b6b7f7761f1d1211
+            origin: s2s-api-auth-catalog
+            status: 401
+            statusText: Unauthorized
+            timestamp: 2024-09-30T06:52:38Z
+          schema:
+            $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+      description: Unauthorized
+    "402":
+      content:
+        application/problem+json:
+          example:
+            title: payment required
+            detail: wb solution for business has insufficient funds on its balance.
+              please top up the balance in the company's personal account https://dev.wildberries.ru/company
+          schema:
+            $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_402_response'
+      description: Payment required
+    "429":
+      content:
+        application/problem+json:
+          example:
+            title: too many requests
+            detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
+            code: "07e4668e-ac2242c5c8c5-[UK-4dx7JUdskGZ]"
+            requestId: 9d3c02cc698f8b041c661a7c28bed293
+            origin: s2s-api-auth-catalog
+            status: 429
+            statusText: Too Many Requests
+            timestamp: 2024-09-30T06:52:38Z
+          schema:
+            $ref: '#/components/schemas/_api_v3_dbs_orders_new_get_401_response'
+      description: Too many requests
+    NotFound:
+      content:
+        application/json:
+          example:
+            message: Не найдено
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The resource is not found
+    AccessDenied:
+      content:
+        application/json:
+          example:
+            message: ""
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Access denied
+  schemas:
+    api.OrderGroupsRequest:
+      example:
+        groups:
+        - 7a2c8810-1db2-4011-9682-5c7fa33afd83
+        - 5a8f4523-4cf2-5691-9682-5a7fd33afd73
+      properties:
+        groups:
+          description: "List of `groupId` values. Can be obtained from [new](./orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1v3~1dbs~1orders~1new/get)\
+            \ and [completed](./orders-dbs#tag/DBS-Assembly-Orders/paths/~1api~1v3~1dbs~1orders/get)\
+            \ assembly orders."
+          items:
+            type: string
+          maxItems: 1000
+          type: array
+      type: object
+    Error:
+      example:
+        code: code
+        data: "{}"
+        message: message
+      nullable: false
+      properties:
+        code:
+          description: Error code
+          nullable: false
+          type: string
+        message:
+          description: Error description
+          nullable: false
+          type: string
+        data:
+          description: Additional data for the error
+          nullable: true
+          type: object
+      type: object
+    OrdersRequestAPI:
+      example:
+        orders:
+        - 987654321
+        - 123456789
+      properties:
+        orders:
+          description: Assembly orders ID list
+          items:
+            type: integer
+          type: array
+      type: object
+    api.OrderGroup:
+      items:
+        $ref: '#/components/schemas/api_OrderGroup_inner'
+      nullable: true
+      type: array
+    DeliveryDatesRequest:
+      example:
+        orders:
+        - 1234567890
+      properties:
+        orders:
+          description: List of orders IDs
+          items:
+            maxItems: 1000
+            minItems: 1
+            type: integer
+          type: array
+      type: object
+    Code:
+      example:
+        code: "123456"
+      properties:
+        code:
+          description: Confirmation code. Displayed to the buyer on the website and
+            in the Wildberries app
+          type: string
+      type: object
+    Next:
+      description: Pagination parameter. Sets the value from which to retrieve the
+        next batch
+      example: 13833711
+      format: int64
+      nullable: false
+      type: integer
+    OrderNewDBS:
+      example:
+        cargoType: 0
+        skus:
+        - "6665956397512"
+        - "6665956397512"
+        groupId: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+        nmId: 123456789
+        finalPrice: 1014
+        rid: f884001e44e511edb8780242ac120002
+        createdAt: 2022-05-04T07:56:29Z
+        isZeroOrder: false
+        price: 1014
+        options:
+          isB2b: true
+        convertedCurrencyCode: 643
+        id: 13833711
+        address:
+          latitude: 40.20192
+          fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+            \ 10A, Apartment 42"
+          longitude: 44.519068
+        salePrice: 504600
+        deliveryType: dbs
+        requiredMeta:
+        - uin
+        article: one-ring-7548
+        convertedFinalPrice: 1014
+        convertedPrice: 1014
+        orderUid: 165918930_629fbc924b984618a44354475ca58675
+        warehouseId: 658434
+        comment: "Упакуйте в пленку, пожалуйста"
+        colorCode: RAL 3017
+        wbStickerId: 123456
+        chrtId: 987654321
+        currencyCode: 643
+      properties:
+        salePrice:
+          description: |
+            Seller's price in the currency of sale, including seller's discount, except the WB Club discount, multiplied by 100
+          example: 504600
+          nullable: true
+          type: integer
+        requiredMeta:
+          description: "List of metadata available for the assembly order. [Specifying\
+            \ the IMEI](./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1imei/post)\
+            \ is required for `Smartphones` [subject](./work-with-products#tag/Categories-Subjects-and-Characteristics/paths/~1content~1v2~1object~1all/get),\
+            \ `\"subjectId\":515`"
+          example:
+          - uin
+          items:
+            type: string
+          nullable: true
+          type: array
+        comment:
+          description: Buyer comment
+          example: "Упакуйте в пленку, пожалуйста"
+          maxLength: 300
+          nullable: false
+          type: string
+        options:
+          $ref: '#/components/schemas/OrderNewDBS_options'
+        address:
+          $ref: '#/components/schemas/OrderNewDBS_address'
+        orderUid:
+          description: Transaction ID for order grouping. Orders in the same buyer's
+            cart will have the same `orderUid`.
+          example: 165918930_629fbc924b984618a44354475ca58675
+          type: string
+        groupId:
+          description: Assembly order group ID. <br> It unites assembly orders received
+            at a single warehouse (`warehouseId`) as part of a single buyer transaction
+            (`orderUid`)
+          example: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+          format: UUID
+          type: string
+        article:
+          description: Supplier's article
+          example: one-ring-7548
+          nullable: false
+          type: string
+        colorCode:
+          description: Color code (for tinted products only)
+          example: RAL 3017
+          nullable: false
+          type: string
+        rid:
+          description: |
+            Unique order ID. <br>
+            Note: `rid` corresponds to `srid` in the responses of the methods:
+              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
+              - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
+              - [Goods Return Report](./reports#tag/Goods-Return-Report)
+              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+          example: f884001e44e511edb8780242ac120002
+          nullable: false
+          type: string
+        createdAt:
+          description: Order creation date
+          example: 2022-05-04T07:56:29Z
+          format: date-time
+          nullable: false
+          type: string
+        deliveryType:
+          description: |
+            Delivery type:
+             - `dbs` — Delivery By Supplier
+             - `dbsPickupPoint` — Delivery By Supplier to Pickup Point
+             - `edbs` — Express Delivery By Supplier
+          enum:
+          - dbs
+          - edbs
+          - dbsPickupPoint
+          nullable: false
+          type: string
+        skus:
+          description: Product barcode array
+          items:
+            example: "6665956397512"
+            type: string
+          nullable: false
+          type: array
+        id:
+          description: Assembly order ID
+          example: 13833711
+          format: int64
+          nullable: false
+          type: integer
+        warehouseId:
+          description: Supplier's warehouse ID where the order was received
+          example: 658434
+          nullable: false
+          type: integer
+        nmId:
+          description: WB article
+          example: 123456789
+          nullable: false
+          type: integer
+        chrtId:
+          description: Product size ID in WB systems
+          example: 987654321
+          nullable: false
+          type: integer
+        price:
+          description: "The price in the currency of sale including all discounts,\
+            \ except WB Wallet discount, multiplied by 100. You can find a currency\
+            \ code in the `currencyCode`. Provided for informational purposes only"
+          example: 1014
+          nullable: false
+          type: integer
+        finalPrice:
+          description: "The sum charged to the buyer in the currency of sale including\
+            \ all discounts, multiplied by 100. You can find a currency code in the\
+            \ `currencyCode` field. Provided for informational purposes only"
+          example: 1014
+          type: integer
+        convertedFinalPrice:
+          description: "The sum charged to the buyer in the currency of the seller's\
+            \ country including all discounts, multiplied by 100. Provided for informational\
+            \ purposes only"
+          example: 1014
+          type: integer
+        convertedPrice:
+          description: "The price in the currency of the seller's country including\
+            \ all discounts, except WB Wallet discount, multiplied by 100. Provided\
+            \ for informational purposes only"
+          example: 1014
+          nullable: false
+          type: integer
+        currencyCode:
+          description: Sale currency code
+          example: 643
+          format: ISO 4217
+          nullable: false
+          type: integer
+        convertedCurrencyCode:
+          description: Currency code of the supplier country
+          example: 643
+          format: ISO 4217
+          nullable: false
+          type: integer
+        cargoType:
+          description: |
+            Type of cargo:
+              - `1` — small-sized goods
+              - `2` — over dimensional cargo (ODC)
+              - `3` — dimensional cargo+ (CD+)
+          enum:
+          - 1
+          - 2
+          - 3
+          nullable: false
+          type: integer
+        isZeroOrder:
+          description: |
+            Indicator of an order for a product with zero inventory:
+              - `false` — the order is made for a product with a non-zero inventory
+              - `true` — the order is made for a product with zero inventory. Such an order can be canceled without a cancellation fee
+          example: false
+          type: boolean
+        wbStickerId:
+          description: Sticker ID. Only displayed for orders to pickup point
+          example: 123456
+          nullable: false
+          type: integer
+      type: object
+    OrderDBS:
+      example:
+        cargoType: 0
+        skus:
+        - "6665956397512"
+        - "6665956397512"
+        groupId: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+        nmId: 12345678
+        finalPrice: 1014
+        rid: f884001e44e511edb8780242ac120002
+        createdAt: 2022-05-04T07:56:29Z
+        isZeroOrder: false
+        price: 1014
+        options:
+          isB2b: true
+        convertedCurrencyCode: 643
+        id: 13833711
+        address:
+          latitude: 40.20192
+          fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+            \ 10A, Apartment 42"
+          longitude: 44.519068
+        deliveryType: deliveryType
+        scanPrice: 50
+        article: one-ring-7548
+        convertedFinalPrice: 1014
+        convertedPrice: 1014
+        orderUid: 165918930_629fbc924b984618a44354475ca58675
+        warehouseId: 658434
+        colorCode: RAL 3017
+        comment: "Упакуйте в пленку, пожалуйста"
+        wbStickerId: 123456
+        chrtId: 987654321
+        currencyCode: 643
+      properties:
+        address:
+          $ref: '#/components/schemas/OrderDBS_address'
+        deliveryType:
+          description: |
+            Delivery type:
+            - `dbs` — Delivery By Supplier
+            - `dbsPickupPoint` — Delivery By Supplier to Pickup Point
+            - `edbs` — Express Delivery By Supplier
+          nullable: false
+          type: string
+        options:
+          $ref: '#/components/schemas/OrderNewDBS_options'
+        orderUid:
+          description: Transaction ID for order grouping. Orders in the same buyer's
+            cart will have the same `orderUid`.
+          example: 165918930_629fbc924b984618a44354475ca58675
+          type: string
+        groupId:
+          description: Assembly order group ID. <br> It unites assembly orders received
+            at a single warehouse (`warehouseId`) as part of a single buyer transaction
+            (`orderUid`)
+          example: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+          format: UUID
+          type: string
+        article:
+          description: Seller's article
+          example: one-ring-7548
+          nullable: false
+          type: string
+        colorCode:
+          description: Color code (for tinted products only)
+          example: RAL 3017
+          nullable: false
+          type: string
+        rid:
+          description: |
+            Unique order ID. <br>
+            Note: `rid` corresponds to `srid` in the responses of the methods:
+              - [Buyers return applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
+              - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
+              - [Goods Return Report](./reports#tag/Goods-Return-Report)
+              - [Realization sales report](./financial-reports-and-accounting#tag/Financial-Reports/paths/~1api~1v5~1supplier~1reportDetailByPeriod/get)
+          example: f884001e44e511edb8780242ac120002
+          nullable: false
+          type: string
+        createdAt:
+          description: Order creation date
+          example: 2022-05-04T07:56:29Z
+          format: date-time
+          nullable: false
+          type: string
+        skus:
+          description: Product barcode array
+          items:
+            example: "6665956397512"
+            type: string
+          nullable: false
+          type: array
+        id:
+          description: Assembly order ID
+          example: 13833711
+          format: int64
+          nullable: false
+          type: integer
+        warehouseId:
+          description: Seller's warehouse ID where the order was received.
+          example: 658434
+          nullable: false
+          type: integer
+        nmId:
+          description: WB article
+          example: 12345678
+          nullable: false
+          type: integer
+        chrtId:
+          description: Product size ID in WB systems
+          example: 987654321
+          nullable: false
+          type: integer
+        scanPrice:
+          description: "Acceptance price for orders to a pickup point, in kopecks.\
+            \ Displayed only for orders to a pickup point"
+          example: 50
+          nullable: true
+          type: integer
+        price:
+          description: "The price in the currency of sale including all discounts,\
+            \ except WB Wallet discount, multiplied by 100. You can find a currency\
+            \ code in the `currencyCode`. Provided for informational purposes only"
+          example: 1014
+          nullable: false
+          type: integer
+        convertedPrice:
+          description: "The price in the currency of the seller's country including\
+            \ all discounts, except WB Wallet discount, multiplied by 100. Provided\
+            \ for informational purposes only"
+          example: 1014
+          nullable: false
+          type: integer
+        currencyCode:
+          description: Sale currency code
+          example: 643
+          format: ISO 4217
+          nullable: false
+          type: integer
+        convertedCurrencyCode:
+          description: Currency code of the supplier country
+          example: 643
+          format: ISO 4217
+          nullable: false
+          type: integer
+        convertedFinalPrice:
+          description: "The sum charged to the buyer in the currency of the seller's\
+            \ country including all discounts, multiplied by 100. Provided for informational\
+            \ purposes only"
+          example: 1014
+          type: integer
+        finalPrice:
+          description: "The sum charged to the buyer in the currency of sale including\
+            \ all discounts, multiplied by 100. You can find a currency code in the\
+            \ `currencyCode` field. Provided for informational purposes only"
+          example: 1014
+          type: integer
+        cargoType:
+          description: |
+            Type of cargo:
+              - `1` — small-sized goods
+              - `2` — over dimensional cargo (ODC)
+              - `3` — dimensional cargo+ (CD+)
+          enum:
+          - 1
+          - 2
+          - 3
+          nullable: false
+          type: integer
+        comment:
+          description: Buyer comment
+          example: "Упакуйте в пленку, пожалуйста"
+          maxLength: 300
+          nullable: false
+          type: string
+        isZeroOrder:
+          description: |
+            Indicator of an order for a product with zero inventory:
+              - `false` — the order is made for a product with a non-zero inventory
+              - `true` — the order is made for a product with zero inventory. Such an order can be canceled without a cancellation fee
+          example: false
+          type: boolean
+        wbStickerId:
+          description: Sticker ID. Only displayed for orders to pickup point
+          example: 123456
+          nullable: false
+          type: integer
+      type: object
+    DbsOnlyClientInfo:
+      example:
+        firstName: firstName
+        orderID: 134567
+        phone: "+79871234567"
+        fullName: Иванов Иван Иванович
+        phoneCode: 1234567
+        replacementPhone: "79871234567"
+        additionalPhoneCodes:
+        - "12345"
+        - "65498"
+      properties:
+        replacementPhone:
+          description: |
+            Replacement phone number to contact the buyer. <br>
+            An empty value `""` means that the number is not assigned yet
+          example: "79871234567"
+          nullable: false
+          type: string
+        firstName:
+          description: First name
+          nullable: false
+          type: string
+        fullName:
+          description: "Full name, used for paperwork. For example, documents for\
+            \ a car"
+          example: Иванов Иван Иванович
+          nullable: false
+          type: string
+        orderID:
+          description: Assembly order ID
+          example: 134567
+          type: integer
+        phone:
+          description: |
+            Backup replacement phone number to contact the buyer. <br>
+            Use if the replacement number from `replacementPhone` is unavailable.
+            To contact the buyer, dial this number and the extension code from `phoneCode`. <br>
+            An empty value `""` means that the number is not assigned yet
+          example: "+79871234567"
+          nullable: false
+          type: string
+        phoneCode:
+          description: |
+            Extension phone code. <br>
+            An empty value `""` means that the code is not assigned yet
+          example: 1234567
+          nullable: false
+          type: integer
+        additionalPhoneCodes:
+          description: |
+            Additional extension codes. <br>
+            Use if you couldn't reach the buyer using the extension code from `phoneCode`.<br>
+            An empty value `""` means that the code is not assigned yet
+          example:
+          - "12345"
+          - "65498"
+          items:
+            type: string
+          nullable: false
+          type: array
+      type: object
+    DbsOnlyClientInfoResp:
+      example:
+        orders:
+        - firstName: firstName
+          orderID: 134567
+          phone: "+79871234567"
+          fullName: Иванов Иван Иванович
+          phoneCode: 1234567
+          replacementPhone: "79871234567"
+          additionalPhoneCodes:
+          - "12345"
+          - "65498"
+        - firstName: firstName
+          orderID: 134567
+          phone: "+79871234567"
+          fullName: Иванов Иван Иванович
+          phoneCode: 1234567
+          replacementPhone: "79871234567"
+          additionalPhoneCodes:
+          - "12345"
+          - "65498"
+      properties:
+        orders:
+          description: Buyer information for dbs-order (Delivery by Seller)
+          items:
+            $ref: '#/components/schemas/DbsOnlyClientInfo'
+          type: array
+      type: object
+    DeliveryDatesInfoResp:
+      example:
+        orders:
+        - dDateOld: 2025-01-28
+          dDate: 2025-02-20
+          dTimeFrom: 11:11
+          dTimeFromOld: 12:30
+          id: 1234567890
+          dTimeTo: 22:22
+          dTimeToOld: 22:30
+        - dDateOld: 2025-01-28
+          dDate: 2025-02-20
+          dTimeFrom: 11:11
+          dTimeFromOld: 12:30
+          id: 1234567890
+          dTimeTo: 22:22
+          dTimeToOld: 22:30
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/DeliveryDatesInfoResp_orders_inner'
+          type: array
+      type: object
+    Meta:
+      description: Order metadata
+      example:
+        sgtin:
+          value:
+          - "123456789012345"
+        gtin:
+          value: "123456789012345"
+        imei:
+          value: "123456789012345"
+        customsDeclaration:
+          value: 10704010/010624/0000302
+        uin:
+          value: "123456789012345"
+      nullable: true
+      properties:
+        imei:
+          $ref: '#/components/schemas/Meta_imei'
+        uin:
+          $ref: '#/components/schemas/Meta_uin'
+        gtin:
+          $ref: '#/components/schemas/Meta_gtin'
+        sgtin:
+          $ref: '#/components/schemas/Meta_sgtin'
+        customsDeclaration:
+          $ref: '#/components/schemas/Meta_customsDeclaration'
+      type: object
+    api.OrdersMetaDeleteRequest:
+      properties:
+        key:
+          description: "Name of metadata to delete (**imei**, **uin**, **gtin**, **sgtin**).\
+            \ Only one value is passed"
+          example: imei
+          type: string
+        orderIds:
+          description: Assembly orders IDs list
+          example:
+          - 123456
+          - 234567
+          items:
+            type: integer
+          maxItems: 1000
+          type: array
+      required:
+      - key
+      - orderIds
+      type: object
+    api.OrdersGTINSetRequest:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/api.GTIN'
+          maxItems: 1000
+          type: array
+      required:
+      - orders
+      type: object
+    api.GTIN:
+      properties:
+        gtin:
+          description: GTIN
+          example: "1234567890123"
+          maxLength: 13
+          minLength: 13
+          type: string
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+      type: object
+    api.OrdersIMEISetRequest:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/api.IMEI'
+          maxItems: 1000
+          type: array
+      required:
+      - orders
+      type: object
+    api.IMEI:
+      properties:
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+        imei:
+          description: IMEI
+          example: "654321741987258"
+          maxLength: 15
+          minLength: 15
+          type: string
+      type: object
+    api.OrdersSGTINsSetRequest:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/api.SGTINs'
+          maxItems: 1000
+          type: array
+      required:
+      - orders
+      type: object
+    api.SGTINs:
+      properties:
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+        sgtins:
+          description: List of Data Matrix codes. From 16 to 135 characters for one
+            label
+          example:
+          - "123456789012345678"
+          - "1234567890123456"
+          items:
+            type: string
+          maxItems: 24
+          minItems: 1
+          type: array
+      type: object
+    api.OrdersUINSetRequest:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/api.UIN'
+          maxItems: 1000
+          type: array
+      required:
+      - orders
+      type: object
+    api.UIN:
+      properties:
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+        uin:
+          description: UIN
+          example: "1234568909091232"
+          maxLength: 16
+          minLength: 16
+          type: string
+      type: object
+    api.OrdersRequestV2:
+      properties:
+        ordersIds:
+          description: List of assembly order IDs
+          example:
+          - 123456
+          - 234567
+          items:
+            type: integer
+          maxItems: 1000
+          type: array
+      type: object
+    api.StatusSetResponses:
+      example:
+        requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+        results:
+        - orderId: 4299281547
+          isError: true
+          errors:
+          - code: 404
+            detail: NotFound
+        - orderId: 4279781545
+          isError: false
+      properties:
+        requestId:
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+          type: string
+        results:
+          items:
+            $ref: '#/components/schemas/api.StatusSetResponse'
+          type: array
+      type: object
+    api.StatusSetResponse:
+      properties:
+        errors:
+          description: Error details
+          items:
+            $ref: '#/components/schemas/api.BatchErrorResponse'
+          type: array
+        isError:
+          description: Are there any errors
+          example: true
+          type: boolean
+        orderId:
+          description: Assembly order ID with successfully set data
+          example: 123456
+          type: integer
+      type: object
+    api.OrdersMetaResponse:
+      example:
+        meta:
+        - sgtin:
+          - "123456789012345"
+          - "123456789012345"
+          gtin: "123456789012345"
+          orderId: 654321
+          imei: "123456789012345"
+          customsDeclaration:
+            value: 10704010/010624/0000302
+          uin: "123456789012345"
+          error: ""
+        - sgtin:
+          - "123456789012345"
+          - "123456789012345"
+          gtin: "123456789012345"
+          orderId: 654321
+          imei: "123456789012345"
+          customsDeclaration:
+            value: 10704010/010624/0000302
+          uin: "123456789012345"
+          error: ""
+      properties:
+        meta:
+          description: Assembly orders metadata
+          items:
+            $ref: '#/components/schemas/api.OrderMetaV2'
+          type: array
+      type: object
+    api.OrderMetaV2:
+      example:
+        sgtin:
+        - "123456789012345"
+        - "123456789012345"
+        gtin: "123456789012345"
+        orderId: 654321
+        imei: "123456789012345"
+        customsDeclaration:
+          value: 10704010/010624/0000302
+        uin: "123456789012345"
+        error: ""
+      properties:
+        error:
+          description: |
+            Error message. <br>
+            If `error: not found`, the assembly order is not found
+          example: ""
+          type: string
+        gtin:
+          description: GTIN
+          example: "123456789012345"
+          type: string
+        imei:
+          description: IMEI
+          example: "123456789012345"
+          type: string
+        orderId:
+          description: Assembly order ID
+          example: 654321
+          type: integer
+        sgtin:
+          description: Data Matrix code (Chestny ZNAK)
+          items:
+            example: "123456789012345"
+            type: string
+          type: array
+        uin:
+          description: UIN
+          example: "123456789012345"
+          type: string
+        customsDeclaration:
+          $ref: '#/components/schemas/Meta_customsDeclaration'
+      type: object
+    api.OrderStatusesV2:
+      example:
+        orders:
+        - supplierStatus: confirm
+          wbStatus: waiting
+          errors: []
+          orderId: 123456
+        - supplierStatus: ""
+          wbStatus: ""
+          errors:
+          - code: 404
+            detail: NotFound
+          orderId: 789012
+      properties:
+        orders:
+          description: Status data
+          items:
+            $ref: '#/components/schemas/api.OrderStatusV2'
+          type: array
+      type: object
+    api.OrderStatusV2:
+      properties:
+        errors:
+          description: Error detail
+          items:
+            $ref: '#/components/schemas/api.BatchErrorResponse'
+          type: array
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+        supplierStatus:
+          description: Assembly order status set by the seller
+          example: deliver
+          type: string
+        wbStatus:
+          description: Assembly order status set by WB system
+          example: waiting
+          type: string
+      type: object
+    api.OrdersCodeRequest:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/api.OrderCodeRequest'
+          maxItems: 1000
+          type: array
+      required:
+      - orders
+      type: object
+    api.OrderCodeRequest:
+      properties:
+        code:
+          description: Confirmation code. Displayed to the buyer on the website and
+            in the Wildberries app
+          example: "741852"
+          type: string
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+      type: object
+    api.BatchError:
+      example:
+        requestId: f1787bd2d1fdс35d6f537316514у4a05
+        origin: dbs-public-api
+        detail: {}
+        title: IncorrectRequest
+      properties:
+        detail:
+          description: Error details
+          example: {}
+          type: object
+        origin:
+          description: WB internal service ID
+          example: dbs-public-api
+          type: string
+        requestId:
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+          type: string
+        title:
+          description: Error title
+          example: IncorrectRequest
+          type: string
+      type: object
+    api.BatchErrorResponse:
+      properties:
+        code:
+          description: |
+            Error code:
+              - `404`
+              - `409`
+          example: 404
+          type: integer
+        detail:
+          description: |
+            - `NotFound` —  assembly order is not found
+            - `StatusMismatch` — operation is not possible for this assembly order status
+            - `ImeiIsNotFilled` — IMEI is not filled
+          example: NotFound
+          type: string
+      type: object
+    api.Error:
+      example:
+        requestId: f1787bd2d1fdс35d6f537316514у4a05
+        origin: dbs-public-api
+        detail: {}
+        title: FailedToUpdateMeta
+      properties:
+        detail:
+          description: Error details
+          example: {}
+          type: object
+        origin:
+          description: WB internal service ID
+          example: dbs-public-api
+          type: string
+        requestId:
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+          type: string
+        title:
+          description: Error title
+          example: FailedToUpdateMeta
+          type: string
+      type: object
+    api.B2bClientInfoResponses:
+      example:
+        requestId: 03615778-eb9e-4f55-b4O4-fd3ac0fad2сc
+        results:
+        - orderId: 4299281547
+          isError: true
+          errors:
+          - code: 404
+            detail: NotFound
+        - orderId: 4279781545
+          isError: false
+          data:
+            orgName: ИП Иванов И.И.
+            inn: "8888888888"
+            kpp: ""
+      properties:
+        requestId:
+          description: Unique request ID
+          type: string
+        results:
+          items:
+            $ref: '#/components/schemas/api.B2bClientInfoResponse'
+          type: array
+      required:
+      - requestId
+      type: object
+    api.B2bClientInfoResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/api.B2bClientInfo'
+        errors:
+          description: Error details
+          items:
+            $ref: '#/components/schemas/api_B2bClientInfoResponse_errors_inner'
+          type: array
+        isError:
+          description: Are there any errors
+          example: true
+          type: boolean
+        orderId:
+          description: Assembly order ID
+          example: 123456
+          type: integer
+      required:
+      - isError
+      - orderId
+      type: object
+    api.B2bClientInfo:
+      description: B2B buyer data
+      properties:
+        inn:
+          description: Taxpayer Identification Number (TIN or INN in Russian)
+          type: string
+        kpp:
+          description: Code of Reason for Registration (CRR or KPP in Russian)
+          type: string
+        orgName:
+          description: Company name
+          type: string
+      type: object
+    _api_v3_dbs_orders_new_get_200_response:
+      example:
+        orders:
+        - cargoType: 0
+          skus:
+          - "6665956397512"
+          - "6665956397512"
+          groupId: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+          nmId: 123456789
+          finalPrice: 1014
+          rid: f884001e44e511edb8780242ac120002
+          createdAt: 2022-05-04T07:56:29Z
+          isZeroOrder: false
+          price: 1014
+          options:
+            isB2b: true
+          convertedCurrencyCode: 643
+          id: 13833711
+          address:
+            latitude: 40.20192
+            fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+              \ 10A, Apartment 42"
+            longitude: 44.519068
+          salePrice: 504600
+          deliveryType: dbs
+          requiredMeta:
+          - uin
+          article: one-ring-7548
+          convertedFinalPrice: 1014
+          convertedPrice: 1014
+          orderUid: 165918930_629fbc924b984618a44354475ca58675
+          warehouseId: 658434
+          comment: "Упакуйте в пленку, пожалуйста"
+          colorCode: RAL 3017
+          wbStickerId: 123456
+          chrtId: 987654321
+          currencyCode: 643
+        - cargoType: 0
+          skus:
+          - "6665956397512"
+          - "6665956397512"
+          groupId: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+          nmId: 123456789
+          finalPrice: 1014
+          rid: f884001e44e511edb8780242ac120002
+          createdAt: 2022-05-04T07:56:29Z
+          isZeroOrder: false
+          price: 1014
+          options:
+            isB2b: true
+          convertedCurrencyCode: 643
+          id: 13833711
+          address:
+            latitude: 40.20192
+            fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+              \ 10A, Apartment 42"
+            longitude: 44.519068
+          salePrice: 504600
+          deliveryType: dbs
+          requiredMeta:
+          - uin
+          article: one-ring-7548
+          convertedFinalPrice: 1014
+          convertedPrice: 1014
+          orderUid: 165918930_629fbc924b984618a44354475ca58675
+          warehouseId: 658434
+          comment: "Упакуйте в пленку, пожалуйста"
+          colorCode: RAL 3017
+          wbStickerId: 123456
+          chrtId: 987654321
+          currencyCode: 643
+      nullable: false
+      properties:
+        orders:
+          description: New assembly orders list
+          items:
+            $ref: '#/components/schemas/OrderNewDBS'
+          nullable: false
+          type: array
+      type: object
+    _api_v3_dbs_orders_new_get_401_response:
+      properties:
+        title:
+          description: Error title
+          type: string
+        detail:
+          description: Error details
+          type: string
+        code:
+          description: Internal error code
+          type: string
+        requestId:
+          description: Unique request ID
+          type: string
+        origin:
+          description: WB internal service ID
+          type: string
+        status:
+          description: HTTP status code
+          type: number
+        statusText:
+          description: Text of the HTTP status code
+          type: string
+        timestamp:
+          description: Request date and time
+          format: date-time
+          type: string
+      type: object
+    _api_v3_dbs_orders_new_get_402_response:
+      properties:
+        title:
+          description: Error title
+          type: string
+        detail:
+          description: "Error details. The error is only returned to services from\
+            \ the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)"
+          type: string
+      type: object
+    _api_v3_dbs_orders_get_200_response:
+      example:
+        next: 13833711
+        orders:
+        - cargoType: 0
+          skus:
+          - "6665956397512"
+          - "6665956397512"
+          groupId: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+          nmId: 12345678
+          finalPrice: 1014
+          rid: f884001e44e511edb8780242ac120002
+          createdAt: 2022-05-04T07:56:29Z
+          isZeroOrder: false
+          price: 1014
+          options:
+            isB2b: true
+          convertedCurrencyCode: 643
+          id: 13833711
+          address:
+            latitude: 40.20192
+            fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+              \ 10A, Apartment 42"
+            longitude: 44.519068
+          deliveryType: deliveryType
+          scanPrice: 50
+          article: one-ring-7548
+          convertedFinalPrice: 1014
+          convertedPrice: 1014
+          orderUid: 165918930_629fbc924b984618a44354475ca58675
+          warehouseId: 658434
+          colorCode: RAL 3017
+          comment: "Упакуйте в пленку, пожалуйста"
+          wbStickerId: 123456
+          chrtId: 987654321
+          currencyCode: 643
+        - cargoType: 0
+          skus:
+          - "6665956397512"
+          - "6665956397512"
+          groupId: 7a2c8810-1db2-4011-9682-5c7fa33afd83
+          nmId: 12345678
+          finalPrice: 1014
+          rid: f884001e44e511edb8780242ac120002
+          createdAt: 2022-05-04T07:56:29Z
+          isZeroOrder: false
+          price: 1014
+          options:
+            isB2b: true
+          convertedCurrencyCode: 643
+          id: 13833711
+          address:
+            latitude: 40.20192
+            fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+              \ 10A, Apartment 42"
+            longitude: 44.519068
+          deliveryType: deliveryType
+          scanPrice: 50
+          article: one-ring-7548
+          convertedFinalPrice: 1014
+          convertedPrice: 1014
+          orderUid: 165918930_629fbc924b984618a44354475ca58675
+          warehouseId: 658434
+          colorCode: RAL 3017
+          comment: "Упакуйте в пленку, пожалуйста"
+          wbStickerId: 123456
+          chrtId: 987654321
+          currencyCode: 643
+      nullable: false
+      properties:
+        next:
+          description: Pagination parameter. Sets the value from which to retrieve
+            the next batch
+          example: 13833711
+          format: int64
+          nullable: false
+          type: integer
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderDBS'
+          nullable: false
+          type: array
+      type: object
+    _api_marketplace_v3_dbs_orders_stickers_post_request:
+      properties:
+        orders:
+          description: Assembly orders ID list
+          items:
+            example: 5346346
+            format: int64
+            type: integer
+          maxItems: 100
+          minItems: 1
+          type: array
+      required:
+      - orders
+      type: object
+    _api_marketplace_v3_dbs_orders_stickers_post_200_response_stickers_inner:
+      example:
+        file: JVBER...ZWYKMTM5MQolJUVPRg==
+        orderId: 5346346
+        partA: "231648"
+        partB: "9753"
+        barcode: '!uKEtQZVx'
+      properties:
+        orderId:
+          description: Assembly order ID
+          example: 5346346
+          format: int64
+          nullable: false
+          type: integer
+        partA:
+          description: The first part of the sticker ID
+          example: "231648"
+          nullable: false
+          type: string
+        partB:
+          description: The second part of the sticker ID
+          example: "9753"
+          nullable: false
+          type: string
+        barcode:
+          description: The encoded value of the sticker
+          example: '!uKEtQZVx'
+          nullable: false
+          type: string
+        file:
+          description: Base64 encoded representation of the sticker
+          example: JVBER...ZWYKMTM5MQolJUVPRg==
+          nullable: false
+          type: string
+      required:
+      - barcode
+      - file
+      - orderId
+      - partA
+      - partB
+      type: object
+    _api_marketplace_v3_dbs_orders_stickers_post_200_response:
+      example:
+        stickers:
+        - file: JVBER...ZWYKMTM5MQolJUVPRg==
+          orderId: 5346346
+          partA: "231648"
+          partB: "9753"
+          barcode: '!uKEtQZVx'
+        - file: JVBER...ZWYKMTM5MQolJUVPRg==
+          orderId: 5346346
+          partA: "231648"
+          partB: "9753"
+          barcode: '!uKEtQZVx'
+      properties:
+        stickers:
+          description: Stickers
+          items:
+            $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_stickers_post_200_response_stickers_inner'
+          nullable: false
+          type: array
+      type: object
+    _api_marketplace_v3_dbs_orders_status_receive_post_200_response_results_inner_errors_inner:
+      properties:
+        code:
+          description: Error code
+          example: 404
+          type: integer
+        detail:
+          description: |
+            - `NotFound` — assembly order is not found
+            - `StatusMismatch` — operation is not possible for this assembly order status
+            - `SGTINIsNotFilled` — required [Data Matrix Code](./orders-dbs#tag/DBS-Metadata/paths/~1api~1marketplace~1v3~1dbs~1orders~1meta~1sgtin/post) is not specified
+          example: NotFound
+          type: string
+      type: object
+    _api_marketplace_v3_dbs_orders_status_receive_post_200_response_results_inner:
+      properties:
+        errors:
+          description: Error details
+          items:
+            $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_status_receive_post_200_response_results_inner_errors_inner'
+          type: array
+        isError:
+          description: Are there any errors
+          example: true
+          type: boolean
+        orderId:
+          description: Assembly order ID with successfully set data
+          example: 123456
+          type: integer
+      type: object
+    _api_marketplace_v3_dbs_orders_status_receive_post_200_response:
+      example:
+        requestId: 03615778-eb9e-4f55-b4Of-fd3ac0fad2сc
+        results:
+        - orderId: 4299281547
+          isError: true
+          errors:
+          - code: 404
+            detail: NotFound
+        - orderId: 4279781545
+          isError: false
+      properties:
+        requestId:
+          description: Unique request ID
+          example: f1787bd2d1fdс35d6f537316514у4a05
+          type: string
+        results:
+          items:
+            $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_status_receive_post_200_response_results_inner'
+          type: array
+      type: object
+    _api_v3_dbs_orders_status_post_request:
+      properties:
+        orders:
+          description: Orders IDs list
+          items:
+            example: 5632423
+            format: int64
+            type: integer
+          maxItems: 1000
+          minItems: 1
+          type: array
+      required:
+      - orders
+      type: object
+    _api_v3_dbs_orders_status_post_200_response_orders_inner:
+      example:
+        supplierStatus: new
+        id: 5632423
+        wbStatus: wbStatus
+      properties:
+        id:
+          description: Assembly order ID
+          example: 5632423
+          format: int64
+          nullable: false
+          type: integer
+        supplierStatus:
+          description: Assembly order status set by the seller
+          example: new
+          nullable: false
+          type: string
+        wbStatus:
+          description: Order status in the Wildberries system
+          nullable: false
+          type: string
+      type: object
+    _api_v3_dbs_orders_status_post_200_response:
+      example:
+        orders:
+        - supplierStatus: new
+          id: 5632423
+          wbStatus: wbStatus
+        - supplierStatus: new
+          id: 5632423
+          wbStatus: wbStatus
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/_api_v3_dbs_orders_status_post_200_response_orders_inner'
+          nullable: false
+          type: array
+      type: object
+    _api_marketplace_v3_dbs_orders_meta_customs_declaration_post_request_orders_inner:
+      properties:
+        customsDeclaration:
+          description: Customs declaration number
+          example: 10704010/010624/0000302
+          maxLength: 29
+          minLength: 17
+          type: string
+        orderId:
+          description: Assembly order ID
+          type: integer
+      required:
+      - customsDeclaration
+      - orderId
+      type: object
+    _api_marketplace_v3_dbs_orders_meta_customs_declaration_post_request:
+      properties:
+        orders:
+          items:
+            $ref: '#/components/schemas/_api_marketplace_v3_dbs_orders_meta_customs_declaration_post_request_orders_inner'
+          maxItems: 1000
+          type: array
+      type: object
+    _api_v3_dbs_orders__orderId__meta_get_200_response:
+      example:
+        meta:
+          sgtin:
+            value:
+            - "123456789012345"
+          gtin:
+            value: "123456789012345"
+          imei:
+            value: "123456789012345"
+          customsDeclaration:
+            value: 10704010/010624/0000302
+          uin:
+            value: "123456789012345"
+      nullable: false
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+      type: object
+    _api_v3_dbs_orders__orderId__meta_sgtin_put_request:
+      properties:
+        sgtins:
+          description: List of Data Matrix codes.From 16 to 135 characters for one
+            label.
+          items:
+            description: Label code on the package. From 16 to 135 characters.
+            example: "1234567890123456"
+            type: string
+          maxItems: 24
+          minItems: 1
+          type: array
+      type: object
+    _api_v3_dbs_orders__orderId__meta_uin_put_request:
+      properties:
+        uin:
+          description: UIN
+          example: "1234567890123456"
+          maxLength: 16
+          minLength: 16
+          type: string
+      required:
+      - uin
+      type: object
+    _api_v3_dbs_orders__orderId__meta_imei_put_request:
+      properties:
+        imei:
+          description: IMEI
+          example: "123456789012345"
+          maxLength: 15
+          minLength: 15
+          type: string
+      required:
+      - imei
+      type: object
+    _api_v3_dbs_orders__orderId__meta_gtin_put_request:
+      properties:
+        gtin:
+          description: GTIN
+          example: "1234567890123"
+          maxLength: 13
+          minLength: 13
+          type: string
+      required:
+      - gtin
+      type: object
+    api_OrderGroup_inner:
+      example:
+        convertedDeliveryCost: 29803
+        groupID: 0596a30a-d11c-4210-a231-ee1c39d61fe4
+        convertedCurrencyCode: 643
+        currencyCode: 933
+        deliveryCost: 1108
+      properties:
+        groupID:
+          description: Assembly order group ID
+          example: 0596a30a-d11c-4210-a231-ee1c39d61fe4
+          format: UUID
+          type: string
+        deliveryCost:
+          description: "The cost of paid delivery in the sale currency, multiplied\
+            \ by 100"
+          example: 1108
+          type: integer
+        convertedDeliveryCost:
+          description: "The cost of paid delivery in the seller's country currency,\
+            \ multiplied by 100. Provided for informational purposes"
+          example: 29803
+          type: integer
+        currencyCode:
+          description: Sale currency code
+          example: 933
+          format: ISO 4217
+          type: integer
+        convertedCurrencyCode:
+          description: Seller's country currency code
+          example: 643
+          type: integer
+      type: object
+    OrderNewDBS_options:
+      description: Order options
+      example:
+        isB2b: true
+      properties:
+        isB2b:
+          description: |
+            Indicator of a B2B sale:
+              - `false` — not B2B sale
+              - `true` — B2B sale
+          type: boolean
+      type: object
+    OrderNewDBS_address:
+      description: "When delivering orders to a pickup point, the address of the pickup\
+        \ point is specified"
+      example:
+        latitude: 40.20192
+        fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+          \ 10A, Apartment 42"
+        longitude: 44.519068
+      nullable: false
+      properties:
+        fullAddress:
+          description: Delivery address
+          example: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+            \ 10A, Apartment 42"
+          type: string
+        longitude:
+          description: Longitude
+          example: 44.519068
+          format: float64
+          nullable: false
+          type: number
+        latitude:
+          description: Latitude
+          example: 40.20192
+          format: float64
+          nullable: false
+          type: number
+      type: object
+    OrderDBS_address:
+      description: "When delivering orders to a pickup point, the address of the pickup\
+        \ point is specified"
+      example:
+        latitude: 40.20192
+        fullAddress: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+          \ 10A, Apartment 42"
+        longitude: 44.519068
+      nullable: true
+      properties:
+        fullAddress:
+          description: Delivery address
+          example: "Chelyabinsk Region, Chelyabinsk, 51st Arabkir Street, Building\
+            \ 10A, Apartment 42"
+          type: string
+        longitude:
+          description: Longitude
+          example: 44.519068
+          format: float64
+          nullable: false
+          type: number
+        latitude:
+          description: Latitude
+          example: 40.20192
+          format: float64
+          nullable: false
+          type: number
+      type: object
+    DeliveryDatesInfoResp_orders_inner:
+      example:
+        dDateOld: 2025-01-28
+        dDate: 2025-02-20
+        dTimeFrom: 11:11
+        dTimeFromOld: 12:30
+        id: 1234567890
+        dTimeTo: 22:22
+        dTimeToOld: 22:30
+      properties:
+        dTimeFrom:
+          description: Current delivery time "from"
+          example: 11:11
+          nullable: true
+          type: string
+        dTimeTo:
+          description: Current delivery time "to"
+          example: 22:22
+          nullable: true
+          type: string
+        dTimeFromOld:
+          description: Previous delivery time "from". Available only during the first
+            day after the change
+          example: 12:30
+          nullable: true
+          type: string
+        dTimeToOld:
+          description: Previous delivery time "to". Available only during the first
+            day after the change
+          example: 22:30
+          nullable: true
+          type: string
+        dDateOld:
+          description: Previous delivery date. Available only one day after the change
+          example: 2025-01-28
+          nullable: true
+          type: string
+        dDate:
+          description: Current delivery date
+          example: 2025-02-20
+          nullable: false
+          type: string
+        id:
+          description: Assembly order ID
+          example: 1234567890
+          type: integer
+      type: object
+    Meta_imei:
+      description: IMEI
+      example:
+        value: "123456789012345"
+      properties:
+        value:
+          example: "123456789012345"
+          nullable: true
+          type: string
+      type: object
+    Meta_uin:
+      description: UIN
+      example:
+        value: "123456789012345"
+      properties:
+        value:
+          example: "123456789012345"
+          nullable: true
+          type: string
+      type: object
+    Meta_gtin:
+      description: GTIN
+      example:
+        value: "123456789012345"
+      properties:
+        value:
+          example: "123456789012345"
+          nullable: true
+          type: string
+      type: object
+    Meta_sgtin:
+      description: Data Matrix code (Chestny ZNAK)
+      example:
+        value:
+        - "123456789012345"
+      properties:
+        value:
+          example:
+          - "123456789012345"
+          items:
+            type: string
+          nullable: true
+          type: array
+      type: object
+    Meta_customsDeclaration:
+      description: Customs declaration number
+      example:
+        value: 10704010/010624/0000302
+      properties:
+        value:
+          example: 10704010/010624/0000302
+          nullable: true
+          type: string
+      type: object
+    api_B2bClientInfoResponse_errors_inner:
+      properties:
+        code:
+          description: Error code
+          type: integer
+        detail:
+          description: Error description
+          type: string
+      type: object
+  securitySchemes:
+    HeaderApiKey:
+      in: header
+      name: Authorization
+      type: apiKey
