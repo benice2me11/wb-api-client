@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	wbfbs "github.com/benice2me11/wb-api-client/internal/generated/fbs"
 	"github.com/benice2me11/wb-api-client/transport"
 )
 
@@ -18,23 +17,18 @@ type FBSOrdersQuery struct {
 
 // FBSService provides ergonomic access to FBS Orders operations.
 type FBSService interface {
-	Raw() *wbfbs.APIClient
-	Orders(ctx context.Context, query *FBSOrdersQuery) (*wbfbs.ApiV3OrdersGet200Response, *http.Response, error)
-	NewOrders(ctx context.Context) (*wbfbs.ApiV3OrdersNewGet200Response, *http.Response, error)
-	OrdersByStatus(ctx context.Context, request wbfbs.ApiV3OrdersStatusPostRequest) (*wbfbs.ApiV3OrdersStatusPost200Response, *http.Response, error)
-	OrdersStatusHistory(ctx context.Context, request wbfbs.ApiV3OrdersStatusHistoryPostRequest) (*wbfbs.ApiV3OrdersStatusHistoryPost200Response, *http.Response, error)
+	Orders(ctx context.Context, query *FBSOrdersQuery) (*ApiV3OrdersGet200Response, *http.Response, error)
+	NewOrders(ctx context.Context) (*ApiV3OrdersNewGet200Response, *http.Response, error)
+	OrdersByStatus(ctx context.Context, request ApiV3OrdersStatusPostRequest) (*ApiV3OrdersStatusPost200Response, *http.Response, error)
+	OrdersStatusHistory(ctx context.Context, request ApiV3OrdersStatusHistoryPostRequest) (*ApiV3OrdersStatusHistoryPost200Response, *http.Response, error)
 	CancelOrder(ctx context.Context, orderID int64) (*http.Response, error)
 }
 
 type fbsService struct {
-	api *wbfbs.APIClient
+	api *FBSAPIClient
 }
 
-func (s *fbsService) Raw() *wbfbs.APIClient {
-	return s.api
-}
-
-func (s *fbsService) Orders(ctx context.Context, query *FBSOrdersQuery) (*wbfbs.ApiV3OrdersGet200Response, *http.Response, error) {
+func (s *fbsService) Orders(ctx context.Context, query *FBSOrdersQuery) (*ApiV3OrdersGet200Response, *http.Response, error) {
 	req := s.api.FBSAssemblyOrdersAPI.ApiV3OrdersGet(ctx)
 	if query != nil {
 		if query.Limit != nil {
@@ -58,7 +52,7 @@ func (s *fbsService) Orders(ctx context.Context, query *FBSOrdersQuery) (*wbfbs.
 	return resp, httpResp, nil
 }
 
-func (s *fbsService) NewOrders(ctx context.Context) (*wbfbs.ApiV3OrdersNewGet200Response, *http.Response, error) {
+func (s *fbsService) NewOrders(ctx context.Context) (*ApiV3OrdersNewGet200Response, *http.Response, error) {
 	req := s.api.FBSAssemblyOrdersAPI.ApiV3OrdersNewGet(ctx)
 
 	resp, httpResp, err := req.Execute()
@@ -68,7 +62,7 @@ func (s *fbsService) NewOrders(ctx context.Context) (*wbfbs.ApiV3OrdersNewGet200
 	return resp, httpResp, nil
 }
 
-func (s *fbsService) OrdersByStatus(ctx context.Context, request wbfbs.ApiV3OrdersStatusPostRequest) (*wbfbs.ApiV3OrdersStatusPost200Response, *http.Response, error) {
+func (s *fbsService) OrdersByStatus(ctx context.Context, request ApiV3OrdersStatusPostRequest) (*ApiV3OrdersStatusPost200Response, *http.Response, error) {
 	resp, httpResp, err := s.api.FBSAssemblyOrdersAPI.
 		ApiV3OrdersStatusPost(ctx).
 		ApiV3OrdersStatusPostRequest(request).
@@ -79,7 +73,7 @@ func (s *fbsService) OrdersByStatus(ctx context.Context, request wbfbs.ApiV3Orde
 	return resp, httpResp, nil
 }
 
-func (s *fbsService) OrdersStatusHistory(ctx context.Context, request wbfbs.ApiV3OrdersStatusHistoryPostRequest) (*wbfbs.ApiV3OrdersStatusHistoryPost200Response, *http.Response, error) {
+func (s *fbsService) OrdersStatusHistory(ctx context.Context, request ApiV3OrdersStatusHistoryPostRequest) (*ApiV3OrdersStatusHistoryPost200Response, *http.Response, error) {
 	resp, httpResp, err := s.api.FBSAssemblyOrdersAPI.
 		ApiV3OrdersStatusHistoryPost(ctx).
 		ApiV3OrdersStatusHistoryPostRequest(request).

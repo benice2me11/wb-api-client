@@ -20,6 +20,8 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 - Products:
   - Create and update cards (`/content/v2/cards/upload`, `/content/v2/cards/update`, `/content/v2/cards/upload/add`)
   - Get cards list
+  - Get products with prices (`/api/v2/list/goods/filter`, GET and POST)
+  - Get size prices by article (`/api/v2/list/goods/size/nm`)
   - Set prices and size prices (`/api/v2/upload/task`, `/api/v2/upload/task/size`)
   - Track processed price uploads (`/api/v2/history/goods/task`)
   - Get and update inventory (`/api/v3/stocks/{warehouseId}`)
@@ -38,6 +40,11 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 
 By default, generated server mappings are preserved (including multi-host categories like Products).
 `With*BaseURL` options explicitly override all operation servers in that category.
+
+## Public Types
+
+External projects should import only `github.com/benice2me11/wb-api-client/client`.
+The facade exposes request/response aliases in `client` (for example, `client.ContentV2GetCardsListPostRequest`), so there is no need to import `internal/generated/*`.
 
 ## Regenerate Client Code
 
