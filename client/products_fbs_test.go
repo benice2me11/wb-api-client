@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/benice2me11/wb-api-client/client"
@@ -307,6 +308,31 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			_, _ = fmt.Fprint(w, `{}`)
+		case "GET /content/v2/cards/limits":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{}`)
+		case "POST /content/v2/cards/error/list":
+			if got := r.URL.Query().Get("locale"); got != "ru" {
+				t.Fatalf("unexpected locale: %s", got)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"data":{"items":[],"cursor":{"next":false,"updatedAt":"2026-05-11T12:00:00Z","batchUUID":"batch-1"}},"error":false,"errorText":"","additionalErrors":{}}`)
+		case "POST /content/v3/media/save":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{}`)
+		case "POST /content/v3/media/file":
+			if got := r.Header.Get("X-Nm-Id"); got != "123456" {
+				t.Fatalf("unexpected X-Nm-Id: %s", got)
+			}
+			if got := r.Header.Get("X-Photo-Number"); got != "1" {
+				t.Fatalf("unexpected X-Photo-Number: %s", got)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{}`)
 		case "POST /api/v3/stocks/10":
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
@@ -363,6 +389,42 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 		t.Fatalf("PriceTaskDetails unexpected status: %+v", httpResp)
 	}
 
+	if _, httpResp, err := c.Products().GetCardsLimits(ctx); err != nil {
+		t.Fatalf("GetCardsLimits unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("GetCardsLimits unexpected status: %+v", httpResp)
+	}
+
+	locale := "ru"
+	if _, httpResp, err := c.Products().GetCardsErrorList(ctx, wbproducts.RequestPublicViewerPublicErrorsTableListV2{}, &client.CardsErrorListQuery{Locale: &locale}); err != nil {
+		t.Fatalf("GetCardsErrorList unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("GetCardsErrorList unexpected status: %+v", httpResp)
+	}
+
+	tmpFile, err := os.CreateTemp(t.TempDir(), "products-media-*.jpg")
+	if err != nil {
+		t.Fatalf("CreateTemp unexpected error: %v", err)
+	}
+	if _, err := tmpFile.WriteString("test-image-body"); err != nil {
+		t.Fatalf("WriteString unexpected error: %v", err)
+	}
+	if _, err := tmpFile.Seek(0, io.SeekStart); err != nil {
+		t.Fatalf("Seek unexpected error: %v", err)
+	}
+
+	if _, httpResp, err := c.Products().SaveMedia(ctx, wbproducts.ContentV3MediaSavePostRequest{}); err != nil {
+		t.Fatalf("SaveMedia unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("SaveMedia unexpected status: %+v", httpResp)
+	}
+
+	if _, httpResp, err := c.Products().UploadMediaFile(ctx, "123456", 1, tmpFile); err != nil {
+		t.Fatalf("UploadMediaFile unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("UploadMediaFile unexpected status: %+v", httpResp)
+	}
+
 	if _, httpResp, err := c.Products().GetInventory(ctx, 10, wbproducts.ApiV3StocksWarehouseIdPostRequest{ChrtIds: []int32{1}}); err != nil {
 		t.Fatalf("GetInventory unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
@@ -382,6 +444,10 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 		"POST /api/v2/upload/task",
 		"POST /api/v2/upload/task/size",
 		"GET /api/v2/history/goods/task",
+		"GET /content/v2/cards/limits",
+		"POST /content/v2/cards/error/list",
+		"POST /content/v3/media/save",
+		"POST /content/v3/media/file",
 		"POST /api/v3/stocks/10",
 		"PUT /api/v3/stocks/10",
 	}

@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"net/http"
+	"os"
 
 	"github.com/benice2me11/wb-api-client/transport"
 )
@@ -28,12 +29,21 @@ type ListGoodsSizeByNmQuery struct {
 	Offset *int32
 }
 
+// CardsErrorListQuery describes query options for failed cards list.
+type CardsErrorListQuery struct {
+	Locale *string
+}
+
 // ProductsService provides ergonomic access to Product Management operations.
 type ProductsService interface {
 	CreateCards(ctx context.Context, cards []ContentV2CardsUploadPostRequestInner) (*ResponseCardCreate, *http.Response, error)
 	AddCards(ctx context.Context, request ContentV2CardsUploadAddPostRequest) (*ResponseCardCreate, *http.Response, error)
 	UpdateCards(ctx context.Context, cards []ContentV2CardsUpdatePostRequestInner) (*ResponseCardCreate, *http.Response, error)
 	GetCardsList(ctx context.Context, request ContentV2GetCardsListPostRequest) (*ContentV2GetCardsListPost200Response, *http.Response, error)
+	GetCardsLimits(ctx context.Context) (*ContentV2CardsLimitsGet200Response, *http.Response, error)
+	GetCardsErrorList(ctx context.Context, request RequestPublicViewerPublicErrorsTableListV2, query *CardsErrorListQuery) (*ResponsePublicViewerPublicErrorsTableListV2, *http.Response, error)
+	SaveMedia(ctx context.Context, request ContentV3MediaSavePostRequest) (*ContentV3MediaFilePost200Response, *http.Response, error)
+	UploadMediaFile(ctx context.Context, nmID string, photoNumber int32, uploadFile *os.File) (*ContentV3MediaFilePost200Response, *http.Response, error)
 	SetPrices(ctx context.Context, request ApiV2UploadTaskPostRequest) (*TaskCreated, *http.Response, error)
 	SetSizePrices(ctx context.Context, request ApiV2UploadTaskSizePostRequest) (*TaskCreated, *http.Response, error)
 	PriceTaskDetails(ctx context.Context, query PriceTaskDetailsQuery) (*ApiV2HistoryGoodsTaskGet200Response, *http.Response, error)
@@ -86,6 +96,55 @@ func (s *productsService) GetCardsList(ctx context.Context, request ContentV2Get
 	resp, httpResp, err := s.api.ProductCardsAPI.
 		ContentV2GetCardsListPost(ctx).
 		ContentV2GetCardsListPostRequest(request).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) GetCardsLimits(ctx context.Context) (*ContentV2CardsLimitsGet200Response, *http.Response, error) {
+	resp, httpResp, err := s.api.CreatingProductCardsAPI.
+		ContentV2CardsLimitsGet(ctx).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) GetCardsErrorList(ctx context.Context, request RequestPublicViewerPublicErrorsTableListV2, query *CardsErrorListQuery) (*ResponsePublicViewerPublicErrorsTableListV2, *http.Response, error) {
+	req := s.api.ProductCardsAPI.
+		ContentV2CardsErrorListPost(ctx).
+		RequestPublicViewerPublicErrorsTableListV2(request)
+	if query != nil && query.Locale != nil {
+		req = req.Locale(*query.Locale)
+	}
+
+	resp, httpResp, err := req.Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) SaveMedia(ctx context.Context, request ContentV3MediaSavePostRequest) (*ContentV3MediaFilePost200Response, *http.Response, error) {
+	resp, httpResp, err := s.api.MediaFilesAPI.
+		ContentV3MediaSavePost(ctx).
+		ContentV3MediaSavePostRequest(request).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) UploadMediaFile(ctx context.Context, nmID string, photoNumber int32, uploadFile *os.File) (*ContentV3MediaFilePost200Response, *http.Response, error) {
+	resp, httpResp, err := s.api.MediaFilesAPI.
+		ContentV3MediaFilePost(ctx).
+		XNmId(nmID).
+		XPhotoNumber(photoNumber).
+		Uploadfile(uploadFile).
 		Execute()
 	if err != nil {
 		return nil, httpResp, transport.WrapResponseError(httpResp, err)
