@@ -46,6 +46,47 @@ By default, generated server mappings are preserved (including multi-host catego
 External projects should import only `github.com/benice2me11/wb-api-client/client`.
 The facade exposes request/response aliases in `client` (for example, `client.ContentV2GetCardsListPostRequest`), so there is no need to import `internal/generated/*`.
 
+## Usage Example
+
+A simple example on how to use this library:
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+
+	wb "github.com/benice2me11/wb-api-client/client"
+)
+
+func main() {
+	// Create a client with your Wildberries API token.
+	// Authorization header is "Bearer <token>" by default.
+	opts := []wb.Option{
+		wb.WithToken("api-token"),
+	}
+	c := wb.NewClient(opts...)
+
+	// Send request through the typed facade.
+	warehouses, resp, err := c.Products().Warehouses(context.Background())
+	if err != nil || resp == nil || resp.StatusCode != http.StatusOK {
+		status := "no response"
+		if resp != nil {
+			status = resp.Status
+		}
+		log.Fatalf("error when getting warehouses: %v (status: %s)", err, status)
+	}
+
+	// Do some stuff.
+	for _, warehouse := range warehouses {
+		fmt.Printf("Warehouse %d: %s\n", warehouse.GetId(), warehouse.GetName())
+	}
+}
+```
+
 ## Regenerate Client Code
 
 Requirements:
