@@ -20,4 +20,18 @@ func TestProductsPublicTypeAliases(t *testing.T) {
 	var _ client.ModelsErrorTableListPublicRespV2
 	var _ client.ModelsErrorTableListPublicRespV2Item
 	var _ client.ViewerContractPublicErrorsCursorOutput
+	var _ client.ApiV3StocksWarehouseIdDeleteRequest
+	var _ client.ApiV3StocksWarehouseIdPutRequestStocksInner
+	var _ client.ApiV3StocksWarehouseIdPost200ResponseStocksInner
+	var _ client.StocksWarehouseErrorInner
+	var _ client.StocksWarehouseErrorInnerDataInner
+	var _ client.ApiV3StocksWarehouseIdPut406Response
+	var _ client.Office
+	var _ client.ApiV3WarehousesPostRequest
+	var _ client.ApiV3WarehousesPost201Response
+	var _ client.ApiV3WarehousesWarehouseIdPutRequest
+	var _ client.StoreContactRequestBody
+	var _ client.StoreContactRequestBodyContactsInner
+	var _ client.ApiV3DbwWarehousesWarehouseIdContactsGet200Response
+	var _ client.ApiV3DbwWarehousesWarehouseIdContactsGet200ResponseContactsInner
 }

@@ -52,7 +52,14 @@ type ProductsService interface {
 	ListGoodsSizeByNm(ctx context.Context, query ListGoodsSizeByNmQuery) (*ApiV2ListGoodsSizeNmGet200Response, *http.Response, error)
 	GetInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdPostRequest) (*ApiV3StocksWarehouseIdPost200Response, *http.Response, error)
 	UpdateInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdPutRequest) (*http.Response, error)
+	DeleteInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdDeleteRequest) (*http.Response, error)
+	Offices(ctx context.Context) ([]Office, *http.Response, error)
 	Warehouses(ctx context.Context) ([]Warehouse, *http.Response, error)
+	CreateWarehouse(ctx context.Context, request ApiV3WarehousesPostRequest) (*ApiV3WarehousesPost201Response, *http.Response, error)
+	UpdateWarehouse(ctx context.Context, warehouseID int64, request ApiV3WarehousesWarehouseIdPutRequest) (*http.Response, error)
+	DeleteWarehouse(ctx context.Context, warehouseID int64) (*http.Response, error)
+	DBWWarehouseContacts(ctx context.Context, warehouseID int64) (*ApiV3DbwWarehousesWarehouseIdContactsGet200Response, *http.Response, error)
+	UpdateDBWWarehouseContacts(ctx context.Context, warehouseID int64, request StoreContactRequestBody) (*http.Response, error)
 }
 
 type productsService struct {
@@ -257,10 +264,82 @@ func (s *productsService) UpdateInventory(ctx context.Context, warehouseID int64
 	return httpResp, nil
 }
 
+func (s *productsService) DeleteInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdDeleteRequest) (*http.Response, error) {
+	httpResp, err := s.api.SellerWarehousesInventoryAPI.
+		ApiV3StocksWarehouseIdDelete(ctx, warehouseID).
+		ApiV3StocksWarehouseIdDeleteRequest(request).
+		Execute()
+	if err != nil {
+		return httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return httpResp, nil
+}
+
+func (s *productsService) Offices(ctx context.Context) ([]Office, *http.Response, error) {
+	resp, httpResp, err := s.api.SellerWarehousesAPI.ApiV3OfficesGet(ctx).Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
 func (s *productsService) Warehouses(ctx context.Context) ([]Warehouse, *http.Response, error) {
 	resp, httpResp, err := s.api.SellerWarehousesAPI.ApiV3WarehousesGet(ctx).Execute()
 	if err != nil {
 		return nil, httpResp, transport.WrapResponseError(httpResp, err)
 	}
 	return resp, httpResp, nil
+}
+
+func (s *productsService) CreateWarehouse(ctx context.Context, request ApiV3WarehousesPostRequest) (*ApiV3WarehousesPost201Response, *http.Response, error) {
+	resp, httpResp, err := s.api.SellerWarehousesAPI.
+		ApiV3WarehousesPost(ctx).
+		ApiV3WarehousesPostRequest(request).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) UpdateWarehouse(ctx context.Context, warehouseID int64, request ApiV3WarehousesWarehouseIdPutRequest) (*http.Response, error) {
+	httpResp, err := s.api.SellerWarehousesAPI.
+		ApiV3WarehousesWarehouseIdPut(ctx, warehouseID).
+		ApiV3WarehousesWarehouseIdPutRequest(request).
+		Execute()
+	if err != nil {
+		return httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return httpResp, nil
+}
+
+func (s *productsService) DeleteWarehouse(ctx context.Context, warehouseID int64) (*http.Response, error) {
+	httpResp, err := s.api.SellerWarehousesAPI.
+		ApiV3WarehousesWarehouseIdDelete(ctx, warehouseID).
+		Execute()
+	if err != nil {
+		return httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return httpResp, nil
+}
+
+func (s *productsService) DBWWarehouseContacts(ctx context.Context, warehouseID int64) (*ApiV3DbwWarehousesWarehouseIdContactsGet200Response, *http.Response, error) {
+	resp, httpResp, err := s.api.SellerWarehousesAPI.
+		ApiV3DbwWarehousesWarehouseIdContactsGet(ctx, warehouseID).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) UpdateDBWWarehouseContacts(ctx context.Context, warehouseID int64, request StoreContactRequestBody) (*http.Response, error) {
+	httpResp, err := s.api.SellerWarehousesAPI.
+		ApiV3DbwWarehousesWarehouseIdContactsPut(ctx, warehouseID).
+		StoreContactRequestBody(request).
+		Execute()
+	if err != nil {
+		return httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return httpResp, nil
 }

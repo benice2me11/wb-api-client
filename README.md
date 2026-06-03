@@ -24,7 +24,10 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
   - Get size prices by article (`/api/v2/list/goods/size/nm`)
   - Set prices and size prices (`/api/v2/upload/task`, `/api/v2/upload/task/size`)
   - Track processed price uploads (`/api/v2/history/goods/task`)
-  - Get and update inventory (`/api/v3/stocks/{warehouseId}`)
+  - Get, update and delete inventory (`/api/v3/stocks/{warehouseId}`)
+  - Get offices for warehouse creation (`/api/v3/offices`)
+  - List, create, update and delete warehouses (`/api/v3/warehouses`)
+  - Get and update DBW warehouse contacts (`/api/v3/dbw/warehouses/{warehouseId}/contacts`)
 - FBS Orders:
   - Get new orders and orders list
   - Get order statuses and status history
