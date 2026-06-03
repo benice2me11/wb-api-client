@@ -8,20 +8,26 @@ import (
 )
 
 const (
-	defaultGeneralBaseURL  = "https://common-api.wildberries.ru"
-	defaultProductsBaseURL = "https://content-api.wildberries.ru"
-	defaultFBSBaseURL      = "https://marketplace-api.wildberries.ru"
-	defaultDBWBaseURL      = "https://marketplace-api.wildberries.ru"
-	defaultDBSBaseURL      = "https://marketplace-api.wildberries.ru"
+	defaultGeneralBaseURL   = "https://common-api.wildberries.ru"
+	defaultProductsBaseURL  = "https://content-api.wildberries.ru"
+	defaultFBSBaseURL       = "https://marketplace-api.wildberries.ru"
+	defaultDBWBaseURL       = "https://marketplace-api.wildberries.ru"
+	defaultDBSBaseURL       = "https://marketplace-api.wildberries.ru"
+	defaultReportsBaseURL   = "https://seller-analytics-api.wildberries.ru"
+	defaultAnalyticsBaseURL = "https://seller-analytics-api.wildberries.ru"
+	defaultOrdersFBWBaseURL = "https://supplies-api.wildberries.ru"
 )
 
 // BaseURLs holds category-specific API hosts.
 type BaseURLs struct {
-	General  string
-	Products string
-	FBS      string
-	DBW      string
-	DBS      string
+	General   string
+	Products  string
+	FBS       string
+	DBW       string
+	DBS       string
+	Reports   string
+	Analytics string
+	OrdersFBW string
 }
 
 // Config configures API client behavior.
@@ -33,11 +39,14 @@ type Config struct {
 	HTTPClient  *http.Client
 	RetryPolicy transport.RetryPolicy
 
-	overrideGeneralBaseURL  bool
-	overrideProductsBaseURL bool
-	overrideFBSBaseURL      bool
-	overrideDBWBaseURL      bool
-	overrideDBSBaseURL      bool
+	overrideGeneralBaseURL   bool
+	overrideProductsBaseURL  bool
+	overrideFBSBaseURL       bool
+	overrideDBWBaseURL       bool
+	overrideDBSBaseURL       bool
+	overrideReportsBaseURL   bool
+	overrideAnalyticsBaseURL bool
+	overrideOrdersFBWBaseURL bool
 }
 
 // Option mutates client configuration.
@@ -46,11 +55,14 @@ type Option func(*Config)
 func defaultConfig() Config {
 	return Config{
 		BaseURLs: BaseURLs{
-			General:  defaultGeneralBaseURL,
-			Products: defaultProductsBaseURL,
-			FBS:      defaultFBSBaseURL,
-			DBW:      defaultDBWBaseURL,
-			DBS:      defaultDBSBaseURL,
+			General:   defaultGeneralBaseURL,
+			Products:  defaultProductsBaseURL,
+			FBS:       defaultFBSBaseURL,
+			DBW:       defaultDBWBaseURL,
+			DBS:       defaultDBSBaseURL,
+			Reports:   defaultReportsBaseURL,
+			Analytics: defaultAnalyticsBaseURL,
+			OrdersFBW: defaultOrdersFBWBaseURL,
 		},
 		TokenPrefix: "Bearer",
 		AuthHeader:  "Authorization",
@@ -102,6 +114,18 @@ func WithBaseURLs(baseURLs BaseURLs) Option {
 			c.BaseURLs.DBS = strings.TrimRight(baseURLs.DBS, "/")
 			c.overrideDBSBaseURL = true
 		}
+		if baseURLs.Reports != "" {
+			c.BaseURLs.Reports = strings.TrimRight(baseURLs.Reports, "/")
+			c.overrideReportsBaseURL = true
+		}
+		if baseURLs.Analytics != "" {
+			c.BaseURLs.Analytics = strings.TrimRight(baseURLs.Analytics, "/")
+			c.overrideAnalyticsBaseURL = true
+		}
+		if baseURLs.OrdersFBW != "" {
+			c.BaseURLs.OrdersFBW = strings.TrimRight(baseURLs.OrdersFBW, "/")
+			c.overrideOrdersFBWBaseURL = true
+		}
 	}
 }
 
@@ -146,6 +170,33 @@ func WithDBSBaseURL(url string) Option {
 		if url != "" {
 			c.BaseURLs.DBS = strings.TrimRight(url, "/")
 			c.overrideDBSBaseURL = true
+		}
+	}
+}
+
+func WithReportsBaseURL(url string) Option {
+	return func(c *Config) {
+		if url != "" {
+			c.BaseURLs.Reports = strings.TrimRight(url, "/")
+			c.overrideReportsBaseURL = true
+		}
+	}
+}
+
+func WithAnalyticsBaseURL(url string) Option {
+	return func(c *Config) {
+		if url != "" {
+			c.BaseURLs.Analytics = strings.TrimRight(url, "/")
+			c.overrideAnalyticsBaseURL = true
+		}
+	}
+}
+
+func WithOrdersFBWBaseURL(url string) Option {
+	return func(c *Config) {
+		if url != "" {
+			c.BaseURLs.OrdersFBW = strings.TrimRight(url, "/")
+			c.overrideOrdersFBWBaseURL = true
 		}
 	}
 }

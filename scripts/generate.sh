@@ -32,6 +32,9 @@ run_generate() {
 
 run_generate "specs/wb/01-general.yaml" "internal/generated/general" "wbgeneral"
 run_generate "specs/wb/02-products.yaml" "internal/generated/products" "wbproducts"
+run_generate "specs/wb/06-reports.yaml" "internal/generated/reports" "wbreports"
+run_generate "specs/wb/07-analytics.yaml" "internal/generated/analytics" "wbanalytics"
+run_generate "specs/wb/08-orders-fbw.yaml" "internal/generated/ordersfbw" "wbordersfbw"
 run_generate "specs/wb/04-orders-dbw.yaml" "internal/generated/dbw" "wbdbw"
 run_generate "specs/wb/05-orders-dbs.yaml" "internal/generated/dbs" "wbdbs"
 

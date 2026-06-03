@@ -1,11 +1,14 @@
 package client
 
 import (
+	wbanalytics "github.com/benice2me11/wb-api-client/internal/generated/analytics"
 	wbdbs "github.com/benice2me11/wb-api-client/internal/generated/dbs"
 	wbdbw "github.com/benice2me11/wb-api-client/internal/generated/dbw"
 	wbfbs "github.com/benice2me11/wb-api-client/internal/generated/fbs"
 	wbgeneral "github.com/benice2me11/wb-api-client/internal/generated/general"
+	wbordersfbw "github.com/benice2me11/wb-api-client/internal/generated/ordersfbw"
 	wbproducts "github.com/benice2me11/wb-api-client/internal/generated/products"
+	wbreports "github.com/benice2me11/wb-api-client/internal/generated/reports"
 )
 
 // Generated API clients (for internal facade wiring).
@@ -14,6 +17,9 @@ type ProductsAPIClient = wbproducts.APIClient
 type FBSAPIClient = wbfbs.APIClient
 type DBWAPIClient = wbdbw.APIClient
 type DBSAPIClient = wbdbs.APIClient
+type ReportsAPIClient = wbreports.APIClient
+type AnalyticsAPIClient = wbanalytics.APIClient
+type OrdersFBWAPIClient = wbordersfbw.APIClient
 
 // General responses.
 type PingGet200Response = wbgeneral.PingGet200Response
@@ -104,4 +110,175 @@ func NewDBSCode(value string) DBSCode {
 	code := wbdbs.NewCode()
 	code.SetCode(value)
 	return *code
+}
+
+// Reports requests/responses.
+type CreateTaskResponse = wbreports.CreateTaskResponse
+type CreateTaskResponseData = wbreports.CreateTaskResponseData
+type GetTasksResponse = wbreports.GetTasksResponse
+type GetTasksResponseData = wbreports.GetTasksResponseData
+type ExciseReportRequest = wbreports.ExciseReportRequest
+type ExciseReportResponse = wbreports.ExciseReportResponse
+type StocksItem = wbreports.StocksItem
+type OrdersItem = wbreports.OrdersItem
+type SalesItem = wbreports.SalesItem
+type ApiV1WarehouseRemainsTasksTaskIdDownloadGet200ResponseInner = wbreports.ApiV1WarehouseRemainsTasksTaskIdDownloadGet200ResponseInner
+type ApiV1AcceptanceReportTasksTaskIdDownloadGet200ResponseInner = wbreports.ApiV1AcceptanceReportTasksTaskIdDownloadGet200ResponseInner
+type ResponsePaidStorageInner = wbreports.ResponsePaidStorageInner
+type ApiV1AnalyticsAntifraudDetailsGet200Response = wbreports.ApiV1AnalyticsAntifraudDetailsGet200Response
+type ApiV1AnalyticsAntifraudDetailsGet200ResponseDetailsInner = wbreports.ApiV1AnalyticsAntifraudDetailsGet200ResponseDetailsInner
+type ApiV1AnalyticsBannedProductsBlockedGet200Response = wbreports.ApiV1AnalyticsBannedProductsBlockedGet200Response
+type ApiV1AnalyticsBannedProductsBlockedGet200ResponseReportInner = wbreports.ApiV1AnalyticsBannedProductsBlockedGet200ResponseReportInner
+type ApiV1AnalyticsBannedProductsShadowedGet200Response = wbreports.ApiV1AnalyticsBannedProductsShadowedGet200Response
+type ApiV1AnalyticsBannedProductsShadowedGet200ResponseReportInner = wbreports.ApiV1AnalyticsBannedProductsShadowedGet200ResponseReportInner
+type ApiV1AnalyticsBrandShareBrandsGet200Response = wbreports.ApiV1AnalyticsBrandShareBrandsGet200Response
+type ApiV1AnalyticsBrandShareGet200Response = wbreports.ApiV1AnalyticsBrandShareGet200Response
+type ApiV1AnalyticsBrandShareGet200ResponseReportInner = wbreports.ApiV1AnalyticsBrandShareGet200ResponseReportInner
+type ApiV1AnalyticsBrandShareParentSubjectsGet200Response = wbreports.ApiV1AnalyticsBrandShareParentSubjectsGet200Response
+type ApiV1AnalyticsBrandShareParentSubjectsGet200ResponseDataInner = wbreports.ApiV1AnalyticsBrandShareParentSubjectsGet200ResponseDataInner
+type ApiV1AnalyticsGoodsLabelingGet200Response = wbreports.ApiV1AnalyticsGoodsLabelingGet200Response
+type ApiV1AnalyticsGoodsLabelingGet200ResponseReportInner = wbreports.ApiV1AnalyticsGoodsLabelingGet200ResponseReportInner
+type ApiV1AnalyticsGoodsReturnGet200Response = wbreports.ApiV1AnalyticsGoodsReturnGet200Response
+type ApiV1AnalyticsGoodsReturnGet200ResponseReportInner = wbreports.ApiV1AnalyticsGoodsReturnGet200ResponseReportInner
+type ApiV1AnalyticsRegionSaleGet200Response = wbreports.ApiV1AnalyticsRegionSaleGet200Response
+type ApiV1AnalyticsRegionSaleGet200ResponseReportInner = wbreports.ApiV1AnalyticsRegionSaleGet200ResponseReportInner
+type GetDeductions200Response = wbreports.GetDeductions200Response
+type GetDeductions200ResponseData = wbreports.GetDeductions200ResponseData
+type GetDeductions200ResponseDataReportsInner = wbreports.GetDeductions200ResponseDataReportsInner
+type MeasurementPenalties = wbreports.MeasurementPenalties
+type MeasurementPenaltiesData = wbreports.MeasurementPenaltiesData
+type MeasurementPenaltiesDataReportsInner = wbreports.MeasurementPenaltiesDataReportsInner
+type WHM = wbreports.WHM
+type WHMData = wbreports.WHMData
+type WHMDataReportsInner = wbreports.WHMDataReportsInner
+
+// Analytics requests/responses.
+type ProductsRequest = wbanalytics.ProductsRequest
+type ProductsRequestPastPeriod = wbanalytics.ProductsRequestPastPeriod
+type ProductsRequestSelectedPeriod = wbanalytics.ProductsRequestSelectedPeriod
+type ProductHistoryRequest = wbanalytics.ProductHistoryRequest
+type GroupedHistoryRequest = wbanalytics.GroupedHistoryRequest
+type MainRequest = wbanalytics.MainRequest
+type TableGroupRequest = wbanalytics.TableGroupRequest
+type TableDetailsRequest = wbanalytics.TableDetailsRequest
+type ProductSearchTextsRequest = wbanalytics.ProductSearchTextsRequest
+type ProductOrdersRequest = wbanalytics.ProductOrdersRequest
+type InventoryRequest = wbanalytics.InventoryRequest
+type TableGroupRequestSt = wbanalytics.TableGroupRequestSt
+type TableProductRequest = wbanalytics.TableProductRequest
+type CommonSizeFilters = wbanalytics.CommonSizeFilters
+type CommonShippingOfficeFilters = wbanalytics.CommonShippingOfficeFilters
+type ItemRatingRequest = wbanalytics.ItemRatingRequest
+type ItemRatingResponse = wbanalytics.ItemRatingResponse
+type ApiV2NmReportDownloadsPostRequest = wbanalytics.ApiV2NmReportDownloadsPostRequest
+type InventoryHistoryReportReq = wbanalytics.InventoryHistoryReportReq
+type InventoryHistoryReportReqParams = wbanalytics.InventoryHistoryReportReqParams
+type InventoryMetricsReportReq = wbanalytics.InventoryMetricsReportReq
+type SalesFunnelGroupReq = wbanalytics.SalesFunnelGroupReq
+type SalesFunnelGroupReqParams = wbanalytics.SalesFunnelGroupReqParams
+type SalesFunnelProductReq = wbanalytics.SalesFunnelProductReq
+type SalesFunnelProductReqParams = wbanalytics.SalesFunnelProductReqParams
+type SearchReportGroupReq = wbanalytics.SearchReportGroupReq
+type SearchReportGroupReqParams = wbanalytics.SearchReportGroupReqParams
+type SearchReportProductReq = wbanalytics.SearchReportProductReq
+type SearchReportProductReqParams = wbanalytics.SearchReportProductReqParams
+type SearchReportTextReq = wbanalytics.SearchReportTextReq
+type SearchReportTextReqParams = wbanalytics.SearchReportTextReqParams
+type NmReportGetReportsResponse = wbanalytics.NmReportGetReportsResponse
+type NmReportGetReportsResponseDataInner = wbanalytics.NmReportGetReportsResponseDataInner
+type NmReportCreateReportResponse = wbanalytics.NmReportCreateReportResponse
+type NmReportRetryReportRequest = wbanalytics.NmReportRetryReportRequest
+type NmReportRetryReportResponse = wbanalytics.NmReportRetryReportResponse
+type PostSalesFunnelProducts200Response = wbanalytics.PostSalesFunnelProducts200Response
+type PostSalesFunnelProducts200ResponseData = wbanalytics.PostSalesFunnelProducts200ResponseData
+type ProductHistoryResponseInner = wbanalytics.ProductHistoryResponseInner
+type PostSalesFunnelGroupedHistory200Response = wbanalytics.PostSalesFunnelGroupedHistory200Response
+type ApiV2SearchReportReportPost200Response = wbanalytics.ApiV2SearchReportReportPost200Response
+type ApiV2SearchReportTableGroupsPost200Response = wbanalytics.ApiV2SearchReportTableGroupsPost200Response
+type ApiV2SearchReportTableDetailsPost200Response = wbanalytics.ApiV2SearchReportTableDetailsPost200Response
+type ApiV2SearchReportProductSearchTextsPost200Response = wbanalytics.ApiV2SearchReportProductSearchTextsPost200Response
+type ApiV2SearchReportProductOrdersPost200Response = wbanalytics.ApiV2SearchReportProductOrdersPost200Response
+type PostV1StocksReportWbWarehouses200Response = wbanalytics.PostV1StocksReportWbWarehouses200Response
+type ApiV2StocksReportProductsGroupsPost200Response = wbanalytics.ApiV2StocksReportProductsGroupsPost200Response
+type ApiV2StocksReportProductsProductsPost200Response = wbanalytics.ApiV2StocksReportProductsProductsPost200Response
+type ApiV2StocksReportProductsSizesPost200Response = wbanalytics.ApiV2StocksReportProductsSizesPost200Response
+type ApiV2StocksReportOfficesPost200Response = wbanalytics.ApiV2StocksReportOfficesPost200Response
+type PostV1ItemRating200Response = wbanalytics.PostV1ItemRating200Response
+type Period = wbanalytics.Period
+type PeriodInv = wbanalytics.PeriodInv
+type PeriodItemRating = wbanalytics.PeriodItemRating
+type PeriodOrdersRequest = wbanalytics.PeriodOrdersRequest
+type StockType = wbanalytics.StockType
+type OrderBy = wbanalytics.OrderBy
+type OrderByGrTe = wbanalytics.OrderByGrTe
+type OrderByItemRating = wbanalytics.OrderByItemRating
+type OrderByMainAndDetails = wbanalytics.OrderByMainAndDetails
+type OrderByMode = wbanalytics.OrderByMode
+type TextLimit = wbanalytics.TextLimit
+type CommonInfo = wbanalytics.CommonInfo
+type CommonInfoAdvertisedProducts = wbanalytics.CommonInfoAdvertisedProducts
+type CommonInfoSupplierRating = wbanalytics.CommonInfoSupplierRating
+type CommonProductFilters = wbanalytics.CommonProductFilters
+type CommonReportFilters = wbanalytics.CommonReportFilters
+type CommonResponseProperties = wbanalytics.CommonResponseProperties
+type TableGroupResponse = wbanalytics.TableGroupResponse
+type TableGroupResponseSt = wbanalytics.TableGroupResponseSt
+type TableGroupField = wbanalytics.TableGroupField
+type TableDetailsResponse = wbanalytics.TableDetailsResponse
+type TableProductResponse = wbanalytics.TableProductResponse
+type TableShippingOfficeResponse = wbanalytics.TableShippingOfficeResponse
+type TableSizeResponse = wbanalytics.TableSizeResponse
+
+// Orders FBW requests/responses.
+type ModelsGood = wbordersfbw.ModelsGood
+type ModelsGoodInSupply = wbordersfbw.ModelsGoodInSupply
+type ModelsGoodInBox = wbordersfbw.ModelsGoodInBox
+type ModelsBox = wbordersfbw.ModelsBox
+type ModelsOptionsResultModel = wbordersfbw.ModelsOptionsResultModel
+type ModelsOptionsResultModelResultInner = wbordersfbw.ModelsOptionsResultModelResultInner
+type ModelsOptionsResultModelResultInnerError = wbordersfbw.ModelsOptionsResultModelResultInnerError
+type ModelsOptionsResultModelResultInnerWarehousesInner = wbordersfbw.ModelsOptionsResultModelResultInnerWarehousesInner
+type ModelsWarehousesResultItems = wbordersfbw.ModelsWarehousesResultItems
+type ModelsTransitTariff = wbordersfbw.ModelsTransitTariff
+type ModelsVolumeTariff = wbordersfbw.ModelsVolumeTariff
+type ModelsSuppliesFiltersRequest = wbordersfbw.ModelsSuppliesFiltersRequest
+type ModelsDateFilterRequest = wbordersfbw.ModelsDateFilterRequest
+type ModelsHandySupplyStatus = wbordersfbw.ModelsHandySupplyStatus
+type ModelsSupply = wbordersfbw.ModelsSupply
+type ModelsSupplyDetails = wbordersfbw.ModelsSupplyDetails
+type ModelsErrorModel = wbordersfbw.ModelsErrorModel
+type ApiV1AcceptanceOptionsPost401Response = wbordersfbw.ApiV1AcceptanceOptionsPost401Response
+type ApiV1AcceptanceOptionsPost402Response = wbordersfbw.ApiV1AcceptanceOptionsPost402Response
+
+// CSV oneOf helpers mirror generated constructors from the internal analytics client.
+func InventoryHistoryReportReqAsApiV2NmReportDownloadsPostRequest(v *InventoryHistoryReportReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.InventoryHistoryReportReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func InventoryMetricsReportReqAsApiV2NmReportDownloadsPostRequest(v *InventoryMetricsReportReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.InventoryMetricsReportReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func SalesFunnelGroupReqAsApiV2NmReportDownloadsPostRequest(v *SalesFunnelGroupReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.SalesFunnelGroupReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func SalesFunnelProductReqAsApiV2NmReportDownloadsPostRequest(v *SalesFunnelProductReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.SalesFunnelProductReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func SearchReportGroupReqAsApiV2NmReportDownloadsPostRequest(v *SearchReportGroupReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.SearchReportGroupReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func SearchReportProductReqAsApiV2NmReportDownloadsPostRequest(v *SearchReportProductReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.SearchReportProductReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func SearchReportTextReqAsApiV2NmReportDownloadsPostRequest(v *SearchReportTextReq) ApiV2NmReportDownloadsPostRequest {
+	return wbanalytics.SearchReportTextReqAsApiV2NmReportDownloadsPostRequest(v)
+}
+
+func Int32AsTextLimit(v *int32) TextLimit {
+	return wbanalytics.Int32AsTextLimit(v)
 }

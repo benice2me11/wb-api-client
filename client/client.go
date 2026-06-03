@@ -4,22 +4,28 @@ import (
 	"net/http"
 	"strings"
 
+	wbanalytics "github.com/benice2me11/wb-api-client/internal/generated/analytics"
 	wbdbs "github.com/benice2me11/wb-api-client/internal/generated/dbs"
 	wbdbw "github.com/benice2me11/wb-api-client/internal/generated/dbw"
 	wbfbs "github.com/benice2me11/wb-api-client/internal/generated/fbs"
 	wbgeneral "github.com/benice2me11/wb-api-client/internal/generated/general"
+	wbordersfbw "github.com/benice2me11/wb-api-client/internal/generated/ordersfbw"
 	wbproducts "github.com/benice2me11/wb-api-client/internal/generated/products"
+	wbreports "github.com/benice2me11/wb-api-client/internal/generated/reports"
 	"github.com/benice2me11/wb-api-client/transport"
 )
 
 // Client is the public SDK facade over generated category clients.
 type Client struct {
-	cfg      Config
-	general  GeneralService
-	products ProductsService
-	fbs      FBSService
-	dbw      DBWService
-	dbs      DBSService
+	cfg       Config
+	general   GeneralService
+	products  ProductsService
+	fbs       FBSService
+	dbw       DBWService
+	dbs       DBSService
+	reports   ReportsService
+	analytics AnalyticsService
+	ordersFBW OrdersFBWService
 }
 
 // NewClient builds a client with generated SDKs + transport middleware.
@@ -61,19 +67,43 @@ func NewClient(opts ...Option) *Client {
 		overrideDBSServers(dbsCfg, cfg.BaseURLs.DBS)
 	}
 
+	reportsCfg := wbreports.NewConfiguration()
+	reportsCfg.HTTPClient = httpClient
+	if cfg.overrideReportsBaseURL {
+		overrideReportsServers(reportsCfg, cfg.BaseURLs.Reports)
+	}
+
+	analyticsCfg := wbanalytics.NewConfiguration()
+	analyticsCfg.HTTPClient = httpClient
+	if cfg.overrideAnalyticsBaseURL {
+		overrideAnalyticsServers(analyticsCfg, cfg.BaseURLs.Analytics)
+	}
+
+	ordersFBWCfg := wbordersfbw.NewConfiguration()
+	ordersFBWCfg.HTTPClient = httpClient
+	if cfg.overrideOrdersFBWBaseURL {
+		overrideOrdersFBWServers(ordersFBWCfg, cfg.BaseURLs.OrdersFBW)
+	}
+
 	generalAPI := wbgeneral.NewAPIClient(generalCfg)
 	productsAPI := wbproducts.NewAPIClient(productsCfg)
 	fbsAPI := wbfbs.NewAPIClient(fbsCfg)
 	dbwAPI := wbdbw.NewAPIClient(dbwCfg)
 	dbsAPI := wbdbs.NewAPIClient(dbsCfg)
+	reportsAPI := wbreports.NewAPIClient(reportsCfg)
+	analyticsAPI := wbanalytics.NewAPIClient(analyticsCfg)
+	ordersFBWAPI := wbordersfbw.NewAPIClient(ordersFBWCfg)
 
 	return &Client{
-		cfg:      cfg,
-		general:  &generalService{api: generalAPI},
-		products: &productsService{api: productsAPI},
-		fbs:      &fbsService{api: fbsAPI},
-		dbw:      &dbwService{api: dbwAPI},
-		dbs:      &dbsService{api: dbsAPI},
+		cfg:       cfg,
+		general:   &generalService{api: generalAPI},
+		products:  &productsService{api: productsAPI},
+		fbs:       &fbsService{api: fbsAPI},
+		dbw:       &dbwService{api: dbwAPI},
+		dbs:       &dbsService{api: dbsAPI},
+		reports:   &reportsService{api: reportsAPI},
+		analytics: &analyticsService{api: analyticsAPI},
+		ordersFBW: &ordersFBWService{api: ordersFBWAPI},
 	}
 }
 
@@ -133,6 +163,21 @@ func (c *Client) DBS() DBSService {
 	return c.dbs
 }
 
+// Reports returns Reports category service facade.
+func (c *Client) Reports() ReportsService {
+	return c.reports
+}
+
+// Analytics returns Analytics category service facade.
+func (c *Client) Analytics() AnalyticsService {
+	return c.analytics
+}
+
+// OrdersFBW returns Orders FBW category service facade.
+func (c *Client) OrdersFBW() OrdersFBWService {
+	return c.ordersFBW
+}
+
 func overrideGeneralServers(cfg *wbgeneral.Configuration, baseURL string) {
 	server := wbgeneral.ServerConfiguration{
 		URL:         baseURL,
@@ -185,5 +230,38 @@ func overrideDBSServers(cfg *wbdbs.Configuration, baseURL string) {
 	cfg.Servers = wbdbs.ServerConfigurations{server}
 	for key := range cfg.OperationServers {
 		cfg.OperationServers[key] = wbdbs.ServerConfigurations{server}
+	}
+}
+
+func overrideReportsServers(cfg *wbreports.Configuration, baseURL string) {
+	server := wbreports.ServerConfiguration{
+		URL:         baseURL,
+		Description: "overridden",
+	}
+	cfg.Servers = wbreports.ServerConfigurations{server}
+	for key := range cfg.OperationServers {
+		cfg.OperationServers[key] = wbreports.ServerConfigurations{server}
+	}
+}
+
+func overrideAnalyticsServers(cfg *wbanalytics.Configuration, baseURL string) {
+	server := wbanalytics.ServerConfiguration{
+		URL:         baseURL,
+		Description: "overridden",
+	}
+	cfg.Servers = wbanalytics.ServerConfigurations{server}
+	for key := range cfg.OperationServers {
+		cfg.OperationServers[key] = wbanalytics.ServerConfigurations{server}
+	}
+}
+
+func overrideOrdersFBWServers(cfg *wbordersfbw.Configuration, baseURL string) {
+	server := wbordersfbw.ServerConfiguration{
+		URL:         baseURL,
+		Description: "overridden",
+	}
+	cfg.Servers = wbordersfbw.ServerConfigurations{server}
+	for key := range cfg.OperationServers {
+		cfg.OperationServers[key] = wbordersfbw.ServerConfigurations{server}
 	}
 }

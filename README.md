@@ -6,6 +6,9 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 - FBS Orders
 - DBW Orders
 - DBS Orders
+- Reports
+- Analytics
+- Orders FBW
 
 ## Architecture
 
@@ -40,6 +43,22 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
   - Get new orders and completed orders list
   - Get order statuses (`status/info`)
   - Confirm, deliver, receive, reject and cancel orders
+- Reports:
+  - Create, check and download warehouse remains reports
+  - Supplier stocks, orders and sales reports
+  - Excise, acceptance and paid storage report tasks
+  - Antifraud, banned products, brand share, goods labeling, goods return and region sale reports
+  - Deductions, measurement penalties and warehouse measurements reports
+- Analytics:
+  - Sales funnel products, product history and grouped history
+  - Search report summary, groups, details, product search texts and product orders
+  - Stocks reports for WB warehouses, product groups, products, sizes and offices
+  - Item rating
+  - CSV report list, create, retry and file download, including stock history CSV requests
+- Orders FBW:
+  - Acceptance options
+  - Warehouses and transit tariffs
+  - Supplies list, supply details, supply goods and supply package
 
 By default, generated server mappings are preserved (including multi-host categories like Products).
 `With*BaseURL` options explicitly override all operation servers in that category.
