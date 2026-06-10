@@ -1,5 +1,8 @@
 # wb-api-client
 
+[![tests](https://img.shields.io/github/actions/workflow/status/benice2me11/wb-api-client/tests.yml?branch=main&label=tests)](https://github.com/benice2me11/wb-api-client/actions/workflows/tests.yml)
+[![coverage](https://img.shields.io/codecov/c/github/benice2me11/wb-api-client/main?label=coverage)](https://codecov.io/gh/benice2me11/wb-api-client)
+
 OpenAPI-first Go client for Wildberries API (v1 scope):
 - General
 - Product Management
