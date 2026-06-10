@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   tests:
@@ -23,16 +22,8 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Run tests with coverage
-        run: go test -race -covermode=atomic -coverprofile=coverage.out ./...
-
-      - name: Upload coverage
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        uses: codecov/codecov-action@v5
-        with:
-          files: coverage.out
-          fail_ci_if_error: true
-          use_oidc: true
+      - name: Run tests
+        run: go test -race ./...
 
       - name: Skip Codecov on external forks
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
