@@ -25,12 +25,13 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 
 - Products:
   - Create and update cards (`/content/v2/cards/upload`, `/content/v2/cards/update`, `/content/v2/cards/upload/add`)
+  - Move cards to trash (`/content/v2/cards/delete/trash`)
   - Get cards list
   - Get products with prices (`/api/v2/list/goods/filter`, GET and POST)
   - Get size prices by article (`/api/v2/list/goods/size/nm`)
   - Set prices and size prices (`/api/v2/upload/task`, `/api/v2/upload/task/size`)
   - Track processed price uploads (`/api/v2/history/goods/task`)
-  - Get, update and delete inventory (`/api/v3/stocks/{warehouseId}`)
+  - Get, update, reset-to-zero and delete inventory (`/api/v3/stocks/{warehouseId}`)
   - Get offices for warehouse creation (`/api/v3/offices`)
   - List, create, update and delete warehouses (`/api/v3/warehouses`)
   - Get and update DBW warehouse contacts (`/api/v3/dbw/warehouses/{warehouseId}/contacts`)

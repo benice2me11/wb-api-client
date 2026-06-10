@@ -115,6 +115,77 @@ func TestProductsDeleteInventory(t *testing.T) {
 	}
 }
 
+func TestProductsDeleteCards(t *testing.T) {
+	t.Parallel()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/content/v2/cards/delete/trash" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Fatalf("unexpected method: %s", r.Method)
+		}
+		if got := r.Header.Get("Authorization"); got != "Bearer products-token" {
+			t.Fatalf("auth header mismatch: %q", got)
+		}
+		assertRequestJSON(t, r, `{"nmIDs":[11,22]}`)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = fmt.Fprint(w, `{}`)
+	}))
+	defer server.Close()
+
+	c := client.NewClient(
+		client.WithToken("products-token"),
+		client.WithProductsBaseURL(server.URL),
+	)
+
+	resp, httpResp, err := c.Products().DeleteCards(context.Background(), client.ContentV2CardsDeleteTrashPostRequest{
+		NmIDs: []int32{11, 22},
+	})
+	if err != nil {
+		t.Fatalf("DeleteCards unexpected error: %v", err)
+	}
+	if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("DeleteCards unexpected status: %+v", httpResp)
+	}
+	if resp == nil {
+		t.Fatalf("DeleteCards unexpected response: %+v", resp)
+	}
+}
+
+func TestProductsResetInventory(t *testing.T) {
+	t.Parallel()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/v3/stocks/777" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPut {
+			t.Fatalf("unexpected method: %s", r.Method)
+		}
+		if got := r.Header.Get("Authorization"); got != "Bearer products-token" {
+			t.Fatalf("auth header mismatch: %q", got)
+		}
+		assertRequestJSON(t, r, `{"stocks":[{"amount":0,"chrtId":11},{"amount":0,"chrtId":22}]}`)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	c := client.NewClient(
+		client.WithToken("products-token"),
+		client.WithProductsBaseURL(server.URL),
+	)
+
+	httpResp, err := c.Products().ResetInventory(context.Background(), 777, []int32{11, 22})
+	if err != nil {
+		t.Fatalf("ResetInventory unexpected error: %v", err)
+	}
+	if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
+		t.Fatalf("ResetInventory unexpected status: %+v", httpResp)
+	}
+}
+
 func TestProductsWarehouseLifecycle(t *testing.T) {
 	t.Parallel()
 

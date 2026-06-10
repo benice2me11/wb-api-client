@@ -42,6 +42,7 @@ type ProductsService interface {
 	GetCardsList(ctx context.Context, request ContentV2GetCardsListPostRequest) (*ContentV2GetCardsListPost200Response, *http.Response, error)
 	GetCardsLimits(ctx context.Context) (*ContentV2CardsLimitsGet200Response, *http.Response, error)
 	GetCardsErrorList(ctx context.Context, request RequestPublicViewerPublicErrorsTableListV2, query *CardsErrorListQuery) (*ResponsePublicViewerPublicErrorsTableListV2, *http.Response, error)
+	DeleteCards(ctx context.Context, request ContentV2CardsDeleteTrashPostRequest) (*ContentV2CardsDeleteTrashPost200Response, *http.Response, error)
 	SaveMedia(ctx context.Context, request ContentV3MediaSavePostRequest) (*ContentV3MediaFilePost200Response, *http.Response, error)
 	UploadMediaFile(ctx context.Context, nmID string, photoNumber int32, uploadFile *os.File) (*ContentV3MediaFilePost200Response, *http.Response, error)
 	SetPrices(ctx context.Context, request ApiV2UploadTaskPostRequest) (*TaskCreated, *http.Response, error)
@@ -52,6 +53,7 @@ type ProductsService interface {
 	ListGoodsSizeByNm(ctx context.Context, query ListGoodsSizeByNmQuery) (*ApiV2ListGoodsSizeNmGet200Response, *http.Response, error)
 	GetInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdPostRequest) (*ApiV3StocksWarehouseIdPost200Response, *http.Response, error)
 	UpdateInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdPutRequest) (*http.Response, error)
+	ResetInventory(ctx context.Context, warehouseID int64, chrtIDs []int32) (*http.Response, error)
 	DeleteInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdDeleteRequest) (*http.Response, error)
 	Offices(ctx context.Context) ([]Office, *http.Response, error)
 	Warehouses(ctx context.Context) ([]Warehouse, *http.Response, error)
@@ -129,6 +131,17 @@ func (s *productsService) GetCardsErrorList(ctx context.Context, request Request
 	}
 
 	resp, httpResp, err := req.Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) DeleteCards(ctx context.Context, request ContentV2CardsDeleteTrashPostRequest) (*ContentV2CardsDeleteTrashPost200Response, *http.Response, error) {
+	resp, httpResp, err := s.api.ProductCardsAPI.
+		ContentV2CardsDeleteTrashPost(ctx).
+		ContentV2CardsDeleteTrashPostRequest(request).
+		Execute()
 	if err != nil {
 		return nil, httpResp, transport.WrapResponseError(httpResp, err)
 	}
@@ -262,6 +275,20 @@ func (s *productsService) UpdateInventory(ctx context.Context, warehouseID int64
 		return httpResp, transport.WrapResponseError(httpResp, err)
 	}
 	return httpResp, nil
+}
+
+func (s *productsService) ResetInventory(ctx context.Context, warehouseID int64, chrtIDs []int32) (*http.Response, error) {
+	stocks := make([]ApiV3StocksWarehouseIdPutRequestStocksInner, 0, len(chrtIDs))
+	for _, chrtID := range chrtIDs {
+		stock := ApiV3StocksWarehouseIdPutRequestStocksInner{}
+		stock.SetChrtId(chrtID)
+		stock.SetAmount(0)
+		stocks = append(stocks, stock)
+	}
+
+	return s.UpdateInventory(ctx, warehouseID, ApiV3StocksWarehouseIdPutRequest{
+		Stocks: stocks,
+	})
 }
 
 func (s *productsService) DeleteInventory(ctx context.Context, warehouseID int64, request ApiV3StocksWarehouseIdDeleteRequest) (*http.Response, error) {
