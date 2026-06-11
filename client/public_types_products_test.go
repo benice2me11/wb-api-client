@@ -15,6 +15,7 @@ func TestProductsPublicTypeAliases(t *testing.T) {
 	var _ client.ContentV2CardsLimitsGet200ResponseData
 	var _ client.ContentV2CardsDeleteTrashPostRequest
 	var _ client.ContentV2CardsDeleteTrashPost200Response
+	var _ client.ContentV2CardsRecoverPost200Response
 	var _ client.RequestPublicViewerPublicErrorsTableListV2
 	var _ client.ResponsePublicViewerPublicErrorsTableListV2
 	var _ client.SwaggerPublicErrorsCursorInput

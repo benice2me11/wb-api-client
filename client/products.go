@@ -43,6 +43,7 @@ type ProductsService interface {
 	GetCardsLimits(ctx context.Context) (*ContentV2CardsLimitsGet200Response, *http.Response, error)
 	GetCardsErrorList(ctx context.Context, request RequestPublicViewerPublicErrorsTableListV2, query *CardsErrorListQuery) (*ResponsePublicViewerPublicErrorsTableListV2, *http.Response, error)
 	DeleteCards(ctx context.Context, request ContentV2CardsDeleteTrashPostRequest) (*ContentV2CardsDeleteTrashPost200Response, *http.Response, error)
+	RecoverCards(ctx context.Context, request ContentV2CardsDeleteTrashPostRequest) (*ContentV2CardsRecoverPost200Response, *http.Response, error)
 	SaveMedia(ctx context.Context, request ContentV3MediaSavePostRequest) (*ContentV3MediaFilePost200Response, *http.Response, error)
 	UploadMediaFile(ctx context.Context, nmID string, photoNumber int32, uploadFile *os.File) (*ContentV3MediaFilePost200Response, *http.Response, error)
 	SetPrices(ctx context.Context, request ApiV2UploadTaskPostRequest) (*TaskCreated, *http.Response, error)
@@ -140,6 +141,17 @@ func (s *productsService) GetCardsErrorList(ctx context.Context, request Request
 func (s *productsService) DeleteCards(ctx context.Context, request ContentV2CardsDeleteTrashPostRequest) (*ContentV2CardsDeleteTrashPost200Response, *http.Response, error) {
 	resp, httpResp, err := s.api.ProductCardsAPI.
 		ContentV2CardsDeleteTrashPost(ctx).
+		ContentV2CardsDeleteTrashPostRequest(request).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	return resp, httpResp, nil
+}
+
+func (s *productsService) RecoverCards(ctx context.Context, request ContentV2CardsDeleteTrashPostRequest) (*ContentV2CardsRecoverPost200Response, *http.Response, error) {
+	resp, httpResp, err := s.api.ProductCardsAPI.
+		ContentV2CardsRecoverPost(ctx).
 		ContentV2CardsDeleteTrashPostRequest(request).
 		Execute()
 	if err != nil {

@@ -26,6 +26,7 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 - Products:
   - Create and update cards (`/content/v2/cards/upload`, `/content/v2/cards/update`, `/content/v2/cards/upload/add`)
   - Move cards to trash (`/content/v2/cards/delete/trash`)
+  - Recover cards from trash (`/content/v2/cards/recover`)
   - Get cards list
   - Get products with prices (`/api/v2/list/goods/filter`, GET and POST)
   - Get size prices by article (`/api/v2/list/goods/size/nm`)

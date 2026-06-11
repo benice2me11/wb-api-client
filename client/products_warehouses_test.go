@@ -154,6 +154,45 @@ func TestProductsDeleteCards(t *testing.T) {
 	}
 }
 
+func TestProductsRecoverCards(t *testing.T) {
+	t.Parallel()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/content/v2/cards/recover" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		if r.Method != http.MethodPost {
+			t.Fatalf("unexpected method: %s", r.Method)
+		}
+		if got := r.Header.Get("Authorization"); got != "Bearer products-token" {
+			t.Fatalf("auth header mismatch: %q", got)
+		}
+		assertRequestJSON(t, r, `{"nmIDs":[11,22]}`)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = fmt.Fprint(w, `{"data":{},"error":false,"errorText":"","additionalErrors":{}}`)
+	}))
+	defer server.Close()
+
+	c := client.NewClient(
+		client.WithToken("products-token"),
+		client.WithProductsBaseURL(server.URL),
+	)
+
+	resp, httpResp, err := c.Products().RecoverCards(context.Background(), client.ContentV2CardsDeleteTrashPostRequest{
+		NmIDs: []int32{11, 22},
+	})
+	if err != nil {
+		t.Fatalf("RecoverCards unexpected error: %v", err)
+	}
+	if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("RecoverCards unexpected status: %+v", httpResp)
+	}
+	if resp == nil {
+		t.Fatalf("RecoverCards unexpected response: %+v", resp)
+	}
+}
+
 func TestProductsResetInventory(t *testing.T) {
 	t.Parallel()
 
