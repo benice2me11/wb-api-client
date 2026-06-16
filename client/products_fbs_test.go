@@ -308,6 +308,13 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			_, _ = fmt.Fprint(w, `{}`)
+		case "GET /api/v2/history/tasks":
+			if got := r.URL.Query().Get("uploadID"); got != "123" {
+				t.Fatalf("unexpected uploadID: %s", got)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"data":{"uploadID":123,"status":3,"overAllGoodsNumber":1,"successGoodsNumber":1},"error":false,"errorText":""}`)
 		case "GET /content/v2/cards/limits":
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
@@ -387,6 +394,14 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 		t.Fatalf("PriceTaskDetails unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("PriceTaskDetails unexpected status: %+v", httpResp)
+	}
+
+	if state, httpResp, err := c.Products().PriceTaskState(ctx, 123); err != nil {
+		t.Fatalf("PriceTaskState unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
+		t.Fatalf("PriceTaskState unexpected status: %+v", httpResp)
+	} else if state == nil || state.GetStatus() != 3 {
+		t.Fatalf("PriceTaskState unexpected state: %+v", state)
 	}
 
 	if _, httpResp, err := c.Products().GetCardsLimits(ctx); err != nil {

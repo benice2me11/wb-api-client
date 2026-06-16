@@ -61,6 +61,7 @@ type ApiV2ListGoodsFilterGet200Response = wbproducts.ApiV2ListGoodsFilterGet200R
 type ApiV2ListGoodsFilterPostRequest = wbproducts.ApiV2ListGoodsFilterPostRequest
 type ApiV2ListGoodsSizeNmGet200Response = wbproducts.ApiV2ListGoodsSizeNmGet200Response
 type GoodsList = wbproducts.GoodsList
+type SupplierTaskMetadata = wbproducts.SupplierTaskMetadata
 type TaskCreated = wbproducts.TaskCreated
 
 // Warehouses/inventory requests/responses.

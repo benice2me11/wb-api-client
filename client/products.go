@@ -48,6 +48,7 @@ type ProductsService interface {
 	UploadMediaFile(ctx context.Context, nmID string, photoNumber int32, uploadFile *os.File) (*ContentV3MediaFilePost200Response, *http.Response, error)
 	SetPrices(ctx context.Context, request ApiV2UploadTaskPostRequest) (*TaskCreated, *http.Response, error)
 	SetSizePrices(ctx context.Context, request ApiV2UploadTaskSizePostRequest) (*TaskCreated, *http.Response, error)
+	PriceTaskState(ctx context.Context, uploadID int32) (*SupplierTaskMetadata, *http.Response, error)
 	PriceTaskDetails(ctx context.Context, query PriceTaskDetailsQuery) (*ApiV2HistoryGoodsTaskGet200Response, *http.Response, error)
 	ListGoodsFilter(ctx context.Context, query ListGoodsFilterQuery) (*ApiV2ListGoodsFilterGet200Response, *http.Response, error)
 	ListGoodsFilterBulk(ctx context.Context, request ApiV2ListGoodsFilterPostRequest) (*ApiV2ListGoodsFilterGet200Response, *http.Response, error)
@@ -204,6 +205,24 @@ func (s *productsService) SetSizePrices(ctx context.Context, request ApiV2Upload
 		return nil, httpResp, transport.WrapResponseError(httpResp, err)
 	}
 	return resp, httpResp, nil
+}
+
+func (s *productsService) PriceTaskState(ctx context.Context, uploadID int32) (*SupplierTaskMetadata, *http.Response, error) {
+	resp, httpResp, err := s.api.PricesAndDiscountsAPI.
+		ApiV2HistoryTasksGet(ctx).
+		UploadID(uploadID).
+		Execute()
+	if err != nil {
+		return nil, httpResp, transport.WrapResponseError(httpResp, err)
+	}
+	if resp == nil {
+		return nil, httpResp, nil
+	}
+	data, ok := resp.GetDataOk()
+	if !ok {
+		return nil, httpResp, nil
+	}
+	return data, httpResp, nil
 }
 
 func (s *productsService) PriceTaskDetails(ctx context.Context, query PriceTaskDetailsQuery) (*ApiV2HistoryGoodsTaskGet200Response, *http.Response, error) {
