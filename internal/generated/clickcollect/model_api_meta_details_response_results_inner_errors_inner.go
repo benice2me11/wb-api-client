@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -21,11 +21,11 @@ var _ MappedNullable = &ApiMetaDetailsResponseResultsInnerErrorsInner{}
 
 // ApiMetaDetailsResponseResultsInnerErrorsInner struct for ApiMetaDetailsResponseResultsInnerErrorsInner
 type ApiMetaDetailsResponseResultsInnerErrorsInner struct {
-	// Код ошибки
+	// Error code
 	Code int32 `json:"code"`
-	// - `NotFound` — сборочное задание не найдено - `StatusMismatch` — операция невозможна для этого статуса сборочного задания - `MetaValidationFail` — идентификаторы маркировки не прошли проверку 
+	// - `NotFound` — the assembly order is not found - `StatusMismatch` — operation is not possible for this assembly order status - `MetaValidationFail` — label identifiers validation failed 
 	Detail string `json:"detail"`
-	// Ошибки проверки идентификаторов маркировки
+	// Assembly order label identifiers validation errors
 	MetaDetails []MetaDetailsErrorsInner `json:"metaDetails,omitempty"`
 }
 

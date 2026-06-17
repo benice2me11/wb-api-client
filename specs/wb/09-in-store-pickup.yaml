@@ -1,11 +1,11 @@
 openapi: 3.0.1
 info:
-  title: Заказы Самовывоз
+  title: In-Store Pickup Orders
   x-file-name: in-store-pickup
   description: |
     <div class="api-block">
 
-    Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.
+    Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.
 
     </div>
   version: instorepickup
@@ -14,10 +14,10 @@ servers:
 security:
   - HeaderApiKey: []
 tags:
-  - name: Сборочные задания Самовывоз
+  - name: In-Store Pickup Assembly Orders
     description: ''
-  - name: Идентификаторы маркировки Самовывоз
-    x-displayName: Идентификаторы маркировки Самовывоз
+  - name: In-Store Pickup Label Identifiers
+    x-displayName: In-Store Pickup Label Identifiers
     description: ''
 paths:
   /api/v3/click-collect/orders/new:
@@ -25,23 +25,23 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Получить список новых сборочных заданий
+        - In-Store Pickup Assembly Orders
+      summary: Get New Assembly Orders List
       description: |
-        Метод возвращает список всех новых [сборочных заданий](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz), которые есть у продавца на момент запроса.
+        The method provides a list of all new [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) that the seller has at the time of the request.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для методов <strong>сборочных заданий Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>In-Store Pickup assembly orders</strong> methods:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 300 запросов | 200 мс | 20 запросов |
+        | 1 min | 300 requests | 200 ms | 20 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -62,19 +62,19 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Перевести сборочные задания на сборку
+        - In-Store Pickup Assembly Orders
+      summary: Transfer to Assembly
       description: |
-        Метод переводит [сборочные задания](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) из [статуса](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `new` — новый — в статус `confirm` — на сборке.
+        The method transfers [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) from the `new` [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) to the `confirm` — on  assembly — status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
         | <no value> | <no value> | <no value> | <no value> |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -83,7 +83,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -103,19 +103,19 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Сообщить, что сборочные задания готовы к выдаче
+        - In-Store Pickup Assembly Orders
+      summary: Notify That the Assembly Orders Are Ready for Pickup
       description: |
-        Метод переводит [сборочные задания](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) из [статуса](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `confirm` — на сборке — в статус `prepare` — готово к выдаче.
+        The method transfers [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) from the `confirm` — on assembly — [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) to the `prepare` — ready for pickup — status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
         | <no value> | <no value> | <no value> | <no value> |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -124,7 +124,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -144,23 +144,26 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Информация о покупателе
+        - In-Store Pickup Assembly Orders
+      summary: Buyer Information
       description: |
-        Метод возвращает информацию о покупателе по ID сборочного задания.
+        The method provides information about the buyer based on the assembly order ID.
         <br><br>
-        Доступно только для сборочных заданий в статусах:
-          - `confirm` — на сборке
-          - `prepare` — готов к выдаче
+        Available only for assembly orders with the following statuses:
+          - `confirm` — in assembly
+          - `prepare` — ready for pickup
+
+        Restrictions:
+        - Information can only be obtained for assembly orders that are in the assembly process — status `confirm` and ready for pickup — status `prepare`.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для методов <strong>сборочных заданий Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>In-Store Pickup assembly orders</strong> methods:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 300 запросов | 200 мс | 20 запросов |
+        | 1 min | 300 requests | 200 ms | 20 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -170,13 +173,13 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/api.OrderClientInfoResp'
         '400':
-          description: Неправильный запрос
+          description: Bad request
           content:
             application/json:
               schema:
@@ -197,21 +200,21 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Проверить, что заказ принадлежит покупателю
+        - In-Store Pickup Assembly Orders
+      summary: Check If the Order Belongs to the Buyer
       description: |
-        Метод сообщает, принадлежит ли проверяемый заказ покупателю или нет по переданному коду.
+        The method indicates whether the checked order belongs to the buyer based on the provided code.
         <br><br>
-        Доступно, если хотя бы одно сборочное задание из заказа находится в статусе prepare - готов к выдаче.
+        Available if at least one assembly order from the order is in `prepare` status — ready for pickup.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 30 запросов | 2 сек | 20 запросов |
+        | 1 min | 30 requests | 2 s | 20 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -221,13 +224,13 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/api.CheckedIdentity'
         '400':
-          description: Неправильный запрос
+          description: Bad request
           content:
             application/json:
               schema:
@@ -242,7 +245,7 @@ paths:
         '403':
           $ref: '#/components/responses/AccessDenied'
         '404':
-          description: Не найдено
+          description: Not found
           content:
             application/json:
               schema:
@@ -251,7 +254,7 @@ paths:
                 OrderNotFound:
                   $ref: '#/components/examples/OrderNotFound'
         '409':
-          description: Введён неверный проверочный код
+          description: Incorrect verification code entered
           content:
             application/json:
               schema:
@@ -266,19 +269,19 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Сообщить, что заказы приняты покупателями
+        - In-Store Pickup Assembly Orders
+      summary: Notify That the Orders Were Received by the Buyers
       description: |
-        Метод переводит [сборочные задания](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) из [статуса](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `prepare` — готово к выдаче — в статус `receive` — получено покупателем.
+        The method transfers [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) from the `prepare` — ready for pickup — [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) to the `receive` — received by the buyer — status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
         | <no value> | <no value> | <no value> | <no value> |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -287,7 +290,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -307,19 +310,19 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Сообщить об отказе от заказов
+        - In-Store Pickup Assembly Orders
+      summary: Notify that the Orders Are Declined
       description: |
-        Метод переводит [сборочные задания](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) из [статуса](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `prepare` — готово к выдаче — в статус `reject` — отказ при получении.
+        The method transfers [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) from the `prepare` — ready for pickup — [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) to the `reject` — refusal upon receipt — status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
         | <no value> | <no value> | <no value> | <no value> |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -328,7 +331,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -348,9 +351,46 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Получить статусы сборочных заданий
-      description: "Метод возвращает статусы [сборочных заданий](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) по их ID.\n<br><br>\n`supplierStatus` — статус сборочного задания. Триггер его изменения - действие самого продавца.\n\nВозможные значения `supplierStatus`:\n| Статус   | Описание            | Как перевести сборочное задание в данный статус |\n| -------  | ---------           | --------------------------------------|\n| `new`      | **Новое сборочное задание** |\n| `confirm`  | **На сборке**  | \t[Перевести сборочное задание на сборку](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1confirm/post)\n| `prepare`  | **Готов к выдаче** | \t[Сообщить, что сборочное задание готово к выдаче](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1prepare/post)\n| `receive`  | **Получено покупателем**   | [Сообщить, что заказ принят покупателем](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1receive/post)\n| `reject`  | **Отказ покупателя при получении**    |  \t[Сообщить, что покупатель отказался от заказа](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1reject/post)\n| `cancel`   | **Отменено продавцом**    |  \t[Отменить сборочное задание](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1cancel/post)\n| `cancel_shelf_life` | **Отмена по истечении срока хранения**    |  \tПереводится автоматически по возникновению события\n\n<br><br>\n`wbStatus` — статус системы Wildberries.\n\nВозможные значения `wbStatus`:\n- `waiting` - сборочное задание в работе\n- `sold` - заказ получен покупателем\n- `canceled` - отмена сборочного задания\n- `canceled_by_client` - покупатель отменил заказ при получении\n- `declined_by_client` - покупатель отменил заказ в первый чаc\n<br> Отмена доступна покупателю в первый час с момента заказа, если заказ не переведён на сборку\n- `defect` - отмена заказа по причине брака\n- `ready_for_pickup` - заказ готов к выдаче\n\n<div class=\"description_limit\">\n<a href=\"/openapi/api-information#tag/Vvedenie/Limity-zaprosov\">Лимит запросов</a> на один аккаунт продавца:\n\n| Период | Лимит | Интервал | Всплеск |\n| --- | --- | --- | --- |\n| <no value> | <no value> | <no value> | <no value> |\n\nОдин запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов\n</div>\n"
+        - In-Store Pickup Assembly Orders
+      summary: Get Assembly Order Statuses
+      description: |
+        The method provides the statuses of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) by their ID.
+        <br><br>
+        `supplierStatus` — the status of the assembly order. The trigger for its change is the action of the seller himself.
+
+        Possible values for `supplierStatus`:
+        | Status              | Description                | How to set the assembly order to this status                    |
+        |---------------------|----------------------------|-----------------------------------------------------------------|
+        | `new`                 | **New assembly order**         ||
+        | `confirm`             | **In assembly**                | [Transfer to assembly](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1confirm/post)          |
+        | `prepare`             | **Ready for pickup**           | [Notify that the assembly order is ready for delivery](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1prepare/post)           |
+        | `receive`             | **Received by buyer**       | [Notify that the order has been received by the buyer](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1receive/post)           |
+        | `reject`              | **Buyer refusal**           | [Notify that the buyer has declined the order](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1reject/post)            |
+        | `cancel`              | **Canceled by seller**         | [Cancel the order](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1cancel/post)            |
+        | `cancel_shelf_life`   | **Canceled due to shelf life expiration** | Automatically transitions upon event occurrence |
+
+        `wbStatus` — the status of the assembly order in the WB system.
+
+        Possible values for wbStatus:
+        - `waiting` - assembly order is in progress
+        - `sorted` - assembly order is sorted
+        - `sold` - the buyer got the order
+        - `canceled` - assembly order canceled
+        - `canceled_by_client` - buyer canceled the order upon receipt
+        - `declined_by_client` - buyer canceled the order within the first hour
+        <br>Cancellation is available to the buyer within the first hour from the time of order, if the order has not been transitioned to assembly
+        - `defect` - order canceled due to defect
+        - `ready_for_pickup` - order is ready for pickup
+
+        <div class="description_limit">
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
+
+        | Period | Limit | Interval | Burst |
+        | --- | --- | --- | --- |
+        | <no value> | <no value> | <no value> | <no value> |
+
+        One request with <code>4XX</code> response codes is counted as 10 requests
+        </div>
       requestBody:
         content:
           application/json:
@@ -359,7 +399,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -379,28 +419,27 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Получить информацию о завершённых сборочных заданиях
+        - In-Store Pickup Assembly Orders
+      summary: Retrieve Information on Completed Assembly Orders
       description: |
-        Метод возвращает информацию о завершённых сборочных заданиях после продажи или отмены заказа.
+        The method provides information on completed assembly orders after the sale or cancellation of an order.
 
-        Можно получить данные за заданный период, максимум 30 календарных дней одним запросом.
+        You can get data for a specified period, maximum of 30 calendar days per request.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для методов <strong>сборочных заданий Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for <strong>In-Store Pickup assembly orders</strong> methods:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 300 запросов | 200 мс | 20 запросов |
+        | 1 min | 300 requests | 200 ms | 20 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       parameters:
         - name: limit
           in: query
           description: |
-            Параметр пагинации. Устанавливает предельное количество возвращаемых
-            данных.
+            Pagination parameter. Sets the maximum number of returned data.
           required: true
           schema:
             type: integer
@@ -409,34 +448,31 @@ paths:
         - name: next
           in: query
           description: |
-            Параметр пагинации. Устанавливает значение, с которого необходимо получить
-            следующий пакет данных. Для получения полного списка данных должен
-            быть равен `0` в первом запросе. Для следующих запросов необходимо
-            брать значения из одноимённого поля в ответе
+            Pagination parameter. Sets the value from which the next batch of data should be retrieved. To obtain the complete list of data, it should be set to 0 in the first request. For subsequent requests, the values should be taken from the field with the same name in the response.
           required: true
           schema:
             type: integer
         - name: dateFrom
           in: query
-          description: Дата начала периода в формате Unix timestamp
+          description: Period start date in the Unix timestamp format
           required: true
           schema:
             type: integer
         - name: dateTo
           in: query
-          description: Дата конца периода в формате Unix timestamp
+          description: Period end date in the Unix timestamp format
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/api.Orders'
         '400':
-          description: Неправильный запрос
+          description: Bad request
           content:
             application/json:
               schema:
@@ -457,19 +493,19 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Сборочные задания Самовывоз
-      summary: Отменить сборочные задания
+        - In-Store Pickup Assembly Orders
+      summary: Cancel the Assembly Orders
       description: |
-        Переводит [сборочные задания](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) из [статусов](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `new`, `confirm`, `prepare` в статус `cancel` — отменено продавцом.
+        The method transfers [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) from the `new`, `confirm`, `prepare` [statuses](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) to the `cancel` — canceled by the seller — status.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
         | <no value> | <no value> | <no value> | <no value> |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -478,7 +514,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -498,21 +534,21 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Получить идентификаторы маркировки сборочных заданий
+        - In-Store Pickup Label Identifiers
+      summary: Get Assembly Orders Label Identifiers
       description: |
-        Метод возвращает [идентификаторы маркировки](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) сборочных заданий и статусы их проверки.
+        Returns [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) label identifiers and their validation statuses.
 
-        Перечень идентификаторов маркировки, доступных для сборочного задания, можно получить в [списке новых сборочных заданий](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1v3~1click-collect~1orders~1new/get), поле `requiredMeta`.
+        You can get the list of label identifiers available for the assembly order with the [list of new assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1v3~1click-collect~1orders~1new/get), field `requiredMeta`.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>получения и удаления идентификаторов маркировки Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>getting and deleting In-Store Pickup label identifiers</strong>:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 150 запросов | 400 мс | 20 запросов |
+        | 1 min | 150 requests | 400 ms | 20 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -521,7 +557,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -539,21 +575,10 @@ paths:
       x-readonly-method: true
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Получить идентификаторы маркировки сборочных заданий
+        - In-Store Pickup Label Identifiers
+      summary: Get Assembly Orders Label Identifiers
       deprecated: true
-      description: |
-        Данный метод устарел. Он будет удалён [15 июля](https://dev.wildberries.ru/release-notes?id=536)
-
-        <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>получения и удаления идентификаторов маркировки Самовывоз</strong>:
-
-        | Период | Лимит | Интервал | Всплеск |
-        | --- | --- | --- | --- |
-        | 1 мин | 150 запросов | 400 мс | 20 запросов |
-
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
-        </div>
+      description: "This method is deprecated. It will be removed on\_[July 15](https://dev.wildberries.ru/en/release-notes?id=536)\n\n<div class=\"description_limit\">\n<a href=\"/openapi/api-information#tag/Introduction/Rate-Limits\">Request limit</a> per one seller's account for all methods for <strong>getting and deleting In-Store Pickup label identifiers</strong>:\n\n| Period | Limit | Interval | Burst |\n| --- | --- | --- | --- |\n| 1 min | 150 requests | 400 ms | 20 requests |\n\nOne request with <code>4XX</code> response codes is counted as 10 requests\n</div>\n"
       requestBody:
         content:
           application/json:
@@ -561,7 +586,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersRequestV2'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -581,21 +606,20 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Удалить идентификаторы маркировки сборочных заданий
+        - In-Store Pickup Label Identifiers
+      summary: Delete Assembly Order Label Identifiers
       description: |
-        Метод удаляет значения указанных [идентификаторов маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post) для нескольких сборочных заданий.
-        <br><br>
-        Одним запросом можно удалить идентификаторы маркировки только одного типа: `imei`, `uin`, `gtin` или `sgtin`.
+        The method removes [assembly orders label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post) values. <br><br>
+        You can only remove one type of label identifiers in one request: `imei`, `uin`, `gtin` or `sgtin`.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>получения и удаления идентификаторов маркировки Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>getting and deleting In-Store Pickup label identifiers</strong>:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 150 запросов | 400 мс | 20 запросов |
+        | 1 min | 150 requests | 400 ms | 20 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -604,7 +628,7 @@ paths:
               $ref: '#/components/schemas/api.OrdersMetaDeleteRequest'
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -624,22 +648,23 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Закрепить коды маркировки Честного знака за сборочными заданиями
+        - In-Store Pickup Label Identifiers
+      summary: Add Labeling codes Chestny ZNAK to the Assembly Orders (Chestny ZNAK)
       description: |
-        Метод обновляет код маркировки [Честного знака](https://честныйзнак.рф/) в [идентификаторах маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post) нескольких сборочных заданий.<br>
-        Закрепить код маркировки Честного знака можно, только если в [идентификаторах маркировки сборочного задания](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post) есть поле `sgtin`, а сборочное задание находится в [статусе](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `confirm`.
-        <br><br>
-        Получить загруженные маркировки можно в [идентификаторах маркировки сборочного задания](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post).
+        The method sets labeling code [Chestny ZNAK](https://chestnyznak.ru/en) to the [assembly orders label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post).<br><br>
+        You can set the labeling codes Chestny ZNAK only for orders in the `confirm` status and if the field `sgtin` is returned in the response of the [Get order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post) method.<br>
+        You can get the uploaded labeling codes in the [assembly orders label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post).
+
+        For more information about labeling codes Chestny ZNAK please check: https://chestnyznak.ru/en/.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>закрепления идентификаторов маркировки Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup label identifiers</strong>:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 20 запросов | 3 сек | 500 запросов |
+        | 1 min | 20 requests | 3 s | 500 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -649,7 +674,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -669,21 +694,21 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Закрепить УИН за сборочными заданиями
+        - In-Store Pickup Label Identifiers
+      summary: Add UIN (Unique Identification Numbers) to the Assembly Orders
       description: |
-        Метод обновляет УИН, уникальные идентификационные номера, в [идентификаторах маркировки сборочных заданий](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post). У одного сборочного задания может быть
-        только один УИН. Добавлять УИН можно только для сборочных заданий в [статусе](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post)
-        `confirm` и доставка которых осуществляется силами WB.
+        The method sets the UIN (Unique Identification Numbers) for the [assembly orders label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post).
+        The order can only have one UIN.
+        You can add the UIN only for assembly orders in the `confirm` [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) and that are delivered by WB.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>закрепления идентификаторов маркировки Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup label identifiers</strong>:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 20 запросов | 3 сек | 500 запросов |
+        | 1 min | 20 requests | 3 s | 500 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -693,7 +718,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -713,21 +738,21 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Закрепить IMEI за сборочными заданиями
+        - In-Store Pickup Label Identifiers
+      summary: Add IMEI to the Assembly Orders
       description: |
-        Метод обновляет IMEI в [идентификаторах маркировки сборочных заданий](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post). У одного сборочного задания может
-        быть только один IMEI. Добавлять IMEI можно только для сборочных заданий в
-        [статусе](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `confirm`, если их доставка осуществляется силами WB.
+        Sets the IMEI for the [assembly orders label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post). <br>
+        The assembly order can have only one IMEI.
+        You can add the IMEI only for assembly orders in the `confirm` [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) that are delivered by Wildberries.<br>
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>закрепления идентификаторов маркировки Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup label identifiers</strong>:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 20 запросов | 3 сек | 500 запросов |
+        | 1 min | 20 requests | 3 s | 500 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -737,7 +762,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -757,22 +782,21 @@ paths:
       x-readonly-method: false
       x-category: marketplace
       tags:
-        - Идентификаторы маркировки Самовывоз
-      summary: Закрепить GTIN за сборочными заданиями
+        - In-Store Pickup Label Identifiers
+      summary: Add GTIN to the Assembly Orders
       description: |
-        Метод обновляет GTIN, уникальный ID товара в Беларуси, в [идентификаторах маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post) нескольких сборочных
-        заданий. У одного сборочного задания может быть только один GTIN.
-        Добавлять GTIN можно только для сборочных заданий в [статусе](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) `confirm` и
-        доставка которых осуществляется силами WB.
+        The method sets the GTIN, Belarus item unique identifier, for the assembly orders [label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers/paths/~1api~1marketplace~1v3~1click-collect~1orders~1meta~1details/post).
+        The assembly order can only have one GTIN.
+        You can add the GTIN only for assembly orders in the `confirm` [status](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders/paths/~1api~1marketplace~1v3~1click-collect~1orders~1status~1info/post) and that are delivered by WB.
 
         <div class="description_limit">
-        <a href="/openapi/api-information#tag/Vvedenie/Limity-zaprosov">Лимит запросов</a> на один аккаунт продавца для всех методов <strong>закрепления идентификаторов маркировки Самовывоз</strong>:
+        <a href="/openapi/api-information#tag/Introduction/Rate-Limits">Request limit</a> per one seller's account for all methods for <strong>adding In-Store Pickup label identifiers</strong>:
 
-        | Период | Лимит | Интервал | Всплеск |
+        | Period | Limit | Interval | Burst |
         | --- | --- | --- | --- |
-        | 1 мин | 20 запросов | 3 сек | 500 запросов |
+        | 1 min | 20 requests | 3 s | 500 requests |
 
-        Один запрос с кодами ответов <code>4XX</code> учитывается как 10 запросов
+        One request with <code>4XX</code> response codes is counted as 10 requests
         </div>
       requestBody:
         content:
@@ -782,7 +806,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Успешно
+          description: Success
           content:
             application/json:
               schema:
@@ -833,20 +857,18 @@ components:
             isZeroOrder: false
     IncorrectRequestBody:
       value:
-        code: IncorrectRequestBody
-        message: Некорректное тело запроса
+        message: Incorrect request body
     InvalidPasscode:
-      description: Введён неправильный проверочный код
+      description: The verification code you entered is incorrect
       value:
         code: InvalidPasscode
     OrderNotFound:
-      description: Заказ не найден
+      description: Order not found
       value:
         code: NotFound
     IncorrectParameter:
       value:
-        code: IncorrectParameter
-        message: Передан некорректный параметр
+        message: Incorrect parameter is passed
   schemas:
     api.CheckedIdentity:
       type: object
@@ -854,34 +876,34 @@ components:
         ok:
           type: boolean
           description: |
-            Принадлежит ли заказ покупателю:
-              - `true` — принадлежит
-              - `false` — значение не применяется. Если заказ не принадлежит покупателю, вы получите ответ со статус-кодом `409`
+            Indicates whether the order belongs to the buyer:
+             - `true` — belongs
+             - `false` — the value is not applied. If the order does not belong to the buyer, you will receive a response with `409` status code
     Error:
       type: object
       nullable: false
       properties:
         code:
           type: string
-          description: Код ошибки
+          description: Error code
           nullable: false
         message:
           type: string
-          description: Описание ошибки
+          description: Error description
           nullable: false
         data:
           type: object
-          description: Дополнительные данные, обогащающие ошибку
+          description: Additional data enriching the error
           nullable: true
     api.CheckIdentityRequest:
       type: object
       properties:
         orderCode:
           type: string
-          description: Уникальный ID заказа покупателя
+          description: Unique buyer order ID
         passcode:
           type: string
-          description: Код подтверждения
+          description: Confirmation code
       example:
         orderCode: 170046918-0011
         passcode: '4567'
@@ -899,10 +921,10 @@ components:
       properties:
         ddate:
           type: string
-          description: Планируемая дата доставки
+          description: Planned delivery date
         salePrice:
           description: |
-            Цена продавца в валюте продажи с учётом скидки продавца, без учёта скидки WB Клуба, умноженная на 100. Предоставляется в информационных целях
+            Seller price in the currency of sale, including seller discount, except the WB Club discount, multiplied by 100
           type: integer
           nullable: true
           example: 504600
@@ -910,89 +932,86 @@ components:
           type: array
           nullable: true
           description: |
-            Список идентификаторов маркировки, доступных для сборочного задания
+            List of label identifiers available for the assembly orders
           items:
             type: string
         article:
           type: string
-          description: Артикул продавца
+          description: Seller item number
         rid:
           type: string
           description: |
-            Уникальный ID заказа. <br>
-            Примечание: `rid` — это `srid` в ответах методов:
-              - [Заявки покупателей на возврат](./user-communication#tag/Vozvraty-pokupatelyami/paths/~1api~1v1~1claims/get)
-              - [Заказы](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1orders/get)
-              - [Продажи](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1sales/get)
-              - [Отчет о возвратах и перемещении товаров](./reports#tag/Otchyot-o-vozvratah-i-peremeshenii-tovarov)
-              - [Детализации к отчётам реализации по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailedReportId)
-              - [Детализации к отчётам реализации за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailed)
-              - [Детализации к отчётам об издержках на приём платежей по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailedReportId)
-              - [Детализации к отчётам об издержках на приём платежей за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailed)
+            Unique order ID. <br>
+            Note: `rid` corresponds to `srid` in the responses of the methods:
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
+              - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
+              - [Returns and Item Movement Report](./reports#tag/Returns-and-Product-Movement-Report)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
         createdAt:
           type: string
-          description: Дата и время создания сборочного задания
+          description: Date and time the assembly order was created
           format: date-time
         warehouseAddress:
           type: string
           description: |
-            Адрес магазина (склада продавца), на который поступило сборочное
-            задание
+            Store address (seller warehouse) where the assembly order was received
         orderCode:
           type: string
           description: |
-            Уникальный ID заказа покупателя
+            Unique buyer order ID
         payMode:
           description: |
-            Режим оплаты:
-              - `prepaid` — предоплатный
-              - `postpaid` — постоплатный
-              - `unknown` — неизвестный
+            Pay mode:
+              - `prepaid` — prepaid
+              - `postpaid` — postpaid
+              - `unknown` — unknown
           type: string
           example: prepaid
         skus:
           type: array
-          description: Массив баркодов товара
+          description: Items SKU array
           items:
             type: string
         id:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
         warehouseId:
           type: integer
           description: |
-            ID склада продавца, на который поступило сборочное
-            задание
+            Seller warehouse ID where the assembly order was received
         nmId:
           type: integer
-          description: Артикул WB
+          description: WB item number
         chrtId:
           type: integer
-          description: ID размера товара в системе WB
+          description: Item size ID in WB system
         price:
           type: integer
           description: |
-            Цена в валюте продажи с учетом всех скидок, кроме скидки по WB Кошельку, умноженная на 100.
-            Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+            The price in the currency of sale including all discounts, except WB Wallet discount, multiplied by 100. You can find a currency code in the `currencyCode`. Provided for informational purposes only
         finalPrice:
-          description: Сумма к оплате покупателем в валюте продажи с учетом всех скидок, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+          description: The sum charged to the buyer in the currency of sale including all discounts, multiplied by 100. You can find a currency code in the `currencyCode` field. Provided for informational purposes only.
           type: integer
-          example: 5000
+          example: 1014
         convertedPrice:
-          description: Цена в валюте страны продавца с учетом всех скидок, кроме скидки по WB Кошельку, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+          description: The price in the currency of the seller country including all discounts, except WB Wallet discount, multiplied by 100. You can find a currency code in the `currencyCode` field. Provided for informational purposes only
           type: integer
           example: 5000
         convertedFinalPrice:
-          description: Сумма к оплате покупателем в валюте страны продавца с учетом всех скидок, умноженная на 100. Предоставляется в информационных целях
+          description: The sum charged to the buyer in the currency of the seller country including all discounts, multiplied by 100. Provided for informational purposes only
           type: integer
-          example: 5000
+          example: 1014
         currencyCode:
           type: integer
-          description: Код валюты продажи
+          description: Sale currency code
           example: 643
           format: ISO 4217
         convertedCurrencyCode:
-          description: Код валюты страны продавца
+          description: Seller country currency code
           format: ISO 4217
           type: integer
           example: 643
@@ -1000,10 +1019,10 @@ components:
           type: integer
           nullable: false
           description: |
-            Тип товара:
-              - `1` — малогабаритный товар (МГТ)
-              - `2` — сверхгабаритный товар (СГТ)
-              - `3` — крупногабаритный товар (КГТ+)
+            Type of cargo:
+              - `1` — small-sized items
+              - `2` — over dimensional cargo (ODC)
+              - `3` — dimensional cargo+ (CD+)
           enum:
             - 1
             - 2
@@ -1011,15 +1030,15 @@ components:
         isZeroOrder:
           type: boolean
           description: |
-            Признак заказа товара с нулевым остатком:
-              - `false` — заказ сделан на товар с ненулевым остатком
-              - `true` — заказ сделан на товар с нулевым остатком. Такой заказ можно отменить без штрафа за отмену
+            Indicator of an order for a item with zero inventory:
+              - `false` — the order is made for a item with a non-zero inventory
+              - `true` — the order is made for a item with zero inventory. Such an order can be canceled without a cancellation fee
     api.NewOrders:
       type: object
       properties:
         orders:
           type: array
-          description: Список сборочных заданий
+          description: Assembly orders list
           items:
             $ref: '#/components/schemas/api.NewOrder'
     api.Order:
@@ -1027,16 +1046,16 @@ components:
       properties:
         article:
           type: string
-          description: Артикул продавца
+          description: Seller item number
           example: wb6scpbwvp
         cargoType:
           type: integer
           nullable: false
           description: |
-            Тип товара:
-              - `1` — малогабаритный товар (МГТ)
-              - `2` — сверхгабаритный товар (СГТ)
-              - `3` — крупногабаритный товар (КГТ+)
+            Type of cargo:
+              - `1` — small-sized items
+              - `2` — over dimensional cargo (ODC)
+              - `3` — dimensional cargo+ (CD+)
           enum:
             - 1
             - 2
@@ -1044,97 +1063,96 @@ components:
           example: 1
         chrtId:
           type: integer
-          description: ID размера товара в системе WB
+          description: Item size ID in WB systems
           example: 12345676
         createdAt:
           type: string
-          description: Дата и время создания сборочного задания
+          description: Date and time the assembly order was created
           format: date-time
           example: '2025-03-21T09:53:31Z'
         price:
           type: integer
           description: |
-            Цена в валюте продажи с учетом всех скидок, кроме скидки по WB Кошельку, умноженная на 100.
-            Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+            The price in the currency of sale including all discounts, except WB Wallet discount, multiplied by 100. You can find a currency code in the `currencyCode`. Provided for informational purposes only
           example: 5000
         finalPrice:
-          description: Сумма к оплате покупателем в валюте продажи с учетом всех скидок, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+          description: The sum charged to the buyer in the currency of sale including all discounts, multiplied by 100. You can find a currency code in the `currencyCode` field. Provided for informational purposes only.
           type: integer
           example: 5000
         convertedPrice:
-          description: Цена в валюте страны продавца с учетом всех скидок, кроме скидки по WB Кошельку, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+          description: The price in the currency of the seller country including all discounts, except WB Wallet discount, multiplied by 100. You can find a currency code in the `currencyCode` field. Provided for informational purposes only
           type: integer
           example: 5000
         convertedFinalPrice:
-          description: Сумма к оплате покупателем в валюте страны продавца с учетом всех скидок, умноженная на 100. Предоставляется в информационных целях
+          description: The sum charged to the buyer in the currency of the seller country including all discounts, multiplied by 100. Provided for informational purposes only
           type: integer
           example: 5000
         currencyCode:
           type: integer
-          description: Код валюты продажи
+          description: Sale currency code
           format: ISO 4217
           example: 643
         convertedCurrencyCode:
-          description: Код валюты страны продавца
+          description: Seller country currency code
           format: ISO 4217
           type: integer
           example: 643
         id:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
           example: 123456789
         isZeroOrder:
           type: boolean
           description: |
-            Признак заказа товара с нулевым остатком:
-              - `false` — заказ сделан на товар с ненулевым остатком
-              - `true` — заказ сделан на товар с нулевым остатком. Такой заказ можно отменить без штрафа за отмену
+            Indicator of an order for a item with zero inventory:
+              - `false` — the order is made for a item with a non-zero inventory
+              - `true` — the order is made for a item with zero inventory. Such an order can be canceled without a cancellation fee
           example: false
         nmId:
           type: integer
-          description: Артикул WB
+          description: WB item number
           example: 1234567898765
         orderCode:
           type: string
           description: |
-            Уникальный ID заказа покупателя
+            Unique buyer order ID
           example: 21117866-0006
         payMode:
           description: |
-            Режим оплаты:
-              - `prepaid` — предоплатный
-              - `postpaid` — постоплатный
-              - `unknown` — неизвестный
+            Pay mode:
+              - `prepaid` — prepaid
+              - `postpaid` — postpaid
+              - `unknown` — unknown
           type: string
           example: prepaid
         rid:
           type: string
           description: |
-            Уникальный ID заказа. <br>
-            Примечание: `rid` — это `srid` в ответах методов:
-              - [Заявки покупателей на возврат](./user-communication#tag/Vozvraty-pokupatelyami/paths/~1api~1v1~1claims/get)
-              - [Заказы](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1orders/get)
-              - [Продажи](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1sales/get)
-              - [Отчет о возвратах и перемещении товаров](./reports#tag/Otchyot-o-vozvratah-i-peremeshenii-tovarov)
-              - [Детализации к отчётам реализации по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailedReportId)
-              - [Детализации к отчётам реализации за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailed)
-              - [Детализации к отчётам об издержках на приём платежей по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailedReportId)
-              - [Детализации к отчётам об издержках на приём платежей за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailed)
+            Unique order ID. <br>
+            Note: `rid` corresponds to `srid` in the responses of the methods:
+              - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)
+              - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)
+              - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)
+              - [Returns and Item Movement Report](./reports#tag/Returns-and-Product-Movement-Report)
+              - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)
+              - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)
+              - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)
+              - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed)
           example: 5044304527347733263.0.0
         skus:
           type: array
-          description: Массив баркодов товара
+          description: Item SKU array
           items:
             type: string
           example:
             - '2043227963145'
         warehouseAddress:
           type: string
-          description: Адрес магазина (склада продавца), на который поступило сборочное задание
+          description: Store address (seller warehouse) where the assembly order was received
           example: Москва, район Якиманка, Софийская набережная, 4 с1
         warehouseId:
           type: integer
-          description: ID склада продавца, на который поступило сборочное задание
+          description: Seller warehouse ID where the assembly order was received
           example: 1162157
     api.OrderClientInfo:
       type: object
@@ -1143,21 +1161,19 @@ components:
           type: string
           example: '+7111111111'
           description: |
-            Телефон для связи с покупателем. Чтобы связаться с покупателем наберите
-            этот номер и введите добавочный код. Данный номер не является прямым
-            номером покупателя
+            Contact phone number for the buyer. To reach the buyer, dial this number and enter the extension code. This number is not the buyer's direct phone number
         firstName:
           type: string
-          description: Имя покупателя
+          description: Buyer's name
           example: Ольга
         orderID:
           type: integer
           example: 4564152
-          description: ID сборочного задания
+          description: Assembly order ID
         phoneCode:
           type: integer
           example: 3535
-          description: Добавочный код
+          description: Phone extension code
     api.OrderClientInfoResp:
       type: object
       properties:
@@ -1171,12 +1187,11 @@ components:
         next:
           type: integer
           description: |
-            Параметр пагинации. Содержит значение, которое необходимо указать в
-            запросе для получения следующего пакета данных
+            Pagination parameter. Contains the value which should be specified in the request to retrieve the next batch of data
           example: 12345566
         orders:
           type: array
-          description: Список сборочных заданий
+          description: Assembly orders list
           items:
             $ref: '#/components/schemas/api.Order'
     api.OrdersRequest:
@@ -1184,7 +1199,7 @@ components:
       properties:
         orders:
           type: array
-          description: Список ID сборочных заданий
+          description: Assembly order IDs list
           items:
             type: integer
       example:
@@ -1207,14 +1222,14 @@ components:
         - sgtins
       properties:
         orderId:
-          description: ID сборочного задания
+          description: Assembly order ID
           type: integer
           example: 123456
         sgtins:
           type: array
           minItems: 1
           maxItems: 24
-          description: Массив кодов маркировки. Допускается от 16 до 135 символов для кода одной маркировки
+          description: List of Data Matrix codes. From 16 to 135 characters for one label
           example:
             - '123456789012345678'
             - '1234567890123456'
@@ -1237,14 +1252,14 @@ components:
         - uin
       properties:
         orderId:
-          description: ID сборочного задания
+          description: Assembly order ID
           type: integer
           example: 123456
         uin:
           type: string
           minLength: 16
           maxLength: 16
-          description: УИН
+          description: UIN
           example: '1234568909091232'
     api.OrdersIMEISetRequest:
       type: object
@@ -1263,7 +1278,7 @@ components:
         - imei
       properties:
         orderId:
-          description: ID сборочного задания
+          description: Assembly order ID
           type: integer
           example: 123456
         imei:
@@ -1295,7 +1310,7 @@ components:
           type: string
           example: '1234567890123'
         orderId:
-          description: ID сборочного задания
+          description: Assembly order ID
           type: integer
           example: 123456
     api.BatchError:
@@ -1308,19 +1323,19 @@ components:
         detail:
           type: object
           nullable: true
-          description: Детали ошибки
+          description: Error details
           example: {}
         origin:
           type: string
-          description: ID внутреннего сервиса WB
+          description: WB internal service ID
           example: market-public-api
         requestId:
           type: string
-          description: Уникальный ID запроса
+          description: Unique request ID
           example: f1787bd2d1fdс35d6f537316514у4a05
         title:
           type: string
-          description: Заголовок ошибки
+          description: Error title
           example: IncorrectRequest
     api.BatchErrorResponse:
       required:
@@ -1329,13 +1344,13 @@ components:
       properties:
         code:
           type: integer
-          description: Код ошибки
+          description: Error code
           example: 404
         detail:
           type: string
           description: |
-            - `NotFound` — сборочное задание не найдено
-            - `StatusMismatch` — операция невозможна для этого статуса сборочного задания
+            - `NotFound` — the assembly order is not found
+            - `StatusMismatch` — operation is not possible for this assembly order status
           example: NotFound
       type: object
     api.MetaErrorResponse:
@@ -1345,14 +1360,14 @@ components:
       properties:
         code:
           type: integer
-          description: Код ошибки
+          description: Error code
           example: 404
         detail:
           type: string
           description: |
-            - `NotFound` — сборочное задание не найдено
-            - `IncorrectRequestBody` — неправильный запрос
-            - `IncorrectRequest` — передан некорректный параметр
+            - `NotFound` — the assembly order is not found
+            - `IncorrectRequestBody` — incorrect request
+            - `IncorrectRequest` — incorrect parameter
           example: NotFound
       type: object
     api.OrdersErrorResponse:
@@ -1362,18 +1377,18 @@ components:
       properties:
         code:
           type: integer
-          description: Код ошибки
+          description: Error code
           example: 404
         detail:
           type: string
           description: |
-            - `NotFound` — сборочное задание не найдено
+            - `NotFound` — the assembly order is not found
           example: NotFound
       type: object
     api.OrdersRequestV2:
       properties:
         ordersIds:
-          description: Список ID сборочных заданий
+          description: List of assembly order IDs
           example:
             - 123456
             - 234567
@@ -1396,7 +1411,7 @@ components:
             isError: false
       properties:
         requestId:
-          description: Уникальный ID запроса
+          description: Unique request ID
           example: f1787bd2d1fdс35d6f537316514у4a05
         results:
           items:
@@ -1414,17 +1429,17 @@ components:
       properties:
         orderId:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
           example: 123456
         isError:
           type: boolean
-          description: Есть ли ошибки
+          description: Are there any errors
           example: true
         errors:
           items:
             $ref: '#/components/schemas/api.BatchErrorResponse'
           type: array
-          description: Детали ошибки
+          description: Error details
     api.MetaDetailsResponse:
       example:
         requestId: 03615778-eb9e-4f55-b4O4-fd3ac0fad2сc
@@ -1447,7 +1462,7 @@ components:
                     decision: imeiAlreadySold
       properties:
         requestId:
-          description: Уникальный ID запроса
+          description: Unique request ID
           example: f1787bd2d1fdс35d6f537316514у4a05
         results:
           items:
@@ -1458,10 +1473,10 @@ components:
             properties:
               orderId:
                 type: integer
-                description: ID сборочного задания
+                description: Assembly order ID
               isError:
                 type: boolean
-                description: Есть ли ошибки
+                description: Are there any errors
               errors:
                 items:
                   required:
@@ -1470,70 +1485,70 @@ components:
                   properties:
                     code:
                       type: integer
-                      description: Код ошибки
+                      description: Error code
                     detail:
                       type: string
                       description: |
-                        - `NotFound` — сборочное задание не найдено
-                        - `StatusMismatch` — операция невозможна для этого статуса сборочного задания
-                        - `MetaValidationFail` — идентификаторы маркировки не прошли проверку
+                        - `NotFound` — the assembly order is not found
+                        - `StatusMismatch` — operation is not possible for this assembly order status
+                        - `MetaValidationFail` — label identifiers validation failed
                     metaDetails:
-                      description: Ошибки проверки идентификаторов маркировки
+                      description: Assembly order label identifiers validation errors
                       $ref: '#/components/schemas/MetaDetailsErrors'
                       type: array
                   type: object
                 type: array
-                description: Детали ошибки
+                description: Error details
       type: object
       required:
         - requestId
         - results
     MetaDetailsErrors:
       type: array
-      description: Ошибки проверки идентификаторов маркировки
+      description: Assembly order label identifiers validation errors
       items:
         type: object
         properties:
           key:
             type: string
             example: uin
-            description: Идентификатор маркировки
+            description: Label identifier
           value:
             nullable: true
             type: string
             example: null
-            description: Значение идентификатора маркировки
+            description: Label identifier value
           decision:
             type: string
             example: uinMaySell
             description: |
-              Ошибки проверки идентификаторов маркировки. <br>
+              Label identifiers validation errors. <br>
               - `imei`
-                - `pending` — Проверка маркировки продолжается. Дождитесь изменения статуса проверки
-                - `required` — Маркировка обязательна и не закреплена за сборочным заданием
-                - `imeiInvalidFormat` — Указан неверный формат маркировки
-                - `imeiAlreadySold` — Товар с этим IMEI уже продан
+                - `pending` — Label identifier validation continues. Wait for the validation status to change
+                - `required` — Required label identifier is not added to the assembly order
+                - `imeiInvalidFormat` — Invalid format
+                - `imeiAlreadySold` — The item with this IMEI has already been sold
               - `uin`
                 - `required` — Маркировка обязательна и не закреплена за сборочным заданием
               - `sgtin`
-                - `pending` — Проверка маркировки продолжается. Дождитесь изменения статуса проверки
-                - `required` — Маркировка обязательна и не закреплена за сборочным заданием
-                - `sgtinInvalidFormat` — Указан неверный формат маркировки
-                - `sgtinNotFound` — Маркировка не найдена в [Честном знаке](https://chestnyznak.ru)
-                - `sgtinEmitted` —  Маркировка эмитирована
-                - `sgtinApplied` — Не пройдена процедура Ввод в оборот
-                - `sgtinWrittenOff` — Списан
-                - `sgtinRetired` — Выбыл
-                - `sgtinWithdrawn` — Выбыл
-                - `sgtinDisaggregated` — Расформирован
-                - `sgtinDisaggregation` — Расформирован
-                - `sgtinAppliedNotPaid` — Не оплачен
+                - `pending` — Label identifier validation continues. Wait for the validation status to change
+                - `required` — Required label identifier is not added to the assembly order
+                - `sgtinInvalidFormat` — Invalid format
+                - `sgtinNotFound` — Label identifier not found in [Chestny ZNAK](https://chestnyznak.ru/en/)
+                - `sgtinEmitted` —  Label identifier has been issued
+                - `sgtinApplied` — Putting into circulation not completed
+                - `sgtinWrittenOff` — Written off
+                - `sgtinRetired` — Retired
+                - `sgtinWithdrawn` — Withdrawn
+                - `sgtinDisaggregated` — Disaggregated
+                - `sgtinDisaggregation` — Disaggregation
+                - `sgtinAppliedNotPaid` — Not paid
               - `gtin`
-                - `required` — Маркировка обязательна и не закреплена за сборочным заданием
+                - `required` — Required label identifier is not added to the assembly order
               - `expiration`
-                - `required` — Маркировка обязательна и не закреплена за сборочным заданием
+                - `required` — Required label identifier is not added to the assembly order
               - `customsDeclaration`
-                - `required` — Маркировка обязательна и не закреплена за сборочным заданием
+                - `required` — Required label identifier is not added to the assembly order
     api.OrdersResponses:
       example:
         requestId: 03615778-eb9e-4f55-b4O4-fd3ac0fad2сc
@@ -1547,7 +1562,7 @@ components:
             isError: false
       properties:
         requestId:
-          description: Уникальный ID запроса
+          description: Unique request ID
           example: f1787bd2d1fdс35d6f537316514у4a05
         results:
           items:
@@ -1565,17 +1580,17 @@ components:
       properties:
         orderId:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
           example: 123456
         isError:
           type: boolean
-          description: Есть ли ошибки
+          description: Are there any errors
           example: true
         errors:
           items:
             $ref: '#/components/schemas/api.OrdersErrorResponse'
           type: array
-          description: Детали ошибки
+          description: Error details
     api.MetaSetResponses:
       example:
         requestId: 03615778-eb9e-4f55-b4O4-fd3ac0fad2сc
@@ -1589,7 +1604,7 @@ components:
             isError: false
       properties:
         requestId:
-          description: Уникальный ID запроса
+          description: Unique request ID
           example: f1787bd2d1fdс35d6f537316514у4a05
         results:
           items:
@@ -1607,17 +1622,17 @@ components:
       properties:
         orderId:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
           example: 123456
         isError:
           type: boolean
-          description: Есть ли ошибки
+          description: Are there any errors
           example: true
         errors:
           items:
             $ref: '#/components/schemas/api.MetaErrorResponse'
           type: array
-          description: Детали ошибки
+          description: Error details
     api.OrderStatusesV2:
       type: object
       example:
@@ -1635,7 +1650,7 @@ components:
       properties:
         orders:
           type: array
-          description: Информация о статусах
+          description: Status data
           items:
             $ref: '#/components/schemas/api.OrderStatusV2'
     api.OrderStatusV2:
@@ -1644,19 +1659,19 @@ components:
         - orderId
       properties:
         errors:
-          description: Информация об ошибке
+          description: Error detail
           items:
             $ref: '#/components/schemas/api.OrdersErrorResponse'
           type: array
         orderId:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
         supplierStatus:
           type: string
-          description: Статус сборочного задания, установленный продавцом
+          description: Assembly order status set by the seller
         wbStatus:
           type: string
-          description: Статус сборочного задания в системе Wildberries
+          description: Assembly order status set by WB system
     api.OrdersMetaDetailsResponse:
       type: object
       required:
@@ -1665,11 +1680,11 @@ components:
       properties:
         requestId:
           type: string
-          description: Уникальный ID запроса
+          description: Unique request ID
           example: f1787bd2d1fdс35d6f537316514у4a05
         orders:
           type: array
-          description: Идентификаторы маркировки сборочных заданий и статусы их валидации
+          description: Assembly orders label identifiers and validation statuses
           items:
             type: object
             required:
@@ -1680,15 +1695,15 @@ components:
               orderId:
                 type: integer
                 example: 123456
-                description: ID сборочного задания
+                description: Assembly order ID
               isError:
                 type: boolean
-                description: Есть ли ошибки
+                description: Are there any errors
                 example: false
               errors:
                 type: array
                 example: []
-                description: Информация об ошибке
+                description: Error data
                 items:
                   type: object
                   required:
@@ -1697,15 +1712,15 @@ components:
                   properties:
                     code:
                       type: integer
-                      description: Код ошибки
+                      description: Error code
                       example: 404
                     detail:
                       type: string
                       example: NotFound
-                      description: Дополнительная информация об ошибке
+                      description: Additional error data
               metaDetails:
                 type: array
-                description: Идентификаторы маркировки и статусы их валидации
+                description: Label identifiers and their validation statuses
                 items:
                   type: object
                   required:
@@ -1715,57 +1730,57 @@ components:
                     key:
                       type: string
                       example: imei
-                      description: Идентификатор маркировки
+                      description: Label identifier
                     value:
                       type: string
                       nullable: true
-                      description: Значение идентификатора маркировки
+                      description: Label identifier value
                       example: '359876543210025'
                     decision:
                       type: string
                       example: imeiInvalidFormat
                       description: |
-                        Статусы проверки идентификатора маркировки. <br>
+                        Label identifiers validation statuses. <br>
                         - `imei`
-                          - `filled` — Маркировка закреплена за сборочным заданием, проверка не требуется
-                          - `optional` — Маркировка не закреплена за сборочным заданием и не обязательна. Проверка пройдена
-                          - `deadlineExceeded` — Проверка маркировки не завершена и будет продолжена. Проверка может завершиться и успешно, и неуспешно
-                          - `imeiMaySell` — Товар допущен к продаже. Проверка пройдена
-                          - `imeiSoldB2B` — Товар продан покупателю B2B, допущен к продаже повторно. Проверка пройдена
-                          - `pending` — Проверка маркировки продолжается. Дождитесь изменения статуса проверки
-                          - `required` — Маркировка обязательна и не закреплена за сборочным заданием. Проверка не пройдена
-                          - `imeiInvalidFormat` — Указан неверный формат маркировки. Проверка не пройдена
-                          - `imeiAlreadySold` — Товар с этим IMEI уже продан. Проверка не пройдена
+                          - `filled` — Label identifier is added to the assembly order, validation is not required
+                          - `deadlineExceeded` — Label identifier validation is not completed and will continue. The validation can pass or fail
+                          - `optional` — Label identifier is not required. Validation passed
+                          - `imeiMaySell` — The item is approved for sale. Validation passed
+                          - `imeiSoldB2B` — The item was sold to a B2B buyer and approved for sale again. Validation passed
+                          - `pending` — Label identifier validation continues. Wait for the validation status to change
+                          - `required` — Required label identifier is not added to the assembly order. Validation failed
+                          - `imeiInvalidFormat` — Invalid format. Validation failed
+                          - `imeiAlreadySold` — The item with this IMEI has already been sold. Validation failed
                         - `uin`
-                          - `filled` — Маркировка закреплена за сборочным заданием, проверка не требуется
-                          - `optional` — Маркировка не закреплена за сборочным заданием и не обязательна. Проверка пройдена
-                          - `required` — Маркировка обязательна и не закреплена за сборочным заданием. Проверка не пройдена                         <br>
+                          - `filled` — Label identifier is added to the assembly order, validation is not required
+                          - `optional` — Label identifier is not required. Validation passed
+                          - `required` — Required label identifier is not added to the assembly order. Validation failed
                         - `sgtin`
-                          - `filled` — Маркировка закреплена за сборочным заданием, проверка не требуется
-                          - `optional` — Маркировка не закреплена за сборочным заданием и не обязательна. Проверка пройдена
-                          - `deadlineExceeded` — Проверка маркировки не завершена и будет продолжена. Проверка может завершиться и успешно, и неуспешно
-                          - `sgtinIntroduced` — Товар допущен к продаже. Проверка пройдена
-                          - `sgtinSoldB2B` — Товар продан покупателю B2B, допущен к продаже повторно. Проверка пройдена
-                          - `pending` — Проверка маркировки продолжается. Дождитесь изменения статуса проверки
-                          - `required` — Маркировка обязательна и не закреплена за сборочным заданием. Проверка не пройдена
-                          - `sgtinInvalidFormat` — Указан неверный формат маркировки. Проверка не пройдена
-                          - `sgtinNotFound` — Маркировка не найдена в [Честном знаке](https://chestnyznak.ru). Проверка не пройдена
-                          - `sgtinEmitted` —  Маркировка эмитирована. Проверка не пройдена
-                          - `sgtinApplied` — Не пройдена процедура Ввод в оборот. Проверка не пройдена
-                          - `sgtinWrittenOff` — Списан. Проверка не пройдена
-                          - `sgtinRetired` — Выбыл. Проверка не пройдена
-                          - `sgtinWithdrawn` — Выбыл. Проверка не пройдена
-                          - `sgtinDisaggregated` — Расформирован. Проверка не пройдена
-                          - `sgtinDisaggregation` — Расформирован. Проверка не пройдена
-                          - `sgtinAppliedNotPaid` — Не оплачен. Проверка не пройдена
+                          - `filled` — Label identifier is added to the assembly order, validation is not required
+                          - `deadlineExceeded` —  Label identifier validation is not completed and will continue. The validation can pass or fail
+                          - `optional` — Label identifier is not required. Validation passed
+                          - `sgtinIntroduced` — The item is approved for sale. Validation passed
+                          - `sgtinSoldB2B` — The item was sold to a B2B buyer and approved for sale again. Validation passed
+                          - `pending` — Label identifier validation continues. Wait for the validation status to change
+                          - `required` — Required label identifier is not added to the assembly order. Validation failed
+                          - `sgtinInvalidFormat` — Invalid format. Validation failed
+                          - `sgtinNotFound` — Label identifier not found in [Chestny ZNAK](https://chestnyznak.ru/en/). Validation failed
+                          - `sgtinEmitted` —  Label identifier has been issued. Validation failed
+                          - `sgtinApplied` — Putting into circulation not completed. Validation failed
+                          - `sgtinWrittenOff` — Written off. Validation failed
+                          - `sgtinRetired` — Retired. Validation failed
+                          - `sgtinWithdrawn` — Withdrawn. Validation failed
+                          - `sgtinDisaggregated` — Disaggregated. Validation failed
+                          - `sgtinDisaggregation` — Disaggregation. Validation failed
+                          - `sgtinAppliedNotPaid` — Not paid. Validation failed
                         - `gtin`
-                          - `filled` — Маркировка закреплена за сборочным заданием, проверка не требуется
-                          - `optional` — Маркировка не закреплена за сборочным заданием и не обязательна. Проверка пройдена
-                          - `required` — Маркировка обязательна и не закреплена за сборочным заданием. Проверка не пройдена
+                          - `filled` — Label identifier is added to the assembly order, validation is not required
+                          - `optional` — Label identifier is not required. Validation passed
+                          - `required` — Required label identifier is not added to the assembly order. Validation failed
                         - `customsDeclaration`
-                          - `filled` — Маркировка закреплена за сборочным заданием, проверка не требуется
-                          - `optional` — Маркировка не закреплена за сборочным заданием и не обязательна. Проверка пройдена
-                          - `required` — Маркировка обязательна и не закреплена за сборочным заданием. Проверка не пройдена
+                          - `filled` — Label identifier is added to the assembly order, validation is not required
+                          - `optional` — Label identifier is not required. Validation passed
+                          - `required` — Required label identifier is not added to the assembly order. Validation failed
     api.OrdersMetaResponse:
       type: object
       required:
@@ -1773,7 +1788,7 @@ components:
       properties:
         meta:
           type: array
-          description: Идентификаторы маркировки сборочных заданий
+          description: Assembly orders label identifiers
           items:
             $ref: '#/components/schemas/api.OrderMetaV2'
     api.OrderMetaV2:
@@ -1785,9 +1800,9 @@ components:
         error:
           type: string
           description: |
-            Сообщение об ошибке. <br>
-            - `""` — нет ошибок
-            - `NotFound` — сборочное задание не найдено
+            Error message. <br>
+            - `""` — no errors
+            - `NotFound` — the assembly order is not found
           example: ''
         gtin:
           type: string
@@ -1801,19 +1816,19 @@ components:
           example: '123456789012345'
         orderId:
           type: integer
-          description: ID сборочного задания
+          description: Assembly order ID
           example: 654321
         sgtin:
           type: array
           nullable: true
-          description: Код маркировки [Честного знака](https://честныйзнак.рф/)
+          description: Labeling code [Chestny ZNAK](https://chestnyznak.ru/en)
           items:
             type: string
             example: '123456789012345'
         uin:
           type: string
           nullable: true
-          description: УИН
+          description: UIN
           example: '123456789012345'
     api.OrdersMetaDeleteRequest:
       type: object
@@ -1829,10 +1844,10 @@ components:
             - gtin
             - sgtin
           example: imei
-          description: Тип идентификаторов маркировки для удаления. Передаётся только одно значение
+          description: Label identifiers type to delete. Only one value is passed
         ordersIds:
           type: array
-          description: Список ID сборочных заданий
+          description: Assembly order IDs list
           maxItems: 1000
           example:
             - 123456
@@ -1841,7 +1856,7 @@ components:
             type: integer
   responses:
     '401':
-      description: Не авторизован
+      description: Unauthorized
       content:
         application/problem+json:
           schema:
@@ -1849,29 +1864,29 @@ components:
             properties:
               title:
                 type: string
-                description: Заголовок ошибки
+                description: Error title
               detail:
                 type: string
-                description: Детали ошибки
+                description: Error details
               code:
                 type: string
-                description: Внутренний код ошибки
+                description: Internal error code
               requestId:
                 type: string
-                description: Уникальный ID запроса
+                description: Unique request ID
               origin:
                 type: string
-                description: ID внутреннего сервиса WB
+                description: WB internal service ID
               status:
                 type: number
-                description: HTTP статус-код
+                description: HTTP status code
               statusText:
                 type: string
-                description: Расшифровка HTTP статус-кода
+                description: Text of the HTTP status code
               timestamp:
                 type: string
                 format: date-time
-                description: Дата и время запроса
+                description: Request date and time
           example:
             title: unauthorized
             detail: 'token problem; token is malformed: could not base64 decode signature: illegal base64 data at input byte 84'
@@ -1882,7 +1897,7 @@ components:
             statusText: Unauthorized
             timestamp: '2024-09-30T06:52:38Z'
     '402':
-      description: Требуется платёж
+      description: Payment required
       content:
         application/problem+json:
           schema:
@@ -1890,15 +1905,15 @@ components:
             properties:
               title:
                 type: string
-                description: Заголовок ошибки
+                description: Error title
               detail:
                 type: string
-                description: Детали ошибки. Ошибка возвращается только сервисам из [Каталога решений для бизнеса](https://dev.wildberries.ru/business-solutions)
+                description: Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
           example:
             title: payment required
             detail: wb solution for business has insufficient funds on its balance. please top up the balance in the company's personal account https://dev.wildberries.ru/company
     '429':
-      description: Слишком много запросов
+      description: Too many requests
       content:
         application/problem+json:
           schema:
@@ -1906,29 +1921,29 @@ components:
             properties:
               title:
                 type: string
-                description: Заголовок ошибки
+                description: Error title
               detail:
                 type: string
-                description: Детали ошибки
+                description: Error details
               code:
                 type: string
-                description: Внутренний код ошибки
+                description: Internal error code
               requestId:
                 type: string
-                description: Уникальный ID запроса
+                description: Unique request ID
               origin:
                 type: string
-                description: ID внутреннего сервиса WB
+                description: WB internal service ID
               status:
                 type: number
-                description: HTTP статус-код
+                description: HTTP status code
               statusText:
                 type: string
-                description: Расшифровка HTTP статус-кода
+                description: Text of the HTTP status code
               timestamp:
                 type: string
                 format: date-time
-                description: Дата и время запроса
+                description: Request date and time
           example:
             title: too many requests
             detail: limited by c122a060-a7fb-4bb4-abb0-32fd4e18d489
@@ -1939,16 +1954,15 @@ components:
             statusText: Too Many Requests
             timestamp: '2024-09-30T06:52:38Z'
     AccessDenied:
-      description: Доступ запрещён
+      description: Access denied
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: AccessDenied
-            message: Доступ запрещён
+            message: Access denied
     IncorrectRequest:
-      description: Неправильный запрос
+      description: Bad request
       content:
         application/json:
           schema:
@@ -1959,7 +1973,7 @@ components:
             requestId: f1787bd2d1fdс35d6f537316514у4a05
             title: IncorrectRequest
     AccessDeniedBatch:
-      description: Доступ запрещён
+      description: Access denied
       content:
         application/json:
           schema:

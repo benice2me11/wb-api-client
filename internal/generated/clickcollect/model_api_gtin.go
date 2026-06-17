@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -23,7 +23,7 @@ var _ MappedNullable = &ApiGTIN{}
 type ApiGTIN struct {
 	// GTIN
 	Gtin string `json:"gtin"`
-	// ID сборочного задания
+	// Assembly order ID
 	OrderId int32 `json:"orderId"`
 }
 

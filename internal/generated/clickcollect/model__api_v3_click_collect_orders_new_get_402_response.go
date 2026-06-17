@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -19,9 +19,9 @@ var _ MappedNullable = &ApiV3ClickCollectOrdersNewGet402Response{}
 
 // ApiV3ClickCollectOrdersNewGet402Response struct for ApiV3ClickCollectOrdersNewGet402Response
 type ApiV3ClickCollectOrdersNewGet402Response struct {
-	// Заголовок ошибки
+	// Error title
 	Title *string `json:"title,omitempty"`
-	// Детали ошибки. Ошибка возвращается только сервисам из [Каталога решений для бизнеса](https://dev.wildberries.ru/business-solutions)
+	// Error details. The error is only returned to services from the [Solutions for business Catalog](https://dev.wildberries.ru/business-solutions)
 	Detail *string `json:"detail,omitempty"`
 }
 

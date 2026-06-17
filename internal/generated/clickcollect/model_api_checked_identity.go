@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -19,7 +19,7 @@ var _ MappedNullable = &ApiCheckedIdentity{}
 
 // ApiCheckedIdentity struct for ApiCheckedIdentity
 type ApiCheckedIdentity struct {
-	// Принадлежит ли заказ покупателю:   - `true` — принадлежит   - `false` — значение не применяется. Если заказ не принадлежит покупателю, вы получите ответ со статус-кодом `409` 
+	// Indicates whether the order belongs to the buyer:  - `true` — belongs  - `false` — the value is not applied. If the order does not belong to the buyer, you will receive a response with `409` status code 
 	Ok *bool `json:"ok,omitempty"`
 }
 

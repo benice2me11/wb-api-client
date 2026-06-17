@@ -41,7 +41,7 @@ type clickCollectService struct {
 }
 
 func (s *clickCollectService) NewOrders(ctx context.Context) (*ClickCollectApiNewOrders, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.ApiV3ClickCollectOrdersNewGet(ctx).Execute()
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.ApiV3ClickCollectOrdersNewGet(ctx).Execute()
 	if err != nil {
 		return nil, httpResp, transport.WrapResponseError(httpResp, err)
 	}
@@ -49,7 +49,7 @@ func (s *clickCollectService) NewOrders(ctx context.Context) (*ClickCollectApiNe
 }
 
 func (s *clickCollectService) Orders(ctx context.Context, query ClickCollectOrdersQuery) (*ClickCollectApiOrders, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiV3ClickCollectOrdersGet(ctx).
 		Limit(query.Limit).
 		Next(query.Next).
@@ -63,7 +63,7 @@ func (s *clickCollectService) Orders(ctx context.Context, query ClickCollectOrde
 }
 
 func (s *clickCollectService) BuyerInfo(ctx context.Context, request ClickCollectApiOrdersRequest) (*ClickCollectApiOrderClientInfoResp, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiV3ClickCollectOrdersClientPost(ctx).
 		ApiOrdersRequest(request).
 		Execute()
@@ -74,7 +74,7 @@ func (s *clickCollectService) BuyerInfo(ctx context.Context, request ClickCollec
 }
 
 func (s *clickCollectService) CheckBuyerIdentity(ctx context.Context, request ClickCollectApiCheckIdentityRequest) (*ClickCollectApiCheckedIdentity, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiV3ClickCollectOrdersClientIdentityPost(ctx).
 		ApiCheckIdentityRequest(request).
 		Execute()
@@ -85,7 +85,7 @@ func (s *clickCollectService) CheckBuyerIdentity(ctx context.Context, request Cl
 }
 
 func (s *clickCollectService) OrdersStatusInfo(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiOrderStatusesV2, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiMarketplaceV3ClickCollectOrdersStatusInfoPost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -96,7 +96,7 @@ func (s *clickCollectService) OrdersStatusInfo(ctx context.Context, request Clic
 }
 
 func (s *clickCollectService) ConfirmOrders(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiStatusSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiMarketplaceV3ClickCollectOrdersStatusConfirmPost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -107,7 +107,7 @@ func (s *clickCollectService) ConfirmOrders(ctx context.Context, request ClickCo
 }
 
 func (s *clickCollectService) PrepareOrders(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiMetaDetailsResponse, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiMarketplaceV3ClickCollectOrdersStatusPreparePost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -118,7 +118,7 @@ func (s *clickCollectService) PrepareOrders(ctx context.Context, request ClickCo
 }
 
 func (s *clickCollectService) ReceiveOrders(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiStatusSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiMarketplaceV3ClickCollectOrdersStatusReceivePost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -129,7 +129,7 @@ func (s *clickCollectService) ReceiveOrders(ctx context.Context, request ClickCo
 }
 
 func (s *clickCollectService) RejectOrders(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiStatusSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiMarketplaceV3ClickCollectOrdersStatusRejectPost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -140,7 +140,7 @@ func (s *clickCollectService) RejectOrders(ctx context.Context, request ClickCol
 }
 
 func (s *clickCollectService) CancelOrders(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiStatusSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupAssemblyOrdersAPI.
 		ApiMarketplaceV3ClickCollectOrdersStatusCancelPost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -151,7 +151,7 @@ func (s *clickCollectService) CancelOrders(ctx context.Context, request ClickCol
 }
 
 func (s *clickCollectService) MetadataInfo(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiOrdersMetaResponse, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaInfoPost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -162,7 +162,7 @@ func (s *clickCollectService) MetadataInfo(ctx context.Context, request ClickCol
 }
 
 func (s *clickCollectService) MetadataDetails(ctx context.Context, request ClickCollectApiOrdersRequestV2) (*ClickCollectApiOrdersMetaDetailsResponse, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaDetailsPost(ctx).
 		ApiOrdersRequestV2(request).
 		Execute()
@@ -173,7 +173,7 @@ func (s *clickCollectService) MetadataDetails(ctx context.Context, request Click
 }
 
 func (s *clickCollectService) DeleteMetadata(ctx context.Context, request ClickCollectApiOrdersMetaDeleteRequest) (*ClickCollectApiOrdersResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaDeletePost(ctx).
 		ApiOrdersMetaDeleteRequest(request).
 		Execute()
@@ -184,7 +184,7 @@ func (s *clickCollectService) DeleteMetadata(ctx context.Context, request ClickC
 }
 
 func (s *clickCollectService) SetSGTINMetadata(ctx context.Context, request ClickCollectApiOrdersSGTINsSetRequest) (*ClickCollectApiMetaSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaSgtinPost(ctx).
 		ApiOrdersSGTINsSetRequest(request).
 		Execute()
@@ -195,7 +195,7 @@ func (s *clickCollectService) SetSGTINMetadata(ctx context.Context, request Clic
 }
 
 func (s *clickCollectService) SetUINMetadata(ctx context.Context, request ClickCollectApiOrdersUINSetRequest) (*ClickCollectApiMetaSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaUinPost(ctx).
 		ApiOrdersUINSetRequest(request).
 		Execute()
@@ -206,7 +206,7 @@ func (s *clickCollectService) SetUINMetadata(ctx context.Context, request ClickC
 }
 
 func (s *clickCollectService) SetIMEIMetadata(ctx context.Context, request ClickCollectApiOrdersIMEISetRequest) (*ClickCollectApiMetaSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaImeiPost(ctx).
 		ApiOrdersIMEISetRequest(request).
 		Execute()
@@ -217,7 +217,7 @@ func (s *clickCollectService) SetIMEIMetadata(ctx context.Context, request Click
 }
 
 func (s *clickCollectService) SetGTINMetadata(ctx context.Context, request ClickCollectApiOrdersGTINSetRequest) (*ClickCollectApiMetaSetResponses, *http.Response, error) {
-	resp, httpResp, err := s.api.DefaultApi.
+	resp, httpResp, err := s.api.InStorePickupLabelIdentifiersAPI.
 		ApiMarketplaceV3ClickCollectOrdersMetaGtinPost(ctx).
 		ApiOrdersGTINSetRequest(request).
 		Execute()

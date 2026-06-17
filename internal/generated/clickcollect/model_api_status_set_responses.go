@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -21,7 +21,7 @@ var _ MappedNullable = &ApiStatusSetResponses{}
 
 // ApiStatusSetResponses struct for ApiStatusSetResponses
 type ApiStatusSetResponses struct {
-	// Уникальный ID запроса
+	// Unique request ID
 	RequestId interface{} `json:"requestId"`
 	Results []ApiStatusSetResponse `json:"results"`
 }

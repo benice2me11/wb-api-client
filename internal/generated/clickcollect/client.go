@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -41,7 +41,7 @@ var (
 	queryDescape    = strings.NewReplacer( "%5B", "[", "%5D", "]" )
 )
 
-// APIClient manages communication with the Заказы Самовывоз API vinstorepickup
+// APIClient manages communication with the In-Store Pickup Orders API vinstorepickup
 // In most cases there should be only one, shared, APIClient.
 type APIClient struct {
 	cfg    *Configuration
@@ -49,7 +49,9 @@ type APIClient struct {
 
 	// API Services
 
-	DefaultApi *DefaultApiService
+	InStorePickupAssemblyOrdersAPI *InStorePickupAssemblyOrdersAPIService
+
+	InStorePickupLabelIdentifiersAPI *InStorePickupLabelIdentifiersAPIService
 }
 
 type service struct {
@@ -68,7 +70,8 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.common.client = c
 
 	// API Services
-	c.DefaultApi = (*DefaultApiService)(&c.common)
+	c.InStorePickupAssemblyOrdersAPI = (*InStorePickupAssemblyOrdersAPIService)(&c.common)
+	c.InStorePickupLabelIdentifiersAPI = (*InStorePickupLabelIdentifiersAPIService)(&c.common)
 
 	return c
 }

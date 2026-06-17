@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -20,21 +20,21 @@ var _ MappedNullable = &ApiV3ClickCollectOrdersNewGet401Response{}
 
 // ApiV3ClickCollectOrdersNewGet401Response struct for ApiV3ClickCollectOrdersNewGet401Response
 type ApiV3ClickCollectOrdersNewGet401Response struct {
-	// Заголовок ошибки
+	// Error title
 	Title *string `json:"title,omitempty"`
-	// Детали ошибки
+	// Error details
 	Detail *string `json:"detail,omitempty"`
-	// Внутренний код ошибки
+	// Internal error code
 	Code *string `json:"code,omitempty"`
-	// Уникальный ID запроса
+	// Unique request ID
 	RequestId *string `json:"requestId,omitempty"`
-	// ID внутреннего сервиса WB
+	// WB internal service ID
 	Origin *string `json:"origin,omitempty"`
-	// HTTP статус-код
+	// HTTP status code
 	Status *float32 `json:"status,omitempty"`
-	// Расшифровка HTTP статус-кода
+	// Text of the HTTP status code
 	StatusText *string `json:"statusText,omitempty"`
-	// Дата и время запроса
+	// Request date and time
 	Timestamp *time.Time `json:"timestamp,omitempty"`
 }
 

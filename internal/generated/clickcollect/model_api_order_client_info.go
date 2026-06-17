@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -19,13 +19,13 @@ var _ MappedNullable = &ApiOrderClientInfo{}
 
 // ApiOrderClientInfo struct for ApiOrderClientInfo
 type ApiOrderClientInfo struct {
-	// Телефон для связи с покупателем. Чтобы связаться с покупателем наберите этот номер и введите добавочный код. Данный номер не является прямым номером покупателя 
+	// Contact phone number for the buyer. To reach the buyer, dial this number and enter the extension code. This number is not the buyer's direct phone number 
 	Phone *string `json:"phone,omitempty"`
-	// Имя покупателя
+	// Buyer's name
 	FirstName *string `json:"firstName,omitempty"`
-	// ID сборочного задания
+	// Assembly order ID
 	OrderID *int32 `json:"orderID,omitempty"`
-	// Добавочный код
+	// Phone extension code
 	PhoneCode *int32 `json:"phoneCode,omitempty"`
 }
 

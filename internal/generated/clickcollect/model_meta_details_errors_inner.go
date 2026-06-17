@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -19,11 +19,11 @@ var _ MappedNullable = &MetaDetailsErrorsInner{}
 
 // MetaDetailsErrorsInner struct for MetaDetailsErrorsInner
 type MetaDetailsErrorsInner struct {
-	// Идентификатор маркировки
+	// Label identifier
 	Key *string `json:"key,omitempty"`
-	// Значение идентификатора маркировки
+	// Label identifier value
 	Value NullableString `json:"value,omitempty"`
-	// Ошибки проверки идентификаторов маркировки. <br> - `imei`   - `pending` — Проверка маркировки продолжается. Дождитесь изменения статуса проверки   - `required` — Маркировка обязательна и не закреплена за сборочным заданием   - `imeiInvalidFormat` — Указан неверный формат маркировки   - `imeiAlreadySold` — Товар с этим IMEI уже продан - `uin`   - `required` — Маркировка обязательна и не закреплена за сборочным заданием - `sgtin`   - `pending` — Проверка маркировки продолжается. Дождитесь изменения статуса проверки   - `required` — Маркировка обязательна и не закреплена за сборочным заданием   - `sgtinInvalidFormat` — Указан неверный формат маркировки   - `sgtinNotFound` — Маркировка не найдена в [Честном знаке](https://chestnyznak.ru)   - `sgtinEmitted` —  Маркировка эмитирована   - `sgtinApplied` — Не пройдена процедура Ввод в оборот   - `sgtinWrittenOff` — Списан   - `sgtinRetired` — Выбыл   - `sgtinWithdrawn` — Выбыл   - `sgtinDisaggregated` — Расформирован   - `sgtinDisaggregation` — Расформирован   - `sgtinAppliedNotPaid` — Не оплачен - `gtin`   - `required` — Маркировка обязательна и не закреплена за сборочным заданием - `expiration`   - `required` — Маркировка обязательна и не закреплена за сборочным заданием - `customsDeclaration`   - `required` — Маркировка обязательна и не закреплена за сборочным заданием 
+	// Label identifiers validation errors. <br> - `imei`   - `pending` — Label identifier validation continues. Wait for the validation status to change   - `required` — Required label identifier is not added to the assembly order   - `imeiInvalidFormat` — Invalid format   - `imeiAlreadySold` — The item with this IMEI has already been sold - `uin`   - `required` — Маркировка обязательна и не закреплена за сборочным заданием - `sgtin`   - `pending` — Label identifier validation continues. Wait for the validation status to change   - `required` — Required label identifier is not added to the assembly order   - `sgtinInvalidFormat` — Invalid format   - `sgtinNotFound` — Label identifier not found in [Chestny ZNAK](https://chestnyznak.ru/en/)   - `sgtinEmitted` —  Label identifier has been issued   - `sgtinApplied` — Putting into circulation not completed   - `sgtinWrittenOff` — Written off   - `sgtinRetired` — Retired   - `sgtinWithdrawn` — Withdrawn   - `sgtinDisaggregated` — Disaggregated   - `sgtinDisaggregation` — Disaggregation   - `sgtinAppliedNotPaid` — Not paid - `gtin`   - `required` — Required label identifier is not added to the assembly order - `expiration`   - `required` — Required label identifier is not added to the assembly order - `customsDeclaration`   - `required` — Required label identifier is not added to the assembly order 
 	Decision *string `json:"decision,omitempty"`
 }
 

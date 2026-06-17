@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -21,9 +21,9 @@ var _ MappedNullable = &ApiOrdersMetaDeleteRequest{}
 
 // ApiOrdersMetaDeleteRequest struct for ApiOrdersMetaDeleteRequest
 type ApiOrdersMetaDeleteRequest struct {
-	// Тип идентификаторов маркировки для удаления. Передаётся только одно значение
+	// Label identifiers type to delete. Only one value is passed
 	Key string `json:"key"`
-	// Список ID сборочных заданий
+	// Assembly order IDs list
 	OrdersIds []int32 `json:"ordersIds"`
 }
 

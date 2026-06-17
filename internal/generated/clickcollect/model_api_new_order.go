@@ -1,7 +1,7 @@
 /*
-Заказы Самовывоз
+In-Store Pickup Orders
 
-<div class=\"api-block\">  Управление [сборочными заданиями](/openapi/in-store-pickup#tag/Sborochnye-zadaniya-Samovyvoz) и [идентификаторами маркировки](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) заказов модели Самовывоз.  </div> 
+<div class=\"api-block\">  Management of [assembly orders](/openapi/in-store-pickup#tag/In-Store-Pickup-Assembly-Orders) and [order label identifiers](/openapi/in-store-pickup#tag/inStorePickupLabelIdentifiers) for the In-Store Pickup scheme.  </div> 
 
 API version: instorepickup
 */
@@ -20,49 +20,49 @@ var _ MappedNullable = &ApiNewOrder{}
 
 // ApiNewOrder struct for ApiNewOrder
 type ApiNewOrder struct {
-	// Планируемая дата доставки
+	// Planned delivery date
 	Ddate *string `json:"ddate,omitempty"`
-	// Цена продавца в валюте продажи с учётом скидки продавца, без учёта скидки WB Клуба, умноженная на 100. Предоставляется в информационных целях 
+	// Seller price in the currency of sale, including seller discount, except the WB Club discount, multiplied by 100 
 	SalePrice NullableInt32 `json:"salePrice,omitempty"`
-	// Список идентификаторов маркировки, доступных для сборочного задания 
+	// List of label identifiers available for the assembly orders 
 	RequiredMeta []string `json:"requiredMeta,omitempty"`
-	// Артикул продавца
+	// Seller item number
 	Article *string `json:"article,omitempty"`
-	// Уникальный ID заказа. <br> Примечание: `rid` — это `srid` в ответах методов:   - [Заявки покупателей на возврат](./user-communication#tag/Vozvraty-pokupatelyami/paths/~1api~1v1~1claims/get)   - [Заказы](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1orders/get)   - [Продажи](./reports#tag/Osnovnye-otchyoty/paths/~1api~1v1~1supplier~1sales/get)   - [Отчет о возвратах и перемещении товаров](./reports#tag/Otchyot-o-vozvratah-i-peremeshenii-tovarov)   - [Детализации к отчётам реализации по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailedReportId)   - [Детализации к отчётам реализации за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1SalesReportsDetailed)   - [Детализации к отчётам об издержках на приём платежей по ID отчётов](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailedReportId)   - [Детализации к отчётам об издержках на приём платежей за период](./financial-reports-and-accounting#tag/Finansovye-otchyoty/operation/postV1AcquiringDetailed) 
+	// Unique order ID. <br> Note: `rid` corresponds to `srid` in the responses of the methods:   - [Buyers Return Applications](./user-communication#tag/Buyers-Returns/paths/~1api~1v1~1claims/get)   - [Orders](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1orders/get)   - [Sales](./reports#tag/Main-Reports/paths/~1api~1v1~1supplier~1sales/get)   - [Returns and Item Movement Report](./reports#tag/Returns-and-Product-Movement-Report)   - [Details for the Sales Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailedReportId)   - [Details for the Sales Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1SalesReportsDetailed)   - [Details for the Acquiring Expenses Reports by Report ID](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailedReportId)   - [Details for the Acquiring Expenses Reports by Period](./financial-reports-and-accounting#tag/Financial-Reports/operation/postV1AcquiringDetailed) 
 	Rid *string `json:"rid,omitempty"`
-	// Дата и время создания сборочного задания
+	// Date and time the assembly order was created
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	// Адрес магазина (склада продавца), на который поступило сборочное задание 
+	// Store address (seller warehouse) where the assembly order was received 
 	WarehouseAddress *string `json:"warehouseAddress,omitempty"`
-	// Уникальный ID заказа покупателя 
+	// Unique buyer order ID 
 	OrderCode *string `json:"orderCode,omitempty"`
-	// Режим оплаты:   - `prepaid` — предоплатный   - `postpaid` — постоплатный   - `unknown` — неизвестный 
+	// Pay mode:   - `prepaid` — prepaid   - `postpaid` — postpaid   - `unknown` — unknown 
 	PayMode *string `json:"payMode,omitempty"`
-	// Массив баркодов товара
+	// Items SKU array
 	Skus []string `json:"skus,omitempty"`
-	// ID сборочного задания
+	// Assembly order ID
 	Id *int32 `json:"id,omitempty"`
-	// ID склада продавца, на который поступило сборочное задание 
+	// Seller warehouse ID where the assembly order was received 
 	WarehouseId *int32 `json:"warehouseId,omitempty"`
-	// Артикул WB
+	// WB item number
 	NmId *int32 `json:"nmId,omitempty"`
-	// ID размера товара в системе WB
+	// Item size ID in WB system
 	ChrtId *int32 `json:"chrtId,omitempty"`
-	// Цена в валюте продажи с учетом всех скидок, кроме скидки по WB Кошельку, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях 
+	// The price in the currency of sale including all discounts, except WB Wallet discount, multiplied by 100. You can find a currency code in the `currencyCode`. Provided for informational purposes only 
 	Price *int32 `json:"price,omitempty"`
-	// Сумма к оплате покупателем в валюте продажи с учетом всех скидок, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+	// The sum charged to the buyer in the currency of sale including all discounts, multiplied by 100. You can find a currency code in the `currencyCode` field. Provided for informational purposes only.
 	FinalPrice *int32 `json:"finalPrice,omitempty"`
-	// Цена в валюте страны продавца с учетом всех скидок, кроме скидки по WB Кошельку, умноженная на 100. Код валюты продажи указан в поле `currencyCode`. Предоставляется в информационных целях
+	// The price in the currency of the seller country including all discounts, except WB Wallet discount, multiplied by 100. You can find a currency code in the `currencyCode` field. Provided for informational purposes only
 	ConvertedPrice *int32 `json:"convertedPrice,omitempty"`
-	// Сумма к оплате покупателем в валюте страны продавца с учетом всех скидок, умноженная на 100. Предоставляется в информационных целях
+	// The sum charged to the buyer in the currency of the seller country including all discounts, multiplied by 100. Provided for informational purposes only
 	ConvertedFinalPrice *int32 `json:"convertedFinalPrice,omitempty"`
-	// Код валюты продажи
+	// Sale currency code
 	CurrencyCode *int32 `json:"currencyCode,omitempty"`
-	// Код валюты страны продавца
+	// Seller country currency code
 	ConvertedCurrencyCode *int32 `json:"convertedCurrencyCode,omitempty"`
-	// Тип товара:   - `1` — малогабаритный товар (МГТ)   - `2` — сверхгабаритный товар (СГТ)   - `3` — крупногабаритный товар (КГТ+) 
+	// Type of cargo:   - `1` — small-sized items   - `2` — over dimensional cargo (ODC)   - `3` — dimensional cargo+ (CD+) 
 	CargoType *int32 `json:"cargoType,omitempty"`
-	// Признак заказа товара с нулевым остатком:   - `false` — заказ сделан на товар с ненулевым остатком   - `true` — заказ сделан на товар с нулевым остатком. Такой заказ можно отменить без штрафа за отмену 
+	// Indicator of an order for a item with zero inventory:   - `false` — the order is made for a item with a non-zero inventory   - `true` — the order is made for a item with zero inventory. Such an order can be canceled without a cancellation fee 
 	IsZeroOrder *bool `json:"isZeroOrder,omitempty"`
 }
 
