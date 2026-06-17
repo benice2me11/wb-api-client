@@ -11,3 +11,6 @@ coverage.out
 # local env and temp files
 .env
 /temp/
+
+# local planning/docs
+/docs/
