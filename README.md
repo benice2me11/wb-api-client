@@ -9,6 +9,7 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 - FBS Orders
 - DBW Orders
 - DBS Orders
+- In-Store Pickup / Click & Collect
 - Reports
 - Analytics
 - Orders FBW
@@ -39,15 +40,29 @@ OpenAPI-first Go client for Wildberries API (v1 scope):
 - FBS Orders:
   - Get new orders and orders list
   - Get order statuses and status history
+  - Stickers and cross-border stickers
+  - Client info and reshipment orders
+  - Supplies list, create, add orders, barcode, order IDs, deliver and delete
+  - Warehouse passes list, offices, create, update and delete
+  - Metadata get, delete and set for SGTIN, UIN, IMEI, GTIN, expiration and customs declaration
   - Cancel order
 - DBW Orders:
   - Get new orders and completed orders list
   - Get order statuses
+  - Buyer info, courier info, delivery dates and stickers
+  - Metadata get, delete and set for SGTIN, UIN, IMEI and GTIN
   - Confirm, assemble and cancel orders
 - DBS Orders:
   - Get new orders and completed orders list
   - Get order statuses (`status/info`)
-  - Confirm, deliver, receive, reject and cancel orders
+  - Paid delivery groups, buyer info, B2B info, delivery dates and stickers
+  - Metadata info, delete and set for SGTIN, UIN, IMEI, GTIN and customs declaration
+  - Batch confirm, deliver, receive, reject and cancel orders
+- In-Store Pickup / Click & Collect:
+  - Get new orders and completed orders list
+  - Buyer info and buyer identity check
+  - Status info, confirm, prepare, receive, reject and cancel
+  - Metadata info, details, delete and set for SGTIN, UIN, IMEI and GTIN
 - Reports:
   - Create, check and download warehouse remains reports
   - Supplier stocks, orders and sales reports

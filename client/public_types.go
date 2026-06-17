@@ -2,6 +2,7 @@ package client
 
 import (
 	wbanalytics "github.com/benice2me11/wb-api-client/internal/generated/analytics"
+	wbclickcollect "github.com/benice2me11/wb-api-client/internal/generated/clickcollect"
 	wbdbs "github.com/benice2me11/wb-api-client/internal/generated/dbs"
 	wbdbw "github.com/benice2me11/wb-api-client/internal/generated/dbw"
 	wbfbs "github.com/benice2me11/wb-api-client/internal/generated/fbs"
@@ -17,6 +18,7 @@ type ProductsAPIClient = wbproducts.APIClient
 type FBSAPIClient = wbfbs.APIClient
 type DBWAPIClient = wbdbw.APIClient
 type DBSAPIClient = wbdbs.APIClient
+type ClickCollectAPIClient = wbclickcollect.APIClient
 type ReportsAPIClient = wbreports.APIClient
 type AnalyticsAPIClient = wbanalytics.APIClient
 type OrdersFBWAPIClient = wbordersfbw.APIClient
@@ -61,6 +63,8 @@ type ApiV2ListGoodsFilterGet200Response = wbproducts.ApiV2ListGoodsFilterGet200R
 type ApiV2ListGoodsFilterPostRequest = wbproducts.ApiV2ListGoodsFilterPostRequest
 type ApiV2ListGoodsSizeNmGet200Response = wbproducts.ApiV2ListGoodsSizeNmGet200Response
 type GoodsList = wbproducts.GoodsList
+type Good = wbproducts.Good
+type SizeGoodReq = wbproducts.SizeGoodReq
 type SupplierTaskMetadata = wbproducts.SupplierTaskMetadata
 type TaskCreated = wbproducts.TaskCreated
 
@@ -95,19 +99,133 @@ type ApiV3OrdersStatusPostRequest = wbfbs.ApiV3OrdersStatusPostRequest
 type ApiV3OrdersStatusPost200Response = wbfbs.ApiV3OrdersStatusPost200Response
 type ApiV3OrdersStatusHistoryPostRequest = wbfbs.ApiV3OrdersStatusHistoryPostRequest
 type ApiV3OrdersStatusHistoryPost200Response = wbfbs.ApiV3OrdersStatusHistoryPost200Response
+type OrdersRequestAPI = wbfbs.OrdersRequestAPI
+type ApiV3OrdersStickersPostRequest = wbfbs.ApiV3OrdersStickersPostRequest
+type ApiV3OrdersStickersPost200Response = wbfbs.ApiV3OrdersStickersPost200Response
+type ApiV3OrdersStickersPost200ResponseStickersInner = wbfbs.ApiV3OrdersStickersPost200ResponseStickersInner
+type ApiV3OrdersStickersCrossBorderPostRequest = wbfbs.ApiV3OrdersStickersCrossBorderPostRequest
+type ApiV3OrdersStickersCrossBorderPost200Response = wbfbs.ApiV3OrdersStickersCrossBorderPost200Response
+type ApiV3OrdersStickersCrossBorderPost200ResponseStickersInner = wbfbs.ApiV3OrdersStickersCrossBorderPost200ResponseStickersInner
+type CrossborderTurkeyClientInfoResp = wbfbs.CrossborderTurkeyClientInfoResp
+type CrossborderTurkeyClientInfo = wbfbs.CrossborderTurkeyClientInfo
+type ApiV3SuppliesOrdersReshipmentGet200Response = wbfbs.ApiV3SuppliesOrdersReshipmentGet200Response
+type ApiV3SuppliesOrdersReshipmentGet200ResponseOrdersInner = wbfbs.ApiV3SuppliesOrdersReshipmentGet200ResponseOrdersInner
+type ApiV3SuppliesGet200Response = wbfbs.ApiV3SuppliesGet200Response
+type ApiV3SuppliesPostRequest = wbfbs.ApiV3SuppliesPostRequest
+type ApiV3SuppliesPost201Response = wbfbs.ApiV3SuppliesPost201Response
+type Supply = wbfbs.Supply
+type ApiV3SuppliesSupplyIdBarcodeGet200Response = wbfbs.ApiV3SuppliesSupplyIdBarcodeGet200Response
+type V3SupplyOrderIDsAPI = wbfbs.V3SupplyOrderIDsAPI
+type ApiMarketplaceV3SuppliesSupplyIdOrdersPatchRequest = wbfbs.ApiMarketplaceV3SuppliesSupplyIdOrdersPatchRequest
+type Pass = wbfbs.Pass
+type PassOffice = wbfbs.PassOffice
+type ApiV3PassesPostRequest = wbfbs.ApiV3PassesPostRequest
+type ApiV3PassesPost201Response = wbfbs.ApiV3PassesPost201Response
+type V3GetMetaMultiRequest = wbfbs.V3GetMetaMultiRequest
+type V3OrdersMetaAPI = wbfbs.V3OrdersMetaAPI
+type V3OrderMetaAPI = wbfbs.V3OrderMetaAPI
+type ApiV3OrdersOrderIdMetaSgtinPutRequest = wbfbs.ApiV3OrdersOrderIdMetaSgtinPutRequest
+type ApiV3OrdersOrderIdMetaUinPutRequest = wbfbs.ApiV3OrdersOrderIdMetaUinPutRequest
+type ApiV3OrdersOrderIdMetaImeiPutRequest = wbfbs.ApiV3OrdersOrderIdMetaImeiPutRequest
+type ApiV3OrdersOrderIdMetaGtinPutRequest = wbfbs.ApiV3OrdersOrderIdMetaGtinPutRequest
+type ApiV3OrdersOrderIdMetaExpirationPutRequest = wbfbs.ApiV3OrdersOrderIdMetaExpirationPutRequest
+type ApiMarketplaceV3OrdersOrderIdMetaCustomsDeclarationPutRequest = wbfbs.ApiMarketplaceV3OrdersOrderIdMetaCustomsDeclarationPutRequest
 
 // DBW requests/responses.
 type ApiV3DbwOrdersGet200Response = wbdbw.ApiV3DbwOrdersGet200Response
 type ApiV3DbwOrdersNewGet200Response = wbdbw.ApiV3DbwOrdersNewGet200Response
 type ApiV3DbwOrdersStatusPostRequest = wbdbw.ApiV3DbwOrdersStatusPostRequest
 type ApiV3DbwOrdersStatusPost200Response = wbdbw.ApiV3DbwOrdersStatusPost200Response
+type DBWOrdersRequestAPI = wbdbw.OrdersRequestAPI
+type DBWClientInfoResp = wbdbw.ClientInfoResp
+type DBWClientInfo = wbdbw.ClientInfo
+type OrderCourierInfoResp = wbdbw.OrderCourierInfoResp
+type OrderCourierInfo = wbdbw.OrderCourierInfo
+type DBWDeliveryDatesRequest = wbdbw.DeliveryDatesRequest
+type DBWDeliveryDatesInfoResp = wbdbw.DeliveryDatesInfoResp
+type DBWDeliveryDatesInfoRespOrdersInner = wbdbw.DeliveryDatesInfoRespOrdersInner
+type ApiV3DbwOrdersStickersPostRequest = wbdbw.ApiV3DbwOrdersStickersPostRequest
+type ApiV3DbwOrdersStickersPost200Response = wbdbw.ApiV3DbwOrdersStickersPost200Response
+type ApiV3DbwOrdersStickersPost200ResponseStickersInner = wbdbw.ApiV3DbwOrdersStickersPost200ResponseStickersInner
+type ApiV3DbwOrdersOrderIdMetaGet200Response = wbdbw.ApiV3DbwOrdersOrderIdMetaGet200Response
+type ApiV3DbwOrdersOrderIdMetaSgtinPutRequest = wbdbw.ApiV3DbwOrdersOrderIdMetaSgtinPutRequest
+type ApiV3DbwOrdersOrderIdMetaUinPutRequest = wbdbw.ApiV3DbwOrdersOrderIdMetaUinPutRequest
+type ApiV3DbwOrdersOrderIdMetaImeiPutRequest = wbdbw.ApiV3DbwOrdersOrderIdMetaImeiPutRequest
+type ApiV3DbwOrdersOrderIdMetaGtinPutRequest = wbdbw.ApiV3DbwOrdersOrderIdMetaGtinPutRequest
 
 // DBS requests/responses.
 type ApiV3DbsOrdersGet200Response = wbdbs.ApiV3DbsOrdersGet200Response
 type ApiV3DbsOrdersNewGet200Response = wbdbs.ApiV3DbsOrdersNewGet200Response
+type DBSOrdersRequestAPI = wbdbs.OrdersRequestAPI
 type ApiOrdersRequestV2 = wbdbs.ApiOrdersRequestV2
+type ApiOrdersCodeRequest = wbdbs.ApiOrdersCodeRequest
+type ApiOrderCodeRequest = wbdbs.ApiOrderCodeRequest
 type ApiOrderStatusesV2 = wbdbs.ApiOrderStatusesV2
+type ApiStatusSetResponses = wbdbs.ApiStatusSetResponses
+type ApiStatusSetResponse = wbdbs.ApiStatusSetResponse
+type ApiMarketplaceV3DbsOrdersStatusReceivePost200Response = wbdbs.ApiMarketplaceV3DbsOrdersStatusReceivePost200Response
+type ApiOrderGroupsRequest = wbdbs.ApiOrderGroupsRequest
+type ApiOrderGroupInner = wbdbs.ApiOrderGroupInner
+type DbsOnlyClientInfoResp = wbdbs.DbsOnlyClientInfoResp
+type DbsOnlyClientInfo = wbdbs.DbsOnlyClientInfo
+type ApiB2bClientInfoResponses = wbdbs.ApiB2bClientInfoResponses
+type ApiB2bClientInfoResponse = wbdbs.ApiB2bClientInfoResponse
+type ApiB2bClientInfo = wbdbs.ApiB2bClientInfo
+type DeliveryDatesRequest = wbdbs.DeliveryDatesRequest
+type DeliveryDatesInfoResp = wbdbs.DeliveryDatesInfoResp
+type DeliveryDatesInfoRespOrdersInner = wbdbs.DeliveryDatesInfoRespOrdersInner
+type ApiMarketplaceV3DbsOrdersStickersPostRequest = wbdbs.ApiMarketplaceV3DbsOrdersStickersPostRequest
+type ApiMarketplaceV3DbsOrdersStickersPost200Response = wbdbs.ApiMarketplaceV3DbsOrdersStickersPost200Response
+type ApiMarketplaceV3DbsOrdersStickersPost200ResponseStickersInner = wbdbs.ApiMarketplaceV3DbsOrdersStickersPost200ResponseStickersInner
+type ApiOrdersMetaResponse = wbdbs.ApiOrdersMetaResponse
+type ApiOrderMetaV2 = wbdbs.ApiOrderMetaV2
+type ApiOrdersMetaDeleteRequest = wbdbs.ApiOrdersMetaDeleteRequest
+type ApiOrdersSGTINsSetRequest = wbdbs.ApiOrdersSGTINsSetRequest
+type ApiSGTINs = wbdbs.ApiSGTINs
+type ApiOrdersUINSetRequest = wbdbs.ApiOrdersUINSetRequest
+type ApiUIN = wbdbs.ApiUIN
+type ApiOrdersIMEISetRequest = wbdbs.ApiOrdersIMEISetRequest
+type ApiIMEI = wbdbs.ApiIMEI
+type ApiOrdersGTINSetRequest = wbdbs.ApiOrdersGTINSetRequest
+type ApiGTIN = wbdbs.ApiGTIN
+type ApiMarketplaceV3DbsOrdersMetaCustomsDeclarationPostRequest = wbdbs.ApiMarketplaceV3DbsOrdersMetaCustomsDeclarationPostRequest
+type ApiMarketplaceV3DbsOrdersMetaCustomsDeclarationPostRequestOrdersInner = wbdbs.ApiMarketplaceV3DbsOrdersMetaCustomsDeclarationPostRequestOrdersInner
 type DBSCode = wbdbs.Code
+
+// Click Collect requests/responses.
+type ClickCollectApiNewOrders = wbclickcollect.ApiNewOrders
+type ClickCollectApiNewOrder = wbclickcollect.ApiNewOrder
+type ClickCollectApiOrders = wbclickcollect.ApiOrders
+type ClickCollectApiOrder = wbclickcollect.ApiOrder
+type ClickCollectApiOrdersRequest = wbclickcollect.ApiOrdersRequest
+type ClickCollectApiOrdersRequestV2 = wbclickcollect.ApiOrdersRequestV2
+type ClickCollectApiOrderClientInfoResp = wbclickcollect.ApiOrderClientInfoResp
+type ClickCollectApiOrderClientInfo = wbclickcollect.ApiOrderClientInfo
+type ClickCollectApiCheckIdentityRequest = wbclickcollect.ApiCheckIdentityRequest
+type ClickCollectApiCheckedIdentity = wbclickcollect.ApiCheckedIdentity
+type ClickCollectApiOrderStatusesV2 = wbclickcollect.ApiOrderStatusesV2
+type ClickCollectApiOrderStatusV2 = wbclickcollect.ApiOrderStatusV2
+type ClickCollectApiStatusSetResponses = wbclickcollect.ApiStatusSetResponses
+type ClickCollectApiStatusSetResponse = wbclickcollect.ApiStatusSetResponse
+type ClickCollectApiMetaDetailsResponse = wbclickcollect.ApiMetaDetailsResponse
+type ClickCollectApiMetaDetailsResponseResultsInner = wbclickcollect.ApiMetaDetailsResponseResultsInner
+type ClickCollectApiOrdersMetaResponse = wbclickcollect.ApiOrdersMetaResponse
+type ClickCollectApiOrderMetaV2 = wbclickcollect.ApiOrderMetaV2
+type ClickCollectApiOrdersMetaDetailsResponse = wbclickcollect.ApiOrdersMetaDetailsResponse
+type ClickCollectApiOrdersMetaDetailsResponseOrdersInner = wbclickcollect.ApiOrdersMetaDetailsResponseOrdersInner
+type ClickCollectApiOrdersMetaDeleteRequest = wbclickcollect.ApiOrdersMetaDeleteRequest
+type ClickCollectApiOrdersResponses = wbclickcollect.ApiOrdersResponses
+type ClickCollectApiOrdersResponse = wbclickcollect.ApiOrdersResponse
+type ClickCollectApiOrdersSGTINsSetRequest = wbclickcollect.ApiOrdersSGTINsSetRequest
+type ClickCollectApiSGTINs = wbclickcollect.ApiSGTINs
+type ClickCollectApiOrdersUINSetRequest = wbclickcollect.ApiOrdersUINSetRequest
+type ClickCollectApiUIN = wbclickcollect.ApiUIN
+type ClickCollectApiOrdersIMEISetRequest = wbclickcollect.ApiOrdersIMEISetRequest
+type ClickCollectApiIMEI = wbclickcollect.ApiIMEI
+type ClickCollectApiOrdersGTINSetRequest = wbclickcollect.ApiOrdersGTINSetRequest
+type ClickCollectApiGTIN = wbclickcollect.ApiGTIN
+type ClickCollectApiMetaSetResponses = wbclickcollect.ApiMetaSetResponses
+type ClickCollectApiMetaSetResponse = wbclickcollect.ApiMetaSetResponse
 
 // NewDBSCode builds DBS confirmation/rejection code value from a plain string.
 func NewDBSCode(value string) DBSCode {

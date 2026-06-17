@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	wbanalytics "github.com/benice2me11/wb-api-client/internal/generated/analytics"
+	wbclickcollect "github.com/benice2me11/wb-api-client/internal/generated/clickcollect"
 	wbdbs "github.com/benice2me11/wb-api-client/internal/generated/dbs"
 	wbdbw "github.com/benice2me11/wb-api-client/internal/generated/dbw"
 	wbfbs "github.com/benice2me11/wb-api-client/internal/generated/fbs"
@@ -17,15 +18,16 @@ import (
 
 // Client is the public SDK facade over generated category clients.
 type Client struct {
-	cfg       Config
-	general   GeneralService
-	products  ProductsService
-	fbs       FBSService
-	dbw       DBWService
-	dbs       DBSService
-	reports   ReportsService
-	analytics AnalyticsService
-	ordersFBW OrdersFBWService
+	cfg          Config
+	general      GeneralService
+	products     ProductsService
+	fbs          FBSService
+	dbw          DBWService
+	dbs          DBSService
+	clickCollect ClickCollectService
+	reports      ReportsService
+	analytics    AnalyticsService
+	ordersFBW    OrdersFBWService
 }
 
 // NewClient builds a client with generated SDKs + transport middleware.
@@ -67,6 +69,12 @@ func NewClient(opts ...Option) *Client {
 		overrideDBSServers(dbsCfg, cfg.BaseURLs.DBS)
 	}
 
+	clickCollectCfg := wbclickcollect.NewConfiguration()
+	clickCollectCfg.HTTPClient = httpClient
+	if cfg.overrideClickCollectBaseURL {
+		overrideClickCollectServers(clickCollectCfg, cfg.BaseURLs.ClickCollect)
+	}
+
 	reportsCfg := wbreports.NewConfiguration()
 	reportsCfg.HTTPClient = httpClient
 	if cfg.overrideReportsBaseURL {
@@ -90,20 +98,22 @@ func NewClient(opts ...Option) *Client {
 	fbsAPI := wbfbs.NewAPIClient(fbsCfg)
 	dbwAPI := wbdbw.NewAPIClient(dbwCfg)
 	dbsAPI := wbdbs.NewAPIClient(dbsCfg)
+	clickCollectAPI := wbclickcollect.NewAPIClient(clickCollectCfg)
 	reportsAPI := wbreports.NewAPIClient(reportsCfg)
 	analyticsAPI := wbanalytics.NewAPIClient(analyticsCfg)
 	ordersFBWAPI := wbordersfbw.NewAPIClient(ordersFBWCfg)
 
 	return &Client{
-		cfg:       cfg,
-		general:   &generalService{api: generalAPI},
-		products:  &productsService{api: productsAPI},
-		fbs:       &fbsService{api: fbsAPI},
-		dbw:       &dbwService{api: dbwAPI},
-		dbs:       &dbsService{api: dbsAPI},
-		reports:   &reportsService{api: reportsAPI},
-		analytics: &analyticsService{api: analyticsAPI},
-		ordersFBW: &ordersFBWService{api: ordersFBWAPI},
+		cfg:          cfg,
+		general:      &generalService{api: generalAPI},
+		products:     &productsService{api: productsAPI},
+		fbs:          &fbsService{api: fbsAPI},
+		dbw:          &dbwService{api: dbwAPI},
+		dbs:          &dbsService{api: dbsAPI},
+		clickCollect: &clickCollectService{api: clickCollectAPI},
+		reports:      &reportsService{api: reportsAPI},
+		analytics:    &analyticsService{api: analyticsAPI},
+		ordersFBW:    &ordersFBWService{api: ordersFBWAPI},
 	}
 }
 
@@ -161,6 +171,11 @@ func (c *Client) DBW() DBWService {
 // DBS returns DBS Orders category service facade.
 func (c *Client) DBS() DBSService {
 	return c.dbs
+}
+
+// ClickCollect returns In-Store Pickup / Click & Collect orders facade.
+func (c *Client) ClickCollect() ClickCollectService {
+	return c.clickCollect
 }
 
 // Reports returns Reports category service facade.
@@ -230,6 +245,17 @@ func overrideDBSServers(cfg *wbdbs.Configuration, baseURL string) {
 	cfg.Servers = wbdbs.ServerConfigurations{server}
 	for key := range cfg.OperationServers {
 		cfg.OperationServers[key] = wbdbs.ServerConfigurations{server}
+	}
+}
+
+func overrideClickCollectServers(cfg *wbclickcollect.Configuration, baseURL string) {
+	server := wbclickcollect.ServerConfiguration{
+		URL:         baseURL,
+		Description: "overridden",
+	}
+	cfg.Servers = wbclickcollect.ServerConfigurations{server}
+	for key := range cfg.OperationServers {
+		cfg.OperationServers[key] = wbclickcollect.ServerConfigurations{server}
 	}
 }
 

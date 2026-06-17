@@ -11,8 +11,6 @@ import (
 	"testing"
 
 	"github.com/benice2me11/wb-api-client/client"
-	wbfbs "github.com/benice2me11/wb-api-client/internal/generated/fbs"
-	wbproducts "github.com/benice2me11/wb-api-client/internal/generated/products"
 	"github.com/benice2me11/wb-api-client/internal/testkit"
 	"github.com/benice2me11/wb-api-client/transport"
 )
@@ -94,7 +92,7 @@ func TestProductsGetCardsList(t *testing.T) {
 				client.WithRetryPolicy(transport.RetryPolicy{MaxAttempts: 1, BaseDelay: 10, MaxDelay: 10, Jitter: 0}),
 			)
 
-			resp, httpResp, err := c.Products().GetCardsList(context.Background(), wbproducts.ContentV2GetCardsListPostRequest{})
+			resp, httpResp, err := c.Products().GetCardsList(context.Background(), client.ContentV2GetCardsListPostRequest{})
 			if tc.wantErr {
 				if err == nil {
 					t.Fatalf("expected error")
@@ -359,31 +357,31 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 
 	ctx := context.Background()
 
-	if _, httpResp, err := c.Products().CreateCards(ctx, []wbproducts.ContentV2CardsUploadPostRequestInner{}); err != nil {
+	if _, httpResp, err := c.Products().CreateCards(ctx, []client.ContentV2CardsUploadPostRequestInner{}); err != nil {
 		t.Fatalf("CreateCards unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("CreateCards unexpected status: %+v", httpResp)
 	}
 
-	if _, httpResp, err := c.Products().AddCards(ctx, wbproducts.ContentV2CardsUploadAddPostRequest{}); err != nil {
+	if _, httpResp, err := c.Products().AddCards(ctx, client.ContentV2CardsUploadAddPostRequest{}); err != nil {
 		t.Fatalf("AddCards unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("AddCards unexpected status: %+v", httpResp)
 	}
 
-	if _, httpResp, err := c.Products().UpdateCards(ctx, []wbproducts.ContentV2CardsUpdatePostRequestInner{}); err != nil {
+	if _, httpResp, err := c.Products().UpdateCards(ctx, []client.ContentV2CardsUpdatePostRequestInner{}); err != nil {
 		t.Fatalf("UpdateCards unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("UpdateCards unexpected status: %+v", httpResp)
 	}
 
-	if _, httpResp, err := c.Products().SetPrices(ctx, wbproducts.ApiV2UploadTaskPostRequest{Data: []wbproducts.Good{}}); err != nil {
+	if _, httpResp, err := c.Products().SetPrices(ctx, client.ApiV2UploadTaskPostRequest{Data: []client.Good{}}); err != nil {
 		t.Fatalf("SetPrices unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("SetPrices unexpected status: %+v", httpResp)
 	}
 
-	if _, httpResp, err := c.Products().SetSizePrices(ctx, wbproducts.ApiV2UploadTaskSizePostRequest{Data: []wbproducts.SizeGoodReq{}}); err != nil {
+	if _, httpResp, err := c.Products().SetSizePrices(ctx, client.ApiV2UploadTaskSizePostRequest{Data: []client.SizeGoodReq{}}); err != nil {
 		t.Fatalf("SetSizePrices unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("SetSizePrices unexpected status: %+v", httpResp)
@@ -411,7 +409,7 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 	}
 
 	locale := "ru"
-	if _, httpResp, err := c.Products().GetCardsErrorList(ctx, wbproducts.RequestPublicViewerPublicErrorsTableListV2{}, &client.CardsErrorListQuery{Locale: &locale}); err != nil {
+	if _, httpResp, err := c.Products().GetCardsErrorList(ctx, client.RequestPublicViewerPublicErrorsTableListV2{}, &client.CardsErrorListQuery{Locale: &locale}); err != nil {
 		t.Fatalf("GetCardsErrorList unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("GetCardsErrorList unexpected status: %+v", httpResp)
@@ -428,7 +426,7 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 		t.Fatalf("Seek unexpected error: %v", err)
 	}
 
-	if _, httpResp, err := c.Products().SaveMedia(ctx, wbproducts.ContentV3MediaSavePostRequest{}); err != nil {
+	if _, httpResp, err := c.Products().SaveMedia(ctx, client.ContentV3MediaSavePostRequest{}); err != nil {
 		t.Fatalf("SaveMedia unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("SaveMedia unexpected status: %+v", httpResp)
@@ -440,13 +438,13 @@ func TestProductsOperationsEndpoints(t *testing.T) {
 		t.Fatalf("UploadMediaFile unexpected status: %+v", httpResp)
 	}
 
-	if _, httpResp, err := c.Products().GetInventory(ctx, 10, wbproducts.ApiV3StocksWarehouseIdPostRequest{ChrtIds: []int32{1}}); err != nil {
+	if _, httpResp, err := c.Products().GetInventory(ctx, 10, client.ApiV3StocksWarehouseIdPostRequest{ChrtIds: []int32{1}}); err != nil {
 		t.Fatalf("GetInventory unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("GetInventory unexpected status: %+v", httpResp)
 	}
 
-	if httpResp, err := c.Products().UpdateInventory(ctx, 10, wbproducts.ApiV3StocksWarehouseIdPutRequest{Stocks: []wbproducts.ApiV3StocksWarehouseIdPutRequestStocksInner{}}); err != nil {
+	if httpResp, err := c.Products().UpdateInventory(ctx, 10, client.ApiV3StocksWarehouseIdPutRequest{Stocks: []client.ApiV3StocksWarehouseIdPutRequestStocksInner{}}); err != nil {
 		t.Fatalf("UpdateInventory unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
 		t.Fatalf("UpdateInventory unexpected status: %+v", httpResp)
@@ -509,13 +507,13 @@ func TestFBSAccountingEndpoints(t *testing.T) {
 
 	ctx := context.Background()
 
-	if _, httpResp, err := c.FBS().OrdersByStatus(ctx, wbfbs.ApiV3OrdersStatusPostRequest{Orders: []int64{123}}); err != nil {
+	if _, httpResp, err := c.FBS().OrdersByStatus(ctx, client.ApiV3OrdersStatusPostRequest{Orders: []int64{123}}); err != nil {
 		t.Fatalf("OrdersByStatus unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("OrdersByStatus unexpected status: %+v", httpResp)
 	}
 
-	if _, httpResp, err := c.FBS().OrdersStatusHistory(ctx, wbfbs.ApiV3OrdersStatusHistoryPostRequest{Orders: []int32{123}}); err != nil {
+	if _, httpResp, err := c.FBS().OrdersStatusHistory(ctx, client.ApiV3OrdersStatusHistoryPostRequest{Orders: []int32{123}}); err != nil {
 		t.Fatalf("OrdersStatusHistory unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("OrdersStatusHistory unexpected status: %+v", httpResp)

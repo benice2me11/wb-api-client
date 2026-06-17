@@ -8,8 +8,6 @@ import (
 	"testing"
 
 	"github.com/benice2me11/wb-api-client/client"
-	wbdbs "github.com/benice2me11/wb-api-client/internal/generated/dbs"
-	wbdbw "github.com/benice2me11/wb-api-client/internal/generated/dbw"
 )
 
 func TestDBWLifecycle(t *testing.T) {
@@ -79,7 +77,7 @@ func TestDBWLifecycle(t *testing.T) {
 		t.Fatalf("NewOrders unexpected response: %+v %+v", httpResp, resp)
 	}
 
-	if resp, httpResp, err := c.DBW().OrdersByStatus(ctx, wbdbw.ApiV3DbwOrdersStatusPostRequest{Orders: []int64{123}}); err != nil {
+	if resp, httpResp, err := c.DBW().OrdersByStatus(ctx, client.ApiV3DbwOrdersStatusPostRequest{Orders: []int64{123}}); err != nil {
 		t.Fatalf("OrdersByStatus unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
 		t.Fatalf("OrdersByStatus unexpected response: %+v %+v", httpResp, resp)
@@ -155,16 +153,26 @@ func TestDBSLifecycle(t *testing.T) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			_, _ = fmt.Fprint(w, `{}`)
-		case "PATCH /api/v3/dbs/orders/321/confirm":
-			w.WriteHeader(http.StatusNoContent)
-		case "PATCH /api/v3/dbs/orders/321/deliver":
-			w.WriteHeader(http.StatusNoContent)
-		case "PATCH /api/v3/dbs/orders/321/receive":
-			w.WriteHeader(http.StatusNoContent)
-		case "PATCH /api/v3/dbs/orders/321/reject":
-			w.WriteHeader(http.StatusNoContent)
-		case "PATCH /api/v3/dbs/orders/321/cancel":
-			w.WriteHeader(http.StatusNoContent)
+		case "POST /api/marketplace/v3/dbs/orders/status/confirm":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"results":[{"orderId":321,"isError":false}]}`)
+		case "POST /api/marketplace/v3/dbs/orders/status/deliver":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"results":[{"orderId":321,"isError":false}]}`)
+		case "POST /api/marketplace/v3/dbs/orders/status/receive":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"results":[{"orderId":321,"isError":false}]}`)
+		case "POST /api/marketplace/v3/dbs/orders/status/reject":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"results":[{"orderId":321,"isError":false}]}`)
+		case "POST /api/marketplace/v3/dbs/orders/status/cancel":
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			_, _ = fmt.Fprint(w, `{"results":[{"orderId":321,"isError":false}]}`)
 		default:
 			t.Fatalf("unexpected request: %s", key)
 		}
@@ -189,58 +197,92 @@ func TestDBSLifecycle(t *testing.T) {
 		t.Fatalf("NewOrders unexpected response: %+v %+v", httpResp, resp)
 	}
 
-	if resp, httpResp, err := c.DBS().OrdersStatusInfo(ctx, wbdbs.ApiOrdersRequestV2{OrdersIds: []int32{321}}); err != nil {
+	ordersReq := client.ApiOrdersRequestV2{OrdersIds: []int32{321}}
+	if resp, httpResp, err := c.DBS().OrdersStatusInfo(ctx, ordersReq); err != nil {
 		t.Fatalf("OrdersStatusInfo unexpected error: %v", err)
 	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
 		t.Fatalf("OrdersStatusInfo unexpected response: %+v %+v", httpResp, resp)
 	}
 
+	codeReq := client.ApiOrdersCodeRequest{Orders: []client.ApiOrderCodeRequest{{}}}
+	codeReq.Orders[0].SetOrderId(321)
+	codeReq.Orders[0].SetCode("1234")
+
+	if resp, httpResp, err := c.DBS().ConfirmOrders(ctx, ordersReq); err != nil {
+		t.Fatalf("ConfirmOrders unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
+		t.Fatalf("ConfirmOrders unexpected response: %+v %+v", httpResp, resp)
+	}
+
+	if resp, httpResp, err := c.DBS().DeliverOrders(ctx, ordersReq); err != nil {
+		t.Fatalf("DeliverOrders unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
+		t.Fatalf("DeliverOrders unexpected response: %+v %+v", httpResp, resp)
+	}
+
+	if resp, httpResp, err := c.DBS().ReceiveOrders(ctx, codeReq); err != nil {
+		t.Fatalf("ReceiveOrders unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
+		t.Fatalf("ReceiveOrders unexpected response: %+v %+v", httpResp, resp)
+	}
+
+	if resp, httpResp, err := c.DBS().RejectOrders(ctx, codeReq); err != nil {
+		t.Fatalf("RejectOrders unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
+		t.Fatalf("RejectOrders unexpected response: %+v %+v", httpResp, resp)
+	}
+
+	if resp, httpResp, err := c.DBS().CancelOrders(ctx, ordersReq); err != nil {
+		t.Fatalf("CancelOrders unexpected error: %v", err)
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK || resp == nil {
+		t.Fatalf("CancelOrders unexpected response: %+v %+v", httpResp, resp)
+	}
+
 	if httpResp, err := c.DBS().ConfirmOrder(ctx, 321); err != nil {
 		t.Fatalf("ConfirmOrder unexpected error: %v", err)
-	} else if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("ConfirmOrder unexpected status: %+v", httpResp)
 	}
 
 	if httpResp, err := c.DBS().DeliverOrder(ctx, 321); err != nil {
 		t.Fatalf("DeliverOrder unexpected error: %v", err)
-	} else if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("DeliverOrder unexpected status: %+v", httpResp)
 	}
 
-	code := wbdbs.Code{}
-	code.SetCode("1234")
+	code := client.NewDBSCode("1234")
 
 	if httpResp, err := c.DBS().ReceiveOrder(ctx, 321, code); err != nil {
 		t.Fatalf("ReceiveOrder unexpected error: %v", err)
-	} else if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("ReceiveOrder unexpected status: %+v", httpResp)
 	}
 
 	if httpResp, err := c.DBS().RejectOrder(ctx, 321, code); err != nil {
 		t.Fatalf("RejectOrder unexpected error: %v", err)
-	} else if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("RejectOrder unexpected status: %+v", httpResp)
 	}
 
 	if httpResp, err := c.DBS().CancelOrder(ctx, 321); err != nil {
 		t.Fatalf("CancelOrder unexpected error: %v", err)
-	} else if httpResp == nil || httpResp.StatusCode != http.StatusNoContent {
+	} else if httpResp == nil || httpResp.StatusCode != http.StatusOK {
 		t.Fatalf("CancelOrder unexpected status: %+v", httpResp)
 	}
 
-	expected := []string{
-		"GET /api/v3/dbs/orders",
-		"GET /api/v3/dbs/orders/new",
-		"POST /api/marketplace/v3/dbs/orders/status/info",
-		"PATCH /api/v3/dbs/orders/321/confirm",
-		"PATCH /api/v3/dbs/orders/321/deliver",
-		"PATCH /api/v3/dbs/orders/321/receive",
-		"PATCH /api/v3/dbs/orders/321/reject",
-		"PATCH /api/v3/dbs/orders/321/cancel",
+	expected := map[string]int{
+		"GET /api/v3/dbs/orders":                             1,
+		"GET /api/v3/dbs/orders/new":                         1,
+		"POST /api/marketplace/v3/dbs/orders/status/info":    1,
+		"POST /api/marketplace/v3/dbs/orders/status/confirm": 2,
+		"POST /api/marketplace/v3/dbs/orders/status/deliver": 2,
+		"POST /api/marketplace/v3/dbs/orders/status/receive": 2,
+		"POST /api/marketplace/v3/dbs/orders/status/reject":  2,
+		"POST /api/marketplace/v3/dbs/orders/status/cancel":  2,
 	}
-	for _, key := range expected {
-		if calls[key] != 1 {
-			t.Fatalf("expected one call for %s, got %d", key, calls[key])
+	for key, want := range expected {
+		if calls[key] != want {
+			t.Fatalf("expected %d call(s) for %s, got %d", want, key, calls[key])
 		}
 	}
 }
